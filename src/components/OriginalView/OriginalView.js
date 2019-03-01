@@ -5,7 +5,12 @@ import LoadingIndicator from '../LoadingIndicator';
 import NodeSidebar from '../NodeSidebar';
 import Errors from '../Errors';
 import { LoadingContainer } from '../LoadingIndicator/styles';
-import { Container, Content, ScrollContainer } from './styles';
+import {
+	Container,
+	Content,
+	ScrollContainer,
+	ZoomControl,
+} from './styles';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
@@ -20,6 +25,8 @@ const OriginalView = ({
 	pagesCount,
 	setPagesCount,
 	errors,
+	toggleZoom,
+	isZoomed,
 }) => (
 	<Container>
 		<Errors errors={errors} />
@@ -27,9 +34,10 @@ const OriginalView = ({
 			<LoadingIndicator />
 		</LoadingContainer>
 		<NodeSidebar id={id} itemType="document" />
+		<ZoomControl onClick={toggleZoom} isZoomed={isZoomed} />
 		{file && (
 			<ScrollContainer>
-				<Content>
+				<Content isZoomed={isZoomed}>
 					<Document
 						file={file}
 						loading=" "
@@ -70,8 +78,10 @@ OriginalView.propTypes = {
 	setErrors: PropTypes.func,
 	stopLoading: PropTypes.func,
 	setPagesCount: PropTypes.func,
+	toggleZoom: PropTypes.func,
 	pagesCount: PropTypes.number,
 	isLoading: PropTypes.bool,
+	isZoomed: PropTypes.bool,
 	errors: Errors.propTypes.errors,
 };
 
@@ -80,8 +90,10 @@ OriginalView.defaultProps = {
 	setErrors: () => undefined,
 	stopLoading: () => undefined,
 	setPagesCount: () => undefined,
+	toggleZoom: () => undefined,
 	pagesCount: 0,
 	isLoading: true,
+	isZoomed: true,
 	errors: Errors.defaultProps.errors,
 };
 
