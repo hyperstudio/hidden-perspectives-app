@@ -46,6 +46,7 @@ const SearchResults = ({
 	setActiveResult,
 	setActiveTab,
 	onResultClick,
+	counts,
 }) => (
 	<Container show={!!searchQuery}>
 		<Content>
@@ -57,14 +58,14 @@ const SearchResults = ({
 							className={activeTab === key && 'active'}
 							onClick={() => setActiveTab(key)}
 						>
-							{title}
+							{`${title} (${counts[key]})`}
 						</Tab>
 					))}
 				</Tabs>
 				<TabHint>
-					{'Press Tab'}
+					{'Hit tab'}
 					<Key>⇥</Key>
-					{'to toggle through categories'}
+					{'to switch category'}
 				</TabHint>
 			</TabsContainer>
 			{searchResults.length === 0 && !isLoading ? (
@@ -112,6 +113,11 @@ SearchResults.propTypes = {
 			title: PropTypes.string.isRequired,
 		}),
 	),
+	counts: PropTypes.shape({
+		events: PropTypes.number.isRequired,
+		documents: PropTypes.number.isRequired,
+		stakeholders: PropTypes.number.isRequired,
+	}),
 };
 
 SearchResults.defaultProps = {
@@ -129,6 +135,12 @@ SearchResults.defaultProps = {
 		{ key: 'document', title: 'Documents' },
 		{ key: 'stakeholder', title: 'Protagonists' },
 	],
+	counts: {
+		all: 0,
+		event: 0,
+		document: 0,
+		stakeholder: 0,
+	},
 };
 
 export default SearchResults;

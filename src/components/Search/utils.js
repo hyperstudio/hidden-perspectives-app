@@ -14,53 +14,68 @@ import {
 import { withRouter } from 'react-router-dom';
 import { withLoading, withErrors } from '../../utils/hocUtil';
 
-export const getSearchQuery = (limit) => gql`
-	query Search($searchQuery: String!) {
-		allEvents(
-			filter: {
-				OR: [
-					{ eventTitle_contains: $searchQuery }
-					{ eventDescription_contains: $searchQuery }
-					{ eventStakeholders_some: {
-						stakeholderFullName_contains: $searchQuery
-					} }
-				]
-			}
-			${limit ? `first: ${limit}` : ''}
-		) {
-			id
-			eventTitle
+export const getSearchQuery = (limit) => {
+	const getEventsQuery = (suffix = '') => `allEvents${suffix}(
+		filter: {
+			OR: [
+				{ eventTitle_contains: $searchQuery }
+				{ eventDescription_contains: $searchQuery }
+				{ eventStakeholders_some: {
+					stakeholderFullName_contains: $searchQuery
+				} }
+			]
 		}
-		allDocuments(
-			filter: {
-				OR: [
-					{ documentTitle_contains: $searchQuery }
-					{ documentDescription_contains: $searchQuery }
-					{ documentTranscript_contains: $searchQuery }
-					{ mentionedStakeholders_some: {
-						stakeholderFullName_contains: $searchQuery
-					} }
-				]
-			}
-			${limit ? `first: ${limit}` : ''}
-		) {
-			id
-			documentTitle
+		${limit ? `first: ${limit}` : ''}
+	)`;
+	const getDocumentsQuery = (suffix = '') => `allDocuments${suffix}(
+		filter: {
+			OR: [
+				{ documentTitle_contains: $searchQuery }
+				{ documentDescription_contains: $searchQuery }
+				{ documentTranscript_contains: $searchQuery }
+				{ mentionedStakeholders_some: {
+					stakeholderFullName_contains: $searchQuery
+				} }
+			]
 		}
-		allStakeholders(
-			filter: {
-				OR: [
-					{ stakeholderFullName_contains: $searchQuery }
-					{ stakeholderDescription_contains: $searchQuery }
-				]
-			}
-			${limit ? `first: ${limit}` : ''}
-		) {
-			id
-			stakeholderFullName
+		${limit ? `first: ${limit}` : ''}
+	)`;
+	const getStakeholderQuery = (suffix = '') => `allStakeholders${suffix}(
+		filter: {
+			OR: [
+				{ stakeholderFullName_contains: $searchQuery }
+				{ stakeholderDescription_contains: $searchQuery }
+			]
 		}
-	}
-`;
+		${limit ? `first: ${limit}` : ''}
+	)`;
+
+	return gql`
+		query Search($searchQuery: String!) {
+			${getEventsQuery()} {
+				id
+				eventTitle
+			}
+			_${getEventsQuery('Meta')} {
+				count
+			}
+			${getDocumentsQuery()} {
+				id
+				documentTitle
+			}
+			_${getDocumentsQuery('Meta')} {
+				count
+			}
+			${getStakeholderQuery()} {
+				id
+				stakeholderFullName
+			}
+			_${getStakeholderQuery('Meta')} {
+				count
+			}
+		}
+	`;
+};
 
 const getElementParser = (type, titleKey) => (items) => items.map((item) => ({
 	id: item.id,
@@ -75,7 +90,7 @@ const contains = (container, containment) => container.toLowerCase()
 	.includes(containment.toLowerCase());
 
 export const handleSearchResults = (props, value) => ({ data }) => {
-	const { stopLoading, setSearchResults } = props;
+	const { stopLoading, setCounts, setSearchResults } = props;
 	const documents = parseDocuments(data.allDocuments);
 	const events = parseEvents(data.allEvents);
 	const stakeholders = parseStakeholders(data.allStakeholders);
@@ -87,6 +102,14 @@ export const handleSearchResults = (props, value) => ({ data }) => {
 
 	stopLoading();
 	setSearchResults(searchResults);
+	/* eslint-disable no-underscore-dangle */
+	setCounts({
+		all: data._allEventsMeta.count + data._allDocumentsMeta.count + data._allStakeholdersMeta.count,
+		event: data._allEventsMeta.count,
+		document: data._allDocumentsMeta.count,
+		stakeholder: data._allStakeholdersMeta.count,
+	});
+	/* eslint-enable no-underscore-dangle */
 };
 
 export const withSearch = compose(
@@ -97,6 +120,7 @@ export const withSearch = compose(
 	withState('allSearchResults', 'setSearchResults', []),
 	withState('activeTab', 'setActiveTab', 'all'),
 	withState('activeResult', 'setActiveResult', undefined),
+	withState('counts', 'setCounts', undefined),
 	mapProps((props) => {
 		const searchResults = props.activeTab === 'all'
 			? props.allSearchResults
