@@ -9,7 +9,8 @@
     "Ludwig Frank @ludwigfrank <mail@ludwigfrank.com> (http://ludwigfrank.com/)",
     "Bela Kurek @q-rec <bela.kurek@berlin.de>",
     "Florian Zia @flozia <zia.florian@gmail.com>",
-    "Joshua Pacheco @josues <joshua.pacheco@me.com>"
+    "Joshua Pacheco @josues <joshua.pacheco@me.com>",
+    "Ben Silverman @ben___silverman <bsilverm@mit.edu>"
   ],
   "scripts": {
     "start": "npx serve build",
