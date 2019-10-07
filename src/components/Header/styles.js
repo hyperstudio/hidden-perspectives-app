@@ -51,9 +51,17 @@ const HeaderLink = styled(NavLink)`
 
 export const Logo = styled(HeaderLink)`
 	position: absolute;
-	top: 0;
+	top: -10px;
 	left: 0;
 	z-index: 1;
+`;
+
+export const LogoH2 = styled(HeaderLink)`
+	position:absolute;
+	top: 10px;
+	left: 0;
+	text-align: justify;
+	font-size:12px;
 `;
 
 export const LogButton = styled(HeaderLink)`

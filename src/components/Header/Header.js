@@ -8,6 +8,7 @@ import {
 	UserInfoContainer,
 	LogButton,
 	Logo,
+	LogoH2,
 } from './styles';
 
 // REMOVE THE PRODUCTION CHECK WHEN YOU PLAN TO INTRODUCE SIGN UP
@@ -20,13 +21,14 @@ const Header = ({
 	<Redirect to="/unsupported-browser" />
 ) : (
 	<HeaderContainer>
-		<Logo to="/">Hidden Perspectives</Logo>
+		<Logo to="/">US-Iran Relations</Logo>
+		<LogoH2 to="/">National Narratives, America, Iran, and the Clash of Civilizations</LogoH2>
 		<Search />
 		{!isProduction && (
 			!isAuthenticated() ? (
 				<UserInfoContainer>
 					<LogButton to="/login" exact>
-						{'Login'}
+						Login
 					</LogButton>
 				</UserInfoContainer>
 			) : <UserInfo />
@@ -45,4 +47,3 @@ Header.defaultProps = {
 };
 
 export default Header;
-

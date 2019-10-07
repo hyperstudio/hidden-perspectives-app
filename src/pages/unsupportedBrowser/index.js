@@ -14,7 +14,7 @@ const hiddenPerspectivesMicrositeUrl = '#';
 
 const UnsupportedBrowser = () => (
 	<Container>
-		<AppTitle variant="h2">Hidden Perspectives</AppTitle>
+		<AppTitle variant="h2">US-Iran Relations</AppTitle>
 		<Title variant="h1">Unfortunately, this beta app was only developed and optimized for Google Chrome on desktop.</Title>
 		<img src={ChromeLogo} alt="The Google Chrome app logo" />
 		<ButtonContainer>
@@ -22,8 +22,8 @@ const UnsupportedBrowser = () => (
 				<Button primary>Download Google Chrome</Button>
 			</a>
 		</ButtonContainer>
-		<a href={hiddenPerspectivesMicrositeUrl} title="The hompage of Hidden Perspectives">
-			<Button>What is Hidden Perspectives?</Button>
+		<a href={hiddenPerspectivesMicrositeUrl} title="The hompage of US-Iran Relations">
+			<Button>What is US-Iran Relations?</Button>
 		</a>
 	</Container>
 );
@@ -37,4 +37,3 @@ UnsupportedBrowser.propTypes = {
 };
 
 export default UnsupportedBrowser;
-
