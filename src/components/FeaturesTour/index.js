@@ -1,4 +1,4 @@
-import { compose, withProps } from 'recompose';
+import { compose, withProps } from '@hypnosphi/recompose';
 import { withTheme } from 'styled-components';
 import { withRouter } from 'react-router-dom';
 

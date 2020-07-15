@@ -3,7 +3,7 @@ import {
 	withState,
 	compose,
 	withHandlers,
-} from 'recompose';
+} from '@hypnosphi/recompose';
 import gql from 'graphql-tag';
 import { withApollo } from 'react-apollo';
 import Login from './Login';

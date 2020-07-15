@@ -5,7 +5,7 @@ import {
 	compose,
 	withHandlers,
 	withState,
-} from 'recompose';
+} from '@hypnosphi/recompose';
 import OriginalCreateDocumentForm from '../components/CreateForm';
 import { StoryWrapper } from './styles';
 

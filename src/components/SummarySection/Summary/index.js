@@ -1,4 +1,4 @@
-import { compose, withState, lifecycle } from 'recompose';
+import { compose, withState, lifecycle } from '@hypnosphi/recompose';
 import { getHoveredSummary } from '../../../utils/timelineUtil';
 import Summary from './Summary';
 

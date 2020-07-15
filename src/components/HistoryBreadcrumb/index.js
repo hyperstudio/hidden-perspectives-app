@@ -3,7 +3,7 @@ import {
 	lifecycle,
 	withState,
 	onlyUpdateForKeys,
-} from 'recompose';
+} from '@hypnosphi/recompose';
 import gql from 'graphql-tag';
 import { withApollo } from 'react-apollo';
 import { withRouter } from 'react-router-dom';

@@ -4,7 +4,7 @@ import {
 	withState,
 	withHandlers,
 	shouldUpdate,
-} from 'recompose';
+} from '@hypnosphi/recompose';
 import { withRouter } from 'react-router-dom';
 import Bubble from './Bubble';
 

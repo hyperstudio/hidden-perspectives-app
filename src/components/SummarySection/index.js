@@ -3,7 +3,7 @@ import {
 	withProps,
 	lifecycle,
 	onlyUpdateForKeys,
-} from 'recompose';
+} from '@hypnosphi/recompose';
 import {
 	flatten,
 	sortWith,

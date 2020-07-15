@@ -4,7 +4,7 @@ import {
 	withState,
 	withHandlers,
 	withProps,
-} from 'recompose';
+} from '@hypnosphi/recompose';
 import { withApollo } from 'react-apollo';
 import gql from 'graphql-tag';
 import { withLoading, withErrors, getErrorHandler } from '../../utils/hocUtil';

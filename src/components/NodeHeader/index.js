@@ -1,4 +1,4 @@
-import { withProps } from 'recompose';
+import { withProps } from '@hypnosphi/recompose';
 import { curry } from 'ramda';
 import { ucFirst } from '../../utils/stringUtil';
 import NodeHeader from './NodeHeader';

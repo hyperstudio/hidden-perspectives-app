@@ -4,7 +4,7 @@ import {
 	withState,
 	withHandlers,
 	lifecycle,
-} from 'recompose';
+} from '@hypnosphi/recompose';
 import { isPartlyInViewport } from './timelineUtil';
 
 export const withLoading = compose(

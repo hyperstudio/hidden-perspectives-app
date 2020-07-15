@@ -1,4 +1,4 @@
-import { compose, withState, withHandlers } from 'recompose';
+import { compose, withState, withHandlers } from '@hypnosphi/recompose';
 import Errors from './Errors';
 
 const StatefulErrors = compose(

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import OutsideClickHandler from 'react-outside-click-handler';
-import { compose, withHandlers, withState } from 'recompose';
+import { compose, withHandlers, withState } from '@hypnosphi/recompose';
 import TextInput from '../TextInput';
 import { isTodayOrPrior, isTodayOrAfter, getFormattedDate } from '../../../utils/dateUtil';
 import {

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { compose, lifecycle, withState } from 'recompose';
+import { compose, lifecycle, withState } from '@hypnosphi/recompose';
 import { withApollo } from 'react-apollo';
 import gql from 'graphql-tag';
 import {

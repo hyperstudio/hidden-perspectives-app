@@ -4,7 +4,7 @@ import {
 	compose,
 	lifecycle,
 	withProps,
-} from 'recompose';
+} from '@hypnosphi/recompose';
 import { getWikipediaImage } from '../../../utils/imageUtil';
 import CentralElement from './CentralElement';
 import { formatHumanDateShort } from '../../../utils/dateUtil';

@@ -1,4 +1,4 @@
-import { lifecycle } from 'recompose';
+import { lifecycle } from '@hypnosphi/recompose';
 import LoadingIndicator from './LoadingIndicator';
 
 export default lifecycle({

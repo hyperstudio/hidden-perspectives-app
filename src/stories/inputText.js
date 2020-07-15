@@ -1,7 +1,7 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
-import { compose, withHandlers, withState } from 'recompose';
+import { compose, withHandlers, withState } from '@hypnosphi/recompose';
 import OriginalInputWrapper from '../components/_library/InputWrapper';
 import { StoryWrapper } from './styles';
 import Select from '../components/_library/Select';

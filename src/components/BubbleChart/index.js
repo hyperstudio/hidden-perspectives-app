@@ -4,7 +4,7 @@ import {
 	lifecycle,
 	withState,
 	withHandlers,
-} from 'recompose';
+} from '@hypnosphi/recompose';
 import { prop } from 'ramda';
 import BubbleChart from './BubbleChart';
 import { calcBubbleLayout, calcForceLayout } from './calculateChartLayout';

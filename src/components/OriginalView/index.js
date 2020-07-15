@@ -3,7 +3,7 @@ import {
 	lifecycle,
 	withState,
 	withHandlers,
-} from 'recompose';
+} from '@hypnosphi/recompose';
 import { withApollo } from 'react-apollo';
 import gql from 'graphql-tag';
 import {

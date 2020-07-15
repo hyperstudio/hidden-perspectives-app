@@ -1,7 +1,7 @@
 import { withApollo } from 'react-apollo';
 import {
 	compose, lifecycle, withState, withHandlers,
-} from 'recompose';
+} from '@hypnosphi/recompose';
 import gql from 'graphql-tag';
 import {
 	map, groupBy, union, either, prop, flatten, reduce, merge,

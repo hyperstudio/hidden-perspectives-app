@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { lifecycle } from 'recompose';
+import { lifecycle } from '@hypnosphi/recompose';
 import {
 	Content,
 	InnerContainer,

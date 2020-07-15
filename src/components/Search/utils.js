@@ -10,7 +10,7 @@ import {
 	withState,
 	withHandlers,
 	mapProps,
-} from 'recompose';
+} from '@hypnosphi/recompose';
 import { withRouter } from 'react-router-dom';
 import { withLoading, withErrors } from '../../utils/hocUtil';
 

@@ -1,4 +1,4 @@
-import { compose, lifecycle, withHandlers } from 'recompose';
+import { compose, lifecycle, withHandlers } from '@hypnosphi/recompose';
 import { withApollo } from 'react-apollo';
 import { getSearchQuery, handleSearchResults, withSearch } from '../Search/utils';
 import SearchView from './SearchView';

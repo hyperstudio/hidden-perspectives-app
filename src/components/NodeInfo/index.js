@@ -4,7 +4,7 @@ import {
 	compose,
 	onlyUpdateForKeys,
 	lifecycle,
-} from 'recompose';
+} from '@hypnosphi/recompose';
 import { prop } from 'ramda';
 import { getWikipediaImagePerUrl } from '../../utils/imageUtil';
 import NodeInfo from './NodeInfo';

@@ -1,4 +1,4 @@
-import { withProps, compose } from 'recompose';
+import { withProps, compose } from '@hypnosphi/recompose';
 import Header from './Header';
 import { isAuthenticated, isAuthorized } from '../../utils/localStorageUtil';
 import { BrowserDetect, isMobile } from '../../utils/browserDetectionUtil';

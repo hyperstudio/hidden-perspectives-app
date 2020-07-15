@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { onlyUpdateForKeys } from 'recompose';
+import { onlyUpdateForKeys } from '@hypnosphi/recompose';
 import BubbleChart from '../BubbleChart';
 import { EventLegend, DocumentLegend } from '../Legend/Legend';
 import CentralElement from './CentralElement';

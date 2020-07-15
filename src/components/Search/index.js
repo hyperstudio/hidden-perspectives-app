@@ -2,7 +2,7 @@ import {
 	compose,
 	withHandlers,
 	lifecycle,
-} from 'recompose';
+} from '@hypnosphi/recompose';
 import { withApollo } from 'react-apollo';
 import debounce from 'lodash.debounce';
 import { getErrorHandler } from '../../utils/hocUtil';

@@ -1,4 +1,4 @@
-import { compose, lifecycle, withState } from 'recompose';
+import { compose, lifecycle, withState } from '@hypnosphi/recompose';
 import Stakeholder from './Stakeholder';
 import { getWikipediaImage } from '../../../utils/imageUtil';
 
