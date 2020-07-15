@@ -10,6 +10,7 @@ const requiredProps = {
 	title: 'When Empathy Failed: Using Critical Oral History to Re-visit the Collapse of U.S.-Soviet Detente in the Carter-Brezhnev Years',
 	hoverHandler: () => {},
 	hovered: false,
+	history: { push: jest.fn() },
 };
 
 describe('TimelineElement component', () => {

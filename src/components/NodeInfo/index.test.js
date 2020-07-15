@@ -7,6 +7,8 @@ describe('NodeInfo component', () => {
 		<NodeInfo
 			title="Yo what's up?"
 			subtitle="Hey!"
+			descriptionExpanded={false}
+			toggleDescriptionExpansion={jest.fn()}
 		/>,
 	);
 
