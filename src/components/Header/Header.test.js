@@ -1,10 +1,10 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { shallow } from 'enzyme';
 import Header from './Header';
 
-it('renders without crashing', () => {
-	const div = document.createElement('div');
-	ReactDOM.render(<Router><Header /></Router>, div);
-	ReactDOM.unmountComponentAtNode(div);
+describe('Header component', () => {
+	const headerComponent = shallow(<Header />);
+	it('should render without crashing', () => {
+		expect(headerComponent.exists()).toBe(true);
+	});
 });
