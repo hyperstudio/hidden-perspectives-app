@@ -1,16 +1,14 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import { BrowserRouter as Router } from 'react-router-dom';
-import Client from '../../state';
-import MetadataPage from '.';
+import { shallow } from 'enzyme';
+import LocationMetadataPage from '.';
 
 const match = {
 	params: { id: 'bob' },
 };
 
-it('renders without crashing', () => {
-	const div = document.createElement('div');
-	ReactDOM.render(<Router><Client><MetadataPage match={match} /></Client></Router>, div);
-	ReactDOM.unmountComponentAtNode(div);
+describe('LocationMetadataPage', () => {
+	const locationMetadataPage = shallow(<LocationMetadataPage match={match} />);
+	it('should render without crashing', () => {
+		expect(locationMetadataPage.exists()).toBe(true);
+	});
 });
-

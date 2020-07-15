@@ -1,16 +1,14 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import { BrowserRouter as Router } from 'react-router-dom';
-import Client from '../../state';
+import { shallow } from 'enzyme';
 import ProtagonistPage from '.';
 
 const match = {
 	params: { id: 'bob' },
 };
 
-it('renders without crashing', () => {
-	const div = document.createElement('div');
-	ReactDOM.render(<Router><Client><ProtagonistPage match={match} /></Client></Router>, div);
-	ReactDOM.unmountComponentAtNode(div);
+describe('ProtagonistPage', () => {
+	const protagonistPage = shallow(<ProtagonistPage match={match} />);
+	it('should render without crashing', () => {
+		expect(protagonistPage.exists()).toBe(true);
+	});
 });
-

@@ -1,13 +1,10 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import { BrowserRouter as Router } from 'react-router-dom';
-import Theme from '../../components/Theme';
-import Client from '../../state';
+import { shallow } from 'enzyme';
 import Home from '.';
 
-it('renders without crashing', () => {
-	const div = document.createElement('div');
-	ReactDOM.render(<Router><Client><Theme><Home /></Theme></Client></Router>, div);
-	ReactDOM.unmountComponentAtNode(div);
+describe('Home', () => {
+	const homePage = shallow(<Home />);
+	it('should render without crashing', () => {
+		expect(homePage.exists()).toBe(true);
+	});
 });
-
