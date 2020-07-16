@@ -63,9 +63,9 @@ const SearchResults = ({
 					))}
 				</Tabs>
 				<TabHint>
-					{'Hit tab'}
+					Hit tab
 					<Key>⇥</Key>
-					{'to switch category'}
+					to switch category
 				</TabHint>
 			</TabsContainer>
 			{searchResults.length === 0 && !isLoading ? (

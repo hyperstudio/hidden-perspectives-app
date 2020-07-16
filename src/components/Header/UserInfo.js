@@ -10,7 +10,7 @@ const UserInfo = ({ userName }) => (
 	<UserInfoContainer>
 		<UserAvatar>{userName[0].toUpperCase()}</UserAvatar>
 		<LogButton to="/" onClick={logUserOut} as={Link}>
-			{'Logout'}
+			Logout
 		</LogButton>
 	</UserInfoContainer>
 );

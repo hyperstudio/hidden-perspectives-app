@@ -39,7 +39,7 @@ const LabelFilters = ({
 				{'Keywords'}
 				{tags.length > 1 && (
 					<AllNoneText onClick={getToggleHandler({ tags, filteredTags, ...otherProps })}>
-						{'Toggle all/none'}
+						Toggle all/none
 					</AllNoneText>
 				)}
 			</Headline>

@@ -225,7 +225,7 @@ const CreateForm = ({
 							alignSelf="flex-end"
 							disabled={submitting || pristine}
 						>
-							{'Submit document'}
+							Submit document
 						</Button>
 					</Row>
 				</Grid>

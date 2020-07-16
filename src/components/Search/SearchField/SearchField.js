@@ -20,7 +20,7 @@ const SearchField = ({
 				onClick={() => onSearch('')}
 				spellCheck="false"
 			>
-				{'✕'}
+				✕
 			</ClearButton>
 		)}
 	</Container>

@@ -8,7 +8,7 @@ storiesOf('Fieldset', module)
 	.add('With string as children', () => (
 		<StoryWrapper maxWidth={640}>
 			<Fieldset title="This is a fieldset">
-				{'And I am its content'}
+				And I am its content
 			</Fieldset>
 		</StoryWrapper>
 	))

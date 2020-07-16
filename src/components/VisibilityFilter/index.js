@@ -20,7 +20,7 @@ const VisibilityFilter = ({ visibilityFilter, toggleVisibility }) => (
 	<div>
 		{visibilityFilter}
 		<button type="button" onClick={toggleVisibility}>
-			{'Toggle visibility'}
+			Toggle visibility
 		</button>
 	</div>
 );

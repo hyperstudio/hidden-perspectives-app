@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 import MetadataRow from '../components/_library/MetadataRow';
@@ -9,23 +10,23 @@ storiesOf('MetadataRow', module)
 	.add('Single row', () => (
 		<StoryWrapper maxWidth={640}>
 			<MetadataRow label="Title">
-				{'Iran reports to the U.N. a number of violations of Irans sovereignty'}
+				Iran reports to the U.N. a number of violations of Irans sovereignty
 			</MetadataRow>
 		</StoryWrapper>
 	))
 	.add('Multiple rows in display mode', () => (
 		<StoryWrapper maxWidth={640}>
 			<MetadataRow label="Title">
-				{'Iran reports to the U.N. a number of violations of Irans sovereignty'}
+				Iran reports to the U.N. a number of violations of Irans sovereignty
 			</MetadataRow>
 			<MetadataRow label="Summary">
-				{'Iran announces an agreement with Moscow on importing goods through the Soviet Union in the event of an American naval Blockade.'}
+				Iran announces an agreement with Moscow on importing goods through the Soviet Union in the event of an American naval Blockade.
 			</MetadataRow>
 			<MetadataRow label="Start-Date">
-				{'21/11/1980'}
+				21/11/1980
 			</MetadataRow>
 			<MetadataRow label="End-Date">
-				{'24/11/1980'}
+				24/11/1980
 			</MetadataRow>
 		</StoryWrapper>
 	))

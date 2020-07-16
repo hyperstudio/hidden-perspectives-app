@@ -52,7 +52,11 @@ SelectInput.propTypes = {
 	onChange: PropTypes.func,
 	valid: PropTypes.bool,
 	options: PropTypes.arrayOf(optionPropTypes).isRequired,
-	theme: PropTypes.shape({}).isRequired,
+	theme: PropTypes.shape({
+		selectTheme: PropTypes.shape({
+			colors: PropTypes.shape({ }),
+		}),
+	}).isRequired,
 };
 
 SelectInput.defaultProps = {
