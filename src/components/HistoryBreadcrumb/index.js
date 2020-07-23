@@ -12,8 +12,8 @@ import HistoryBreadcrumb from './HistoryBreadcrumb';
 
 
 const EVENT_QUERY = gql`
-	query GetEvent($id: ID!) {
-		Event(id: $id) {
+	query GetEvent($id: String) {
+		event(where: { id: $id }) {
 			id
 			eventTitle
 		}
@@ -21,8 +21,8 @@ const EVENT_QUERY = gql`
 `;
 
 const DOCUMENT_QUERY = gql`
-	query GetDocument($id: ID!) {
-		Document(id: $id) {
+	query GetDocument($id: String) {
+		document(where: { id: $id }) {
 			id
 			documentTitle
 		}
@@ -30,8 +30,8 @@ const DOCUMENT_QUERY = gql`
 `;
 
 const STAKEHOLDER_QUERY = gql`
-	query GetStakholder($id: ID!) {
-		Stakeholder(id: $id) {
+	query GetStakholder($id: String) {
+		stakeholder(where: { id: $id }) {
 			id
 			stakeholderFullName
 		}
@@ -39,8 +39,8 @@ const STAKEHOLDER_QUERY = gql`
 `;
 
 const LOCATION_QUERY = gql`
-	query GetLocation($id: ID!) {
-		Location(id: $id) {
+	query GetLocation($id: String) {
+		location(where: { id: $id }) {
 			id
 			locationName
 		}

@@ -10,36 +10,41 @@ import debounce from 'lodash.debounce';
 import MainTimeline from './MainTimeline';
 import { withLoading, withErrors, getErrorHandler } from '../../utils/hocUtil';
 import { getMinimap, isFullyInViewport } from '../../utils/timelineUtil';
-import { ucFirst } from '../../utils/stringUtil';
 import isDocumentId from '../../utils/isDocumentId';
 import { getFormattedDate } from '../../utils/dateUtil';
 import { parseItemsToDates } from './utils';
 import { startTour } from '../../utils/localStorageUtil';
 
 const ALL_EVENTS_AND_DOCUMENTS = gql`
-	{
-		allEvents(orderBy: eventStartDate_ASC) {
+	query {
+		events(orderBy: { eventStartDate: asc }) {
 			id
 			eventTitle
 			eventStartDate
 			eventDescription
 			eventStakeholders {
-				id
-				stakeholderFullName
+				Stakeholder{
+					id
+					stakeholderFullName
+				}
 			}
 		}
-		allDocuments(orderBy: documentCreationDate_ASC) {
+		documents(orderBy: { documentCreationDate: asc} ) {
 			id
 			documentTitle
 			documentDescription
 			documentCreationDate
 			mentionedStakeholders {
-				id
-				stakeholderFullName
+				Stakeholder{
+					id
+					stakeholderFullName
+				}
 			}
 			documentAuthors {
-				id
-				stakeholderFullName
+				Stakeholder{
+					id
+					stakeholderFullName
+				}
 			}
 		}
 	}
@@ -50,7 +55,7 @@ const getFilterArgsForQuery = (type, itemIds) => map((id) => `{ id: "${id}" }`, 
 const builtProtagonistQueryStringByType = (type, itemIds) => {
 	const stakeholdersFieldName = type === 'document' ? 'mentionedStakeholders' : 'eventStakeholders';
 	const query = `
-		all${ucFirst(type)}s(
+		all${type}s(
 			filter: {
 				OR: [
 					${getFilterArgsForQuery(type, itemIds)}
@@ -60,8 +65,10 @@ const builtProtagonistQueryStringByType = (type, itemIds) => {
 			id
 			${type}Title
 			${stakeholdersFieldName} {
-				id
-				stakeholderFullName
+				Stakeholder{
+					id
+					stakeholderFullName
+				}
 			}
 		}
 	`;

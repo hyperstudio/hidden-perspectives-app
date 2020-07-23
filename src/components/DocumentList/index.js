@@ -5,10 +5,10 @@ import DocumentList from './DocumentList';
 
 const ALL_DOCUMENTS_QUERY = gql`
 	query allDocuments {
-	  allDocuments {
-		id
-		documentTitle
-		documentOriginalID
+	  documents {
+			id
+			documentTitle
+			documentOriginalID
 	  }
 	}
 `;

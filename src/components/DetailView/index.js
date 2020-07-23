@@ -25,65 +25,83 @@ import { groupItemsBy } from '../../utils/timelineUtil';
 import { startTour } from '../../utils/localStorageUtil';
 
 const EVENT_QUERY = gql`
-	query GetEvent($id: ID!) {
-		Event(id: $id) {
+query GetEvent($id: String) {
+		event(where: { id: $id }) {
 			id
 			eventTitle
 			eventStartDate
 			eventTags {
-				id
-				name
+        Tag {
+					id
+					name
+				}
 			}
 			eventStakeholders {
-				id
-				stakeholderFullName
+        Stakeholder {
+					id
+					stakeholderFullName
+        }
 			}
 			eventDescription
 			eventLocations {
-				id
-				locationName
+        Location {
+					id
+					locationName
+				}
 			}
 		}
 	}
 `;
 
 const DOCUMENT_QUERY = gql`
-	query GetDocument($id: ID!) {
-		Document(id: $id) {
+	query GetDocument($id: String) {
+		document(where: { id: $id }) {
 			id
 			documentTitle
 			documentCreationDate
 			documentKind {
-				id
-				name
+				Kind {
+					id
+					name
+				}
 			}
 			documentTags {
-				id
-				name
+				Tag {
+					id
+					name
+				}
 			}
 			mentionedStakeholders {
-				id
-				stakeholderFullName
+				Stakeholder {
+					id
+					stakeholderFullName
+				}
 			}
 			documentAuthors {
-				id
-				stakeholderFullName
+				Stakeholder {
+					id
+					stakeholderFullName
+				}
 			}
 			documentDescription
 			documentFiles {
-				url
+				File {
+					url
+				}
 			}
 			mentionedLocations {
-				id
-				locationName
+				Location {
+					id
+					locationName
+				}
 			}
 		}
 	}
 `;
 
 const STAKEHOLDER_QUERY = gql`
-	query GetStakholder($id: ID!) {
-		Stakeholder(id: $id) {
+	query GetStakholder($id: String) {
+		stakeholder(where: { id: $id }) {
 			id
 			stakeholderFullName
 			stakeholderDescription
@@ -92,8 +110,8 @@ const STAKEHOLDER_QUERY = gql`
 `;
 
 const LOCATION_QUERY = gql`
-	query GetLocation($id: ID!) {
-		Location(id: $id) {
+	query GetLocation($id: String) {
+		location(where: { id: $id }) {
 			id
 			locationName
 			locationDescription
@@ -128,15 +146,21 @@ const getAdditionalReturnValuesByType = (type) => (
 		? `
 		documentCreationDate
 		documentFiles {
-			url
+			File {
+				url
+			}
 		}
 		documentKind {
-			id
-			name
+			Kind {
+				id
+				name
+			}
 		}
 		documentAuthors {
-			id
-			stakeholderFullName
+			Stakeholder {
+				id
+				stakeholderFullName
+			}
 		}`
 		: 'eventStartDate'
 );
@@ -147,7 +171,7 @@ const builtQueryStringByType = (type, id, tagIds) => {
 	const additionalReturnValues = getAdditionalReturnValuesByType(type);
 	const stakeholdersFieldName = type === 'document' ? 'mentionedStakeholders' : 'eventStakeholders';
 	const query = `
-		all${ucFirst(type)}s(
+		${type}s(
 			filter: {
 				OR: [
 					${formattedTags}
@@ -159,13 +183,17 @@ const builtQueryStringByType = (type, id, tagIds) => {
 			${type}Title
 			${additionalReturnValues}
 			${type}Tags {
-				id
-				name
+				Tag {
+					id
+					name
+				}
 			}
 			${type}Description
 			${stakeholdersFieldName} {
-				id
-				stakeholderFullName
+				Stakeholder {
+					id
+					stakeholderFullName
+				}
 			}
 		}
 	`;
@@ -184,7 +212,7 @@ const builtStakeholderQueryStringByItemId = (type, { id }) => {
 	const additionalReturnValues = getAdditionalReturnValuesByType(type);
 	const stakeholdersFieldName = type === 'document' ? 'mentionedStakeholders' : 'eventStakeholders';
 	const query = `
-		all${ucFirst(type)}s(
+		${type}s(
 			filter: {
 				${stakeholdersFieldName}_some: { id: "${id}" }
 			}
@@ -194,13 +222,17 @@ const builtStakeholderQueryStringByItemId = (type, { id }) => {
 			${type}Title
 			${additionalReturnValues}
 			${type}Tags {
-				id
-				name
+				Tag {
+					id
+					name
+				}
 			}
 			${type}Description
 			${stakeholdersFieldName} {
-				id
-				stakeholderFullName
+				Stakeholder { 
+					id
+					stakeholderFullName
+				}
 			}
 		}
 	`;
@@ -212,7 +244,7 @@ const builtLocationQueryStringByItemId = (type, { id }) => {
 	const additionalReturnValues = getAdditionalReturnValuesByType(type);
 	const locationsFieldName = type === 'document' ? 'mentionedLocations' : 'eventLocations';
 	const query = `
-		all${ucFirst(type)}s(
+		${type}s(
 			filter: {
 				${locationsFieldName}_some: { id: "${id}" }
 			}
@@ -222,13 +254,17 @@ const builtLocationQueryStringByItemId = (type, { id }) => {
 			${type}Title
 			${additionalReturnValues}
 			${type}Tags {
-				id
-				name
+				Tag {
+					id
+					name
+				}
 			}
 			${type}Description
 			${locationsFieldName} {
-				id
-				locationName
+				Location {
+					id
+					locationName
+				}
 			}
 		}
 	`;

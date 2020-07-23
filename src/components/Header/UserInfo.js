@@ -20,8 +20,8 @@ UserInfo.propTypes = {
 };
 
 const USERNAME_QUERY = gql`
-query getUser($id: ID!) {
-  User(id: $id) {
+query getUser($id: String) {
+  user(where: { id: $id }) {
     userName
   }
 }
@@ -36,7 +36,7 @@ export default () => (
 			if (loading) {
 				return null;
 			}
-			return <UserInfo userName={data.User.userName} />;
+			return <UserInfo userName={data.user.userName} />;
 		}}
 	</Query>
 );
