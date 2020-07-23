@@ -59,10 +59,10 @@ const getQueryByItemType = (itemType) => {
 
 const getTitleFromResponse = ({ data }, itemType) => {
 	switch (itemType) {
-	case 'protagonist': return data.stakeholder.stakeholderFullName;
-	case 'event': return data.event.eventTitle;
-	case 'document': return data.document.documentTitle;
-	case 'location': return data.location.locationName;
+	case 'protagonist': return data.stakeholder ? data.stakeholder.stakeholderFullName : data.stakeholderFullName;
+	case 'event': return data.event ? data.event.eventTitle : data.eventTitle;
+	case 'document': return data.document ? data.document.documentTitle : data.documentTitle;
+	case 'location': return data.location ? data.location.locationName : data.locationName;
 	default: return undefined;
 	}
 };
