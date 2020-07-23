@@ -30,13 +30,13 @@ export const formatGraphcoolDocument = ({
 	title: documentTitle,
 	date: new Date(documentCreationDate),
 	summary: documentDescription,
-	type: ucFirst(documentKind.name),
+	type: ucFirst(documentKind[0].Kind.name),
 	thumbnailUrl: documentFiles && documentFiles.length
-		? documentFiles[0].url
+		? documentFiles[0].File.url
 		: undefined,
 	authors: (documentAuthors || []).map((author) => ({
-		id: author.id,
-		name: author.stakeholderFullName,
+		id: author.Stakeholder.id,
+		name: author.Stakeholder.stakeholderFullName,
 	})),
 });
 
