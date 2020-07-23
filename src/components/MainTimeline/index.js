@@ -56,7 +56,7 @@ const builtProtagonistQueryStringByType = (type, itemIds) => {
 	const stakeholdersFieldName = type === 'document' ? 'mentionedStakeholders' : 'eventStakeholders';
 	const query = `
 		${type}s(
-			filter: {
+			where: {
 				OR: [
 					${getFilterArgsForQuery(type, itemIds)}
 				]
@@ -159,7 +159,7 @@ const getEventsAndDocuments = ({
 	setDocumentsCount,
 	setEventsCount,
 	setTourIsOpen,
-}) => ({ data: { allEvents: events, allDocuments: documents } }) => {
+}) => ({ data: { events, documents } }) => {
 	const items = parseItems({
 		events,
 		documents,

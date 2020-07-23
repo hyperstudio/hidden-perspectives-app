@@ -15,7 +15,7 @@ const TRANSCRIPT_QUERY = gql`
 
 
 const getDataParser = ({ setTranscript, stopLoading }) => ({ data }) => {
-	setTranscript(data.Document.documentTranscript);
+	setTranscript(data.document.documentTranscript);
 	stopLoading();
 };
 

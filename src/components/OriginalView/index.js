@@ -34,7 +34,7 @@ const getFileUrl = pipe(
 );
 
 const getDataParser = ({ setFile }) => ({ data }) => {
-	setFile(getFileUrl(data.Document));
+	setFile(getFileUrl(data.document));
 };
 
 export default compose(

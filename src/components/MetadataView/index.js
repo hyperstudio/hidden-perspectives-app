@@ -365,10 +365,10 @@ const structureLocationData = (data) => {
 
 const getStructuredData = (data, itemType) => {
 	switch (itemType) {
-	case 'event': return structureEventData(data.Event);
-	case 'document': return structureDocumentData(data.Document);
-	case 'stakeholder': return structureStakeholderData(data.Stakeholder);
-	case 'location': return structureLocationData(data.Location);
+	case 'event': return structureEventData(data.event);
+	case 'document': return structureDocumentData(data.document);
+	case 'stakeholder': return structureStakeholderData(data.stakeholder);
+	case 'location': return structureLocationData(data.location);
 	default: return '';
 	}
 };
