@@ -5,8 +5,8 @@ import { withLoading, withErrors, getErrorHandler } from '../../utils/hocUtil';
 import TranscriptView from './TranscriptView';
 
 const TRANSCRIPT_QUERY = gql`
-	query GetDocument($id: ID!) {
-		Document(id: $id) {
+	query GetDocument($id: String) {
+		document(where: {id: $id}) {
 			id
 			documentTranscript
 		}

@@ -16,12 +16,14 @@ import { withErrors, withLoading, getErrorHandler } from '../../utils/hocUtil';
 import OriginalView from './OriginalView';
 
 const FILE_QUERY = gql`
-	query GetDocument($id: ID!) {
-		Document(id: $id) {
+	query GetDocument($id: String) {
+		document(where: {id: $id}) {
 			id
 			documentFiles {
-				id
-				url
+				File{
+					id
+					url
+				}
 			}
 		}
 	}

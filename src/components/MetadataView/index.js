@@ -19,80 +19,104 @@ import Stakeholder from '../_library/Stakeholder';
 import Item from '../_library/Item';
 
 const DOCUMENT_QUERY = gql`
-	query GetDocument($id: ID!) {
-		Document(id: $id) {
+	query GetDocument($id: String) {
+		document(where: {id: $id}) {
 			id
 			documentTitle
 			documentDescription
 			documentKind {
-				id
-				name
+				Kind {
+					id
+					name
+				}
 			}
 			documentClassification {
-				id
-				name
+				Clasisfication {
+					id
+					name
+				}
 			}
 			documentAuthors {
-				id
-				stakeholderFullName
+				Stakeholder {
+					id
+					stakeholderFullName
+				}
 			}
 			documentCreationDate
 			documentPublicationDate
 			mentionedStakeholders {
-				id
-				stakeholderFullName
+				Stakeholder {
+					id
+					stakeholderFullName
+				}
 			}
 			mentionedLocations {
-				id,
-				locationName
+				Location {
+					id,
+					locationName
+				}
 			}
 			documentTags {
-				id,
-				name												
+				Tag{
+					id,
+					name
+				}											
 			}
 		}
 	}
 `;
 
 const EVENT_QUERY = gql`
-	query GetEvent($id: ID!) {
-		Event(id: $id) {
+	query GetEvent($id: String) {
+		event(where: {id: $id}) {
 			id
 			eventTitle
 			eventDescription
 			eventStartDate
 			eventEndDate
 			eventStakeholders {
-				id
-				stakeholderFullName
+				Stakeholder{
+					id
+					stakeholderFullName
+				}
 			}
 			eventTags {
-				id,
-				name												
+				Tag {
+					id,
+					name			
+				}									
 			}
 			eventLocations {
-				id,
-				locationName
+				Location{
+					id,
+					locationName
+				}
 			}
 		}
 	}
 `;
 
 const STAKEHOLDER_QUERY = gql`
-	query GetStakeholder($id: ID!) {
-		Stakeholder(id: $id) {
+	query GetStakeholder($id: String) {
+		stakeholder(where: {id: $id}) {
 			id
 			documents {
-				id
-				documentTitle
+				Document{
+					id
+					documentTitle
+				}
 			}
 			documentsMentionedIn {
-				id
-				documentTitle
+				Document{
+					id
+					documentTitle
+				}
 			}
 			eventsInvolvedIn {
-				id
-				eventTitle
+				Event {
+					id
+					eventTitle
+				}
 			}
 			stakeholderDescription
 			stakeholderFullName
@@ -102,16 +126,20 @@ const STAKEHOLDER_QUERY = gql`
 `;
 
 const LOCATION_QUERY = gql`
-	query GetLocation($id: ID!) {
-		Location(id: $id) {
+	query GetLocation($id: String) {
+		location(where: {id: $id}) {
 			id
 			documentsMentionedIn {
-				id
-				documentTitle
+				Document{
+					id
+					documentTitle
+				}
 			}
 			locationEvents {
-				id
-				eventTitle
+				Event {
+					id
+					eventTitle
+				}
 			}
 			locationDescription
 			locationName

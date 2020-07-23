@@ -8,50 +8,60 @@ import { formatHumanDate } from '../../utils/dateUtil';
 import NodeSidebar from './NodeSidebar';
 
 const EVENT_QUERY = gql`
-	query GetEvent($id: ID!) {
-		Event(id: $id) {
+	query GetEvent($id: String) {
+		event(where: {id: $id}) {
 			id
 			eventTitle
 			eventStartDate
 			eventDescription
 			eventLocations {
-				id
-				locationName
+				Location {
+					id
+					locationName
+				}
 			}
 		}
 	}
 `;
 
 const DOCUMENT_QUERY = gql`
-	query GetDocument($id: ID!) {
-		Document(id: $id) {
+	query GetDocument($id: String) {
+		document(where: {id: $id}) {
 			id
 			documentTitle
 			documentCreationDate
 			documentDescription
 			documentKind {
-				id
-				name
+				Kind{ 
+					id
+					name
+				}
 			}
 			documentAuthors {
-				id
-				stakeholderFullName
+				Author{
+					id
+					stakeholderFullName
+				}
 			}
 			documentFiles {
-				id
-				url
+				File {
+					id
+					url
+				}
 			}
 			mentionedLocations {
-				id
-				locationName
+				Location{
+					id
+					locationName
+				}
 			}
 		}
 	}
 `;
 
 const STAKEHOLDER_QUERY = gql`
-	query GetStakholder($id: ID!) {
-		Stakeholder(id: $id) {
+	query GetStakholder($id: String) {
+		stakeholder(where: {id: $id}) {
 			id
 			stakeholderFullName
 			stakeholderDescription
@@ -60,8 +70,8 @@ const STAKEHOLDER_QUERY = gql`
 `;
 
 const LOCATION_QUERY = gql`
-	query GetLocation($id: ID!) {
-		Location(id: $id) {
+	query GetLocation($id: String) {
+		location(where: {id: $id}) {
 			id
 			locationName
 			locationDescription

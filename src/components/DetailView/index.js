@@ -469,7 +469,7 @@ const getItemParser = (props) => ({ data }) => {
 		itemType,
 		setTags,
 	} = props;
-	const dataItemName = ucFirst(itemType);
+	const dataItemName = itemType;
 	const item = data[dataItemName];
 
 	setItem({
