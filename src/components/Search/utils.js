@@ -16,35 +16,51 @@ import { withLoading, withErrors } from '../../utils/hocUtil';
 
 export const getSearchQuery = (limit) => {
 	const getEventsQuery = (suffix = '') => `allEvents${suffix}(
-		filter: {
+		where: {
 			OR: [
-				{ eventTitle_contains: $searchQuery }
-				{ eventDescription_contains: $searchQuery }
-				{ eventStakeholders_some: {
-					stakeholderFullName_contains: $searchQuery
-				} }
+				{ eventTitle: { contains: $searchQuery } }
+				{ eventDescription: { contains: $searchQuery } }
+				{ eventStakeholders: { 
+						some: {
+							stakeholderFullName: {
+								contains: $searchQuery
+							}
+						}
+					} 
+				}
 			]
 		}
 		${limit ? `first: ${limit}` : ''}
 	)`;
 	const getDocumentsQuery = (suffix = '') => `allDocuments${suffix}(
-		filter: {
+		where: {
 			OR: [
-				{ documentTitle_contains: $searchQuery }
-				{ documentDescription_contains: $searchQuery }
-				{ documentTranscript_contains: $searchQuery }
-				{ mentionedStakeholders_some: {
-					stakeholderFullName_contains: $searchQuery
-				} }
+				{ documentTitle: { contains: $searchQuery } }
+				{ documentDescription: { contains: $searchQuery } }
+				{ documentTranscript: { contains: $searchQuery } }
+				{ mentionedStakeholders: { 
+						some: {
+							stakeholderFullName: {
+								contains: $searchQuery
+							}
+						}
+					}
+				}
 			]
 		}
 		${limit ? `first: ${limit}` : ''}
 	)`;
 	const getStakeholderQuery = (suffix = '') => `allStakeholders${suffix}(
-		filter: {
+		where: {
 			OR: [
-				{ stakeholderFullName_contains: $searchQuery }
-				{ stakeholderDescription_contains: $searchQuery }
+				{ stakeholderFullName: { 
+						contains: $searchQuery
+					} 
+				}
+				{ stakeholderDescription: {
+						contains: $searchQuery 
+					}
+				}
 			]
 		}
 		${limit ? `first: ${limit}` : ''}

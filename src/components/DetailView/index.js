@@ -131,14 +131,14 @@ const getQueryByItemId = (itemType) => {
 
 const formatTagsForQuery = (id, type, tagIds) => [
 	...map(
-		(tagId) => `{ ${type}Tags_some: { id: "${tagId}" } }`,
+		(tagId) => `{ ${type}Tags: { some: { id: "${tagId}" } } }`,
 		tagIds,
 	),
-	`{ id_in: "${id}" }`,
+	`{ id: { in: "${id}" } }`,
 ];
 
 const getOrderBy = (type) => (
-	type === 'document' ? 'documentCreationDate_ASC' : 'eventStartDate_ASC'
+	type === 'document' ? { documentCreationDate: 'asc' } : { eventStartDate: 'asc' }
 );
 
 const getAdditionalReturnValuesByType = (type) => (
@@ -172,7 +172,7 @@ const builtQueryStringByType = (type, id, tagIds) => {
 	const stakeholdersFieldName = type === 'document' ? 'mentionedStakeholders' : 'eventStakeholders';
 	const query = `
 		${type}s(
-			filter: {
+			where: {
 				OR: [
 					${formattedTags}
 				]
@@ -213,8 +213,10 @@ const builtStakeholderQueryStringByItemId = (type, { id }) => {
 	const stakeholdersFieldName = type === 'document' ? 'mentionedStakeholders' : 'eventStakeholders';
 	const query = `
 		${type}s(
-			filter: {
-				${stakeholdersFieldName}_some: { id: "${id}" }
+			where: {
+				${stakeholdersFieldName}: {
+					some: { id: "${id}" }
+				}
 			}
 			orderBy: ${orderBy}
 		) {
@@ -245,8 +247,10 @@ const builtLocationQueryStringByItemId = (type, { id }) => {
 	const locationsFieldName = type === 'document' ? 'mentionedLocations' : 'eventLocations';
 	const query = `
 		${type}s(
-			filter: {
-				${locationsFieldName}_some: { id: "${id}" }
+			where: {
+				${locationsFieldName}: {
+					some: { id: "${id}" }
+				}
 			}
 			orderBy: ${orderBy}
 		) {
