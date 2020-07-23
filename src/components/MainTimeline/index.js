@@ -55,7 +55,7 @@ const getFilterArgsForQuery = (type, itemIds) => map((id) => `{ id: "${id}" }`, 
 const builtProtagonistQueryStringByType = (type, itemIds) => {
 	const stakeholdersFieldName = type === 'document' ? 'mentionedStakeholders' : 'eventStakeholders';
 	const query = `
-		all${type}s(
+		${type}s(
 			filter: {
 				OR: [
 					${getFilterArgsForQuery(type, itemIds)}

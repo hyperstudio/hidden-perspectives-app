@@ -13,8 +13,8 @@ import { ucFirst } from '../../utils/stringUtil';
 import Tooltip from './Tooltip';
 
 const EVENT_QUERY = gql`
-	query GetEvent($id: ID!) {
-		Event(id: $id) {
+	query GetEvent($id: String) {
+		event(where: { id: $id }) {
 			id
 			eventStartDate
 			eventTitle
@@ -24,22 +24,28 @@ const EVENT_QUERY = gql`
 `;
 
 const DOCUMENT_QUERY = gql`
-	query GetDocument($id: ID!) {
-		Document(id: $id) {
+	query GetDocument($id: String) {
+		document(where: { id: $id }) {
 			id
 			documentTitle
 			documentKind {
-				id
-				name
+					Kind {
+						id
+						name
+					}
 			}
 			documentDescription
 			documentFiles {
-				id
-				url
+				File{
+					id
+					url
+				}
 			}
 			documentAuthors {
-				id
-				stakeholderFullName
+				Stakeholder {
+					id
+					stakeholderFullName
+				}
 			}
 		}
 	}
