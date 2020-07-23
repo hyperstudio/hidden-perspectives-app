@@ -41,7 +41,7 @@ class TimelineItemsClass extends React.PureComponent {
 
 				items.forEach((item) => {
 					if (!item.mentionedStakeholders) return;
-					item.mentionedStakeholders.forEach(({ stakeholderFullName, id }) => {
+					item.mentionedStakeholders.forEach(({ Stakeholder: { stakeholderFullName, id } }) => {
 						if (protagonists[stakeholderFullName]) {
 							protagonists[stakeholderFullName].value += 1;
 						} else {

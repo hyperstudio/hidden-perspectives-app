@@ -82,7 +82,7 @@ const getResponseProp = (key, type, item) => {
 const getItemSubtitle = (item, itemType) => {
 	switch (itemType) {
 	case 'event': return `Event ・ ${formatHumanDate(new Date(item.eventStartDate))}`;
-	case 'document': return `${ucFirst(item.documentKind && item.documentKind.name)} ・ ${formatHumanDate(new Date(item.documentCreationDate))}`;
+	case 'document': return `${ucFirst(item.documentKind && item.documentKind[0].Kind.name)} ・ ${formatHumanDate(new Date(item.documentCreationDate))}`;
 	case 'stakeholder': return 'Protagonist';
 	case 'location': return 'Location';
 	default: return '';
@@ -94,14 +94,14 @@ const getItemDescription = (item, itemType) => item[`${itemType}Description`];
 const getItemOriginal = (item, itemType) => {
 	if (itemType !== 'document') return undefined;
 	return item.documentFiles && item.documentFiles.length > 0
-		? item.documentFiles[0].url : undefined;
+		? item.documentFiles[0].File.url : undefined;
 };
 
 const getItemAuthors = (item, itemType) => {
 	if (itemType !== 'document') return [];
 	return item.documentAuthors.map((author) => ({
-		id: author.id,
-		name: author.stakeholderFullName,
+		id: author.Stakeholder.id,
+		name: author.Stakeholder.stakeholderFullName,
 	}));
 };
 

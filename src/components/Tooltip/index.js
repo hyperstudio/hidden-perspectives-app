@@ -60,7 +60,7 @@ const getDataParser = ({
 	stopLoading,
 	setAuthors,
 }) => ({ data }) => {
-	const item = data[ucFirst(itemType)];
+	const item = data[itemType];
 	const {
 		title,
 		type,

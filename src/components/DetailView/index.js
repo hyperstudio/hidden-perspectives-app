@@ -131,7 +131,7 @@ const getQueryByItemId = (itemType) => {
 
 const formatTagsForQuery = (id, type, tagIds) => [
 	...map(
-		(tagId) => `{ ${type}Tags: { some: { id: "${tagId}" } } }`,
+		(tagId) => `{ ${type}Tags: { some: { id: { equals: "${tagId}" } } } }`,
 		tagIds,
 	),
 	`{ id: { in: "${id}" } }`,
@@ -215,7 +215,7 @@ const builtStakeholderQueryStringByItemId = (type, { id }) => {
 		${type}s(
 			where: {
 				${stakeholdersFieldName}: {
-					some: { id: "${id}" }
+					some: { id: { equals: "${id}" } }
 				}
 			}
 			orderBy: ${orderBy}
@@ -249,7 +249,7 @@ const builtLocationQueryStringByItemId = (type, { id }) => {
 		${type}s(
 			where: {
 				${locationsFieldName}: {
-					some: { id: "${id}" }
+					some: { id: { equals: "${id}" } }
 				}
 			}
 			orderBy: ${orderBy}
@@ -320,8 +320,8 @@ const getItemOriginal = (item, itemType) => {
 const getItemAuthors = (item, itemType) => {
 	if (itemType !== 'document') return [];
 	return item.documentAuthors.map((author) => ({
-		id: author.id,
-		name: author.stakeholderFullName,
+		id: author.Stakeholder.id,
+		name: author.Stakeholder.stakeholderFullName,
 	}));
 };
 

@@ -15,15 +15,17 @@ import { withRouter } from 'react-router-dom';
 import { withLoading, withErrors } from '../../utils/hocUtil';
 
 export const getSearchQuery = (limit) => {
-	const getEventsQuery = (suffix = '') => `allEvents${suffix}(
+	const getEventsQuery = (suffix = '') => `events${suffix}(
 		where: {
 			OR: [
 				{ eventTitle: { contains: $searchQuery } }
 				{ eventDescription: { contains: $searchQuery } }
 				{ eventStakeholders: { 
 						some: {
-							stakeholderFullName: {
-								contains: $searchQuery
+							Stakeholder: {
+								stakeholderFullName: {
+									contains: $searchQuery
+								}
 							}
 						}
 					} 
@@ -32,7 +34,7 @@ export const getSearchQuery = (limit) => {
 		}
 		${limit ? `first: ${limit}` : ''}
 	)`;
-	const getDocumentsQuery = (suffix = '') => `allDocuments${suffix}(
+	const getDocumentsQuery = (suffix = '') => `documents${suffix}(
 		where: {
 			OR: [
 				{ documentTitle: { contains: $searchQuery } }
@@ -40,8 +42,10 @@ export const getSearchQuery = (limit) => {
 				{ documentTranscript: { contains: $searchQuery } }
 				{ mentionedStakeholders: { 
 						some: {
-							stakeholderFullName: {
-								contains: $searchQuery
+							Stakeholder: {
+								stakeholderFullName: {
+									contains: $searchQuery
+								}
 							}
 						}
 					}
@@ -50,7 +54,7 @@ export const getSearchQuery = (limit) => {
 		}
 		${limit ? `first: ${limit}` : ''}
 	)`;
-	const getStakeholderQuery = (suffix = '') => `allStakeholders${suffix}(
+	const getStakeholderQuery = (suffix = '') => `stakeholders${suffix}(
 		where: {
 			OR: [
 				{ stakeholderFullName: { 
