@@ -26,6 +26,14 @@ function elementHasTag(element, id) {
 	return (element.tags || []).find((tag) => tag.id === id);
 }
 
+function reOrganizeTags(tags) {
+	const redoneTags = [];
+	tags.forEach((element) => {
+		redoneTags.push(element.Tag);
+	});
+	return redoneTags;
+}
+
 const LabelFilters = ({
 	tags,
 	filteredTags,
@@ -45,7 +53,7 @@ const LabelFilters = ({
 			</Headline>
 		)}
 		<br />
-		{tags.map(({ id, name }) => (
+		{reOrganizeTags(tags).map(({ id, name }) => (
 			<Tag
 				key={id}
 				hovered={hoveredElement && elementHasTag(hoveredElement, id)}
