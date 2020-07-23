@@ -30,7 +30,7 @@ const DOCUMENT_QUERY = gql`
 `;
 
 const STAKEHOLDER_QUERY = gql`
-	query GetStakholder($id: String) {
+	query GetStakeholder($id: String) {
 		stakeholder(where: { id: $id }) {
 			id
 			stakeholderFullName
