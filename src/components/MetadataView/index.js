@@ -31,7 +31,7 @@ const DOCUMENT_QUERY = gql`
 				}
 			}
 			documentClassification {
-				Clasisfication {
+				Classification {
 					id
 					name
 				}
@@ -148,16 +148,16 @@ const LOCATION_QUERY = gql`
 	}
 `;
 
-const mapStakeholder = ({ id, stakeholderFullName }) => ({
+const mapStakeholder = ({ Stakeholder: { id, stakeholderFullName } }) => ({
 	id, name: stakeholderFullName,
 });
-const mapLocation = ({ id, locationName }) => ({
+const mapLocation = ({ Location: { id, locationName } }) => ({
 	id, name: locationName,
 });
-const mapDocuments = ({ id, documentTitle }) => ({
+const mapDocuments = ({ Document: { id, documentTitle } }) => ({
 	id, name: documentTitle,
 });
-const mapEvents = ({ id, eventTitle }) => ({
+const mapEvents = ({ Event: { id, eventTitle } }) => ({
 	id, name: eventTitle,
 });
 
@@ -222,15 +222,18 @@ const structureDocumentData = (data) => {
 			},
 		].filter(hasValue),
 	};
-
+	const docTagsRedone = [];
+	data.documentTags.forEach((element) => {
+		docTagsRedone.push(element.Tag);
+	});
 	const categorization = {
 		groupLabel: 'Categorization',
 		values: [
-			{ label: 'Kind', value: data.documentKind.name },
-			{ label: 'Classification', value: data.documentClassification.name },
+			{ label: 'Kind', value: data.documentKind[0].Kind.name },
+			{ label: 'Classification', value: data.documentClassification[0].Classification.name },
 			{
 				label: 'Tags',
-				value: data.documentTags,
+				value: docTagsRedone,
 				ValueComponent: passValueAsChild(Tag),
 			},
 		].filter(hasValue),
@@ -253,6 +256,8 @@ const structureEventData = (data) => {
 		eventLocations,
 		eventTags,
 	} = data;
+
+	console.log(data);
 
 	const coreInformation = {
 		groupLabel: 'Core information',

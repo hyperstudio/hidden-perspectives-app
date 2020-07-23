@@ -38,7 +38,7 @@ const DOCUMENT_QUERY = gql`
 				}
 			}
 			documentAuthors {
-				Author{
+				Stakeholder {
 					id
 					stakeholderFullName
 				}
@@ -60,7 +60,7 @@ const DOCUMENT_QUERY = gql`
 `;
 
 const STAKEHOLDER_QUERY = gql`
-	query GetStakholder($id: String) {
+	query GetStakeholder($id: String) {
 		stakeholder(where: {id: $id}) {
 			id
 			stakeholderFullName
@@ -138,7 +138,7 @@ const getItemParser = (props) => ({ data }) => {
 		itemType,
 		stopLoading,
 	} = props;
-	const dataItemName = ucFirst(itemType);
+	const dataItemName = itemType;
 	const item = data[dataItemName];
 
 	setItem({

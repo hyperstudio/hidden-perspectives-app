@@ -86,6 +86,7 @@ const DOCUMENT_QUERY = gql`
 			documentDescription
 			documentFiles {
 				File {
+					id
 					url
 				}
 			}
@@ -100,7 +101,7 @@ const DOCUMENT_QUERY = gql`
 `;
 
 const STAKEHOLDER_QUERY = gql`
-	query GetStakholder($id: String) {
+	query GetStakeholder($id: String) {
 		stakeholder(where: { id: $id }) {
 			id
 			stakeholderFullName
@@ -138,7 +139,7 @@ const formatTagsForQuery = (id, type, tagIds) => [
 ];
 
 const getOrderBy = (type) => (
-	type === 'document' ? { documentCreationDate: 'asc' } : { eventStartDate: 'asc' }
+	type === 'document' ? '{ documentCreationDate: asc }' : '{ eventStartDate: asc }'
 );
 
 const getAdditionalReturnValuesByType = (type) => (
@@ -147,6 +148,7 @@ const getAdditionalReturnValuesByType = (type) => (
 		documentCreationDate
 		documentFiles {
 			File {
+				id
 				url
 			}
 		}
@@ -215,7 +217,9 @@ const builtStakeholderQueryStringByItemId = (type, { id }) => {
 		${type}s(
 			where: {
 				${stakeholdersFieldName}: {
-					some: { id: { equals: "${id}" } }
+					some: { 
+						Stakeholder: { id: { equals: "${id}" } }
+					}
 				}
 			}
 			orderBy: ${orderBy}
@@ -302,7 +306,7 @@ const getResponseProp = (key, type, item) => {
 const getItemSubtitle = (item, itemType) => {
 	switch (itemType) {
 	case 'event': return `Event ・ ${formatHumanDate(new Date(item.eventStartDate))}`;
-	case 'document': return `${ucFirst(item.documentKind && item.documentKind.name)} ・ ${formatHumanDate(new Date(item.documentCreationDate))}`;
+	case 'document': return `${ucFirst(item.documentKind[0].Kind && item.documentKind[0].Kind.name)} ・ ${formatHumanDate(new Date(item.documentCreationDate))}`;
 	case 'stakeholder': return 'Protagonist';
 	case 'location': return 'Location';
 	default: return '';
@@ -314,7 +318,7 @@ const getItemDescription = (item, itemType) => item[`${itemType}Description`];
 const getItemOriginal = (item, itemType) => {
 	if (itemType !== 'document') return undefined;
 	return item.documentFiles && item.documentFiles.length > 0
-		? item.documentFiles[0].url : undefined;
+		? item.documentFiles[0].File.url : undefined;
 };
 
 const getItemAuthors = (item, itemType) => {
@@ -325,7 +329,7 @@ const getItemAuthors = (item, itemType) => {
 	}));
 };
 
-const mapLocation = ({ id, locationName: name }) => ({ id, name });
+const mapLocation = ({Location: { id, locationName: name } }) => ({ id, name });
 const getItemLocations = (item, itemType) => {
 	if (itemType === 'document') return item.mentionedLocations.map(mapLocation);
 	if (itemType === 'event') return item.eventLocations.map(mapLocation);
@@ -395,24 +399,24 @@ const roundAngle = (angle) => angle - (angle % 4);
 const getFirstDate = pipe(head, getItemDate);
 const getLastDate = pipe(last, getItemDate);
 
-const getStartExtreme = ({ allDocuments, allEvents }) => {
-	const firstDocumentDate = getFirstDate(allDocuments);
-	const firstEventDate = getFirstDate(allEvents);
+const getStartExtreme = ({ documents, events }) => {
+	const firstDocumentDate = getFirstDate(documents);
+	const firstEventDate = getFirstDate(events);
 
 	return firstDocumentDate < firstEventDate ? firstDocumentDate : firstEventDate;
 };
 
-const getEndExtreme = ({ allDocuments, allEvents }) => {
-	const lastDocumentDate = getLastDate(allDocuments);
-	const lastEventDate = getLastDate(allEvents);
+const getEndExtreme = ({ documents, events }) => {
+	const lastDocumentDate = getLastDate(documents);
+	const lastEventDate = getLastDate(events);
 
 	return lastDocumentDate > lastEventDate ? lastDocumentDate : lastEventDate;
 };
 
-const newParseItems = ({ allDocuments, allEvents, tags }) => {
+const newParseItems = ({ documents, events, tags }) => {
 	const dateExtremes = [
-		getStartExtreme({ allDocuments, allEvents }),
-		getEndExtreme({ allDocuments, allEvents }),
+		getStartExtreme({ documents, events }),
+		getEndExtreme({ documents, events }),
 	];
 	const angleScaleFunction = scaleLinear()
 		.domain(dateExtremes)
@@ -421,12 +425,12 @@ const newParseItems = ({ allDocuments, allEvents, tags }) => {
 	const getAngle = pipe(angleScaleFunction, roundAngle);
 
 	return {
-		events: newNormalizeItems({ tags, getAngle, items: allEvents }),
-		documents: newNormalizeItems({ tags, getAngle, items: allDocuments }),
+		events: newNormalizeItems({ tags, getAngle, items: events }),
+		documents: newNormalizeItems({ tags, getAngle, items: documents }),
 	};
 };
 
-const getContextParser = (props, item, tags) => ({ data: { allEvents, allDocuments } }) => {
+const getContextParser = (props, item, tags) => ({ data: { events, documents } }) => {
 	const {
 		itemType,
 		stopLoading,
@@ -438,23 +442,23 @@ const getContextParser = (props, item, tags) => ({ data: { allEvents, allDocumen
 		setHoveredElement,
 	} = props;
 
-	if (allDocuments.length === 0 && allEvents.length === 0) {
+	if (documents.length === 0 && events.length === 0) {
 		setDocuments([]);
 		setEvents([]);
 		stopLoading();
 		return;
 	}
 
-	const { documents, events } = newParseItems({ allDocuments, allEvents, tags });
-	const protagonists = getProtagonists(item, itemType, allDocuments, allEvents);
+	const { newDocuments, newEvents } = newParseItems({ documents, events, tags });
+	const protagonists = getProtagonists(item, itemType, documents, events);
 
 	setItemCounts({
-		documentsCount: allDocuments.length,
-		eventsCount: allEvents.length,
+		documentsCount: documents.length,
+		eventsCount: events.length,
 		protagonistsCount: protagonists.length,
 	});
-	setDocuments(documents);
-	setEvents(events);
+	setDocuments(newDocuments);
+	setEvents(newEvents);
 	setProtagonists(protagonists);
 
 	stopLoading();
