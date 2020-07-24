@@ -11,6 +11,7 @@ import {
 } from 'ramda';
 import { scaleLinear } from 'd3-scale';
 import { TIMELINE_EVENT_HEIGHT, MINIMAP_EVENT_HEIGHT } from '../state/constants';
+import reOrganizeItems from './reorganizeUtil';
 
 const groupsOf = curry(function group(n, list) {
 	return isEmpty(list) ? [] : prepend(take(n, list), group(n, drop(n, list)));
@@ -84,8 +85,8 @@ const isDocumentHovered = (item, hoveredElement) => {
 	if (hoveredElement.itemType === 'tag') {
 		return !!item.commonTags.find((tag) => tag.id === hoveredElement.id);
 	}
-	return !!item
-		.mentionedStakeholders.find(({ id }) => id === hoveredElement.id);
+	return !!reOrganizeItems(item
+		.mentionedStakeholders, 'stakeholder').find(({ id }) => id === hoveredElement.id);
 };
 
 const isEventHovered = (item, hoveredElement) => {
@@ -93,18 +94,17 @@ const isEventHovered = (item, hoveredElement) => {
 	if (hoveredElement.itemType === 'tag') {
 		return !!item.commonTags.find((tag) => tag.id === hoveredElement.id);
 	}
-	return !!item
-		.eventStakeholders.find(({ id }) => id === hoveredElement.id);
+	return !!reOrganizeItems(item
+		.eventStakeholders, 'stakeholder').find(({ id }) => id === hoveredElement.id);
 };
 
 const isStakeholderHovered = (item, hoveredElement) => {
 	if (hoveredElement.itemType === 'document') {
-		return !!hoveredElement
-			.mentionedStakeholders.find(({ id }) => id === item.id);
+		return !!reOrganizeItems(hoveredElement
+			.mentionedStakeholders, 'stakeholder').find(({ id }) => id === item.id);
 	}
 	if (hoveredElement.itemType === 'event') {
-		return !!hoveredElement
-			.eventStakeholders.find(({ id }) => id === item.id);
+		return !!reOrganizeItems(hoveredElement.eventStakeholders, 'stakeholder').find(({ id }) => id === item.id);
 	}
 	return false;
 };

@@ -75,7 +75,7 @@ class TimelineItemsClass extends React.PureComponent {
 
 		const mapTimelineItem = (itemType) => (item) => (
 			<TimelineElement
-				key={item.id}
+				key={item.id.trim()}
 				{...item}
 				itemType={itemType}
 				hoveredElement={hoveredElement}

@@ -25,7 +25,7 @@ const TimelineElement = ({
 				'timeline-event',
 				hovered ? 'hovered' : '',
 			].join(' ')}
-			data-id={id}
+			data-id={id.trim()}
 			right={itemType === 'document'}
 			onMouseEnter={() => hoverHandler({ id, itemType, ...itemProps })}
 			onMouseLeave={() => hoverHandler(null)}
@@ -36,7 +36,7 @@ const TimelineElement = ({
 				<IconItem itemType={itemType} hovered={hovered} size={18} />
 			</IconContainer>
 			<Tooltip
-				id={id}
+				id={id.trim()}
 				itemType={itemType}
 				position={itemType === 'document' ? 'right' : 'left'}
 				noTitle
