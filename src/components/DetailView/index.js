@@ -132,7 +132,7 @@ const getQueryByItemId = (itemType) => {
 
 const formatTagsForQuery = (id, type, tagIds) => [
 	...map(
-		(tagId) => `{ ${type}Tags: { some: { id: { equals: "${tagId}" } } } }`,
+		(tagId) => `{ ${type}Tags: { some: { Tag: { id: { equals: "${tagId}" } } } } }`,
 		tagIds,
 	),
 	`{ id: { in: "${id}" } }`,
@@ -253,7 +253,7 @@ const builtLocationQueryStringByItemId = (type, { id }) => {
 		${type}s(
 			where: {
 				${locationsFieldName}: {
-					some: { id: { equals: "${id}" } }
+					some: { Location: { id: { equals: "${id}" } } }
 				}
 			}
 			orderBy: ${orderBy}
