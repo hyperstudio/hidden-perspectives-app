@@ -426,8 +426,8 @@ const newParseItems = ({ documents, events, tags }) => {
 
 	const getAngle = pipe(angleScaleFunction, roundAngle);
 	return {
-		events: newNormalizeItems({ tags, getAngle, items: events }),
-		documents: newNormalizeItems({ tags, getAngle, items: documents }),
+		newEvents: newNormalizeItems({ tags, getAngle, items: events }),
+		newDocuments: newNormalizeItems({ tags, getAngle, items: documents }),
 	};
 };
 
