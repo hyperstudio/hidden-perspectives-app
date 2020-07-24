@@ -59,8 +59,8 @@ const BubbleChartImages = ({ images }) => (
 			y,
 		}) => (
 			<pattern
-				key={id}
-				id={`image-def-${id}`}
+				key={id.trim()}
+				id={`image-def-${id.trim()}`}
 				x={x}
 				y={y}
 				patternUnits="userSpaceOnUse"

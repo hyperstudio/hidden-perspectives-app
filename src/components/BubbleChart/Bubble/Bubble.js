@@ -22,7 +22,7 @@ const Bubble = ({
 	history,
 }) => {
 	const { name, isActive } = data;
-	const { id } = data[0].Stakeholder;
+	const id = data[0].Stakeholder.id.trim();
 
 	const maxFontSize = 16;
 	const margin = 12;
