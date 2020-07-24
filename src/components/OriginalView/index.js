@@ -30,13 +30,12 @@ const FILE_QUERY = gql`
 `;
 
 const getFileUrl = pipe(
-	prop('documentFiles'),
-	defaultTo({}, head),
+	prop('File'),
 	prop('url'),
 );
 
 const getDataParser = ({ setFile }) => ({ data }) => {
-	setFile(getFileUrl(data.document));
+	setFile(getFileUrl(data.document.documentFiles[0]));
 };
 
 export default compose(
