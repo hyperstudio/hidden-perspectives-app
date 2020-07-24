@@ -23,6 +23,7 @@ import { ucFirst } from '../../utils/stringUtil';
 import { formatHumanDate } from '../../utils/dateUtil';
 import { groupItemsBy } from '../../utils/timelineUtil';
 import { startTour } from '../../utils/localStorageUtil';
+import reOrganizeItems from '../../utils/reorganizeUtil';
 
 const EVENT_QUERY = gql`
 query GetEvent($id: String) {
@@ -342,7 +343,7 @@ const getQuery = (item, itemType) => {
 
 	if (itemType === 'event' || itemType === 'document') {
 		tags = getResponseProp('tags', itemType, item);
-		const tagsQuery = builtTagsQuery(item.id, map(prop('id'), tags));
+		const tagsQuery = builtTagsQuery(item.id, map(prop('id'), reOrganizeItems(tags, 'tag')));
 		query = tagsQuery;
 	} else if (itemType === 'stakeholder') {
 		const mentionedInQuery = builtStakeholderMentionedInQuery(item);
@@ -424,7 +425,6 @@ const newParseItems = ({ documents, events, tags }) => {
 		.range([0, 320]);
 
 	const getAngle = pipe(angleScaleFunction, roundAngle);
-
 	return {
 		events: newNormalizeItems({ tags, getAngle, items: events }),
 		documents: newNormalizeItems({ tags, getAngle, items: documents }),

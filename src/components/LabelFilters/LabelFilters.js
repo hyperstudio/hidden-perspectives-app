@@ -4,6 +4,7 @@ import { prop } from 'ramda';
 import { AllNoneText } from './styles';
 import Tag from '../_library/Tag';
 import Headline from '../_library/Headline';
+import reOrganizeItems from '../../utils/reorganizeUtil';
 
 const getToggleHandler = ({ filteredTags, tags, setFilteredTags }) => () => {
 	if (filteredTags.length === tags.length) return setFilteredTags([]);
@@ -26,14 +27,6 @@ function elementHasTag(element, id) {
 	return (element.tags || []).find((tag) => tag.id === id);
 }
 
-function reOrganizeTags(tags) {
-	const redoneTags = [];
-	tags.forEach((element) => {
-		redoneTags.push(element.Tag);
-	});
-	return redoneTags;
-}
-
 const LabelFilters = ({
 	tags,
 	filteredTags,
@@ -53,7 +46,7 @@ const LabelFilters = ({
 			</Headline>
 		)}
 		<br />
-		{reOrganizeTags(tags).map(({ id, name }) => (
+		{reOrganizeItems(tags, 'tag').map(({ id, name }) => (
 			<Tag
 				key={id}
 				hovered={hoveredElement && elementHasTag(hoveredElement, id)}
