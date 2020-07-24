@@ -357,12 +357,11 @@ const getQuery = (item, itemType) => {
 
 const getProtagonists = (item, itemType, allDocuments, allEvents) => {
 	const items = itemType === 'stakeholder' || itemType === 'location' ? union(allDocuments, allEvents) : [item];
-
 	const protagonists = items.reduce((allProtagonists, currentItem) => {
 		const stakeholdersValue = either(prop('eventStakeholders'), prop('mentionedStakeholders'))(currentItem) || [];
 		const stakeholders = stakeholdersValue.reduce((acc, current) => ({
 			...acc,
-			[current.id]: (acc[current.id] || []).concat(current),
+			[current.Stakeholder.id]: (acc[current.Stakeholder.id] || []).concat(current),
 		}), allProtagonists);
 		return {
 			...allProtagonists,
@@ -378,7 +377,9 @@ const getItemTags = either(prop('documentTags'), prop('eventTags'));
 
 const newNormalizeItem = ({ tags, getAngle }) => (item) => {
 	const itemTags = getItemTags(item);
-	const commonTags = itemTags.filter((itemTag) => tags.some(({ id }) => id === itemTag.id));
+	const commonTags = itemTags.filter(
+		(itemTag) => tags.some(({ Tag: { id } }) => id === itemTag.Tag.id),
+	);
 	const date = getItemDate(item);
 	return {
 		...item,

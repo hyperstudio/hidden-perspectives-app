@@ -21,7 +21,8 @@ const Bubble = ({
 	image,
 	history,
 }) => {
-	const { name, id, isActive } = data;
+	const { name, isActive } = data;
+	const { id } = data[0].Stakeholder;
 
 	const maxFontSize = 16;
 	const margin = 12;
