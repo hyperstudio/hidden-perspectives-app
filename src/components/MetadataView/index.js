@@ -17,6 +17,7 @@ import { getFormattedDate } from '../../utils/dateUtil';
 import Tag from '../_library/Tag';
 import Stakeholder from '../_library/Stakeholder';
 import Item from '../_library/Item';
+import reOrganizeItems from '../../utils/reorganizeUtil';
 
 const DOCUMENT_QUERY = gql`
 	query GetDocument($id: String) {
@@ -222,10 +223,6 @@ const structureDocumentData = (data) => {
 			},
 		].filter(hasValue),
 	};
-	const docTagsRedone = [];
-	data.documentTags.forEach((element) => {
-		docTagsRedone.push(element.Tag);
-	});
 	const categorization = {
 		groupLabel: 'Categorization',
 		values: [
@@ -233,7 +230,7 @@ const structureDocumentData = (data) => {
 			{ label: 'Classification', value: data.documentClassification[0].Classification.name },
 			{
 				label: 'Tags',
-				value: docTagsRedone,
+				value: reOrganizeItems(data.documentTags, 'tag'),
 				ValueComponent: passValueAsChild(Tag),
 			},
 		].filter(hasValue),
@@ -288,7 +285,7 @@ const structureEventData = (data) => {
 		values: [
 			{
 				label: 'Tags',
-				value: eventTags,
+				value: reOrganizeItems(eventTags, 'tag'),
 				ValueComponent: passValueAsChild(Tag),
 			},
 		].filter(hasValue),
