@@ -75,23 +75,17 @@ export const getSearchQuery = (limit) => {
 			${getEventsQuery()} {
 				id
 				eventTitle
-			}
-			_${getEventsQuery('Meta')} {
-				count
+				eventCount
 			}
 			${getDocumentsQuery()} {
 				id
 				documentTitle
-			}
-			_${getDocumentsQuery('Meta')} {
-				count
+				documentCount
 			}
 			${getStakeholderQuery()} {
 				id
 				stakeholderFullName
-			}
-			_${getStakeholderQuery('Meta')} {
-				count
+				stakeholderCount
 			}
 		}
 	`;
@@ -111,25 +105,28 @@ const contains = (container, containment) => container.toLowerCase()
 
 export const handleSearchResults = (props, value) => ({ data }) => {
 	const { stopLoading, setCounts, setSearchResults } = props;
-	const documents = parseDocuments(data.allDocuments);
-	const events = parseEvents(data.allEvents);
-	const stakeholders = parseStakeholders(data.allStakeholders);
+	const documents = parseDocuments(data.documents);
+	const events = parseEvents(data.events);
+	const stakeholders = parseStakeholders(data.stakeholders);
 	const unorderedSearchResults = [...stakeholders, ...documents, ...events];
 	const allSearchResults = sortBy(prop('title'), unorderedSearchResults);
 	const withHighlights = allSearchResults.filter(({ title }) => contains(title, value));
 	const withoutHighlights = allSearchResults.filter(({ title }) => !contains(title, value));
 	const searchResults = [...withHighlights, ...withoutHighlights];
+	const documentCount = data.documents[0] ? data.documents[0].documentCount : 0;
+	const eventCount = data.events[0] ? data.events[0].eventCount : 0;
+	const stakeholderCount = data.stakeholders[0] ? data.stakeholders[0].stakeholderCount : 0;
 
 	stopLoading();
 	setSearchResults(searchResults);
-	/* eslint-disable no-underscore-dangle */
 	setCounts({
-		all: data._allEventsMeta.count + data._allDocumentsMeta.count + data._allStakeholdersMeta.count,
-		event: data._allEventsMeta.count,
-		document: data._allDocumentsMeta.count,
-		stakeholder: data._allStakeholdersMeta.count,
+		all: eventCount
+			+ documentCount
+			+ stakeholderCount,
+		event: eventCount,
+		document: documentCount,
+		stakeholder: stakeholderCount,
 	});
-	/* eslint-enable no-underscore-dangle */
 };
 
 export const withSearch = compose(
