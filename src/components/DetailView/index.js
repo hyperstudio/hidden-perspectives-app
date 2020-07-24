@@ -378,9 +378,9 @@ const getItemTags = either(prop('documentTags'), prop('eventTags'));
 
 const newNormalizeItem = ({ tags, getAngle }) => (item) => {
 	const itemTags = getItemTags(item);
-	const commonTags = itemTags.filter(
+	const commonTags = reOrganizeItems(itemTags.filter(
 		(itemTag) => tags.some(({ Tag: { id } }) => id === itemTag.Tag.id),
-	);
+	), 'tag');
 	const date = getItemDate(item);
 	return {
 		...item,

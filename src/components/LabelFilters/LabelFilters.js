@@ -8,7 +8,7 @@ import reOrganizeItems from '../../utils/reorganizeUtil';
 
 const getToggleHandler = ({ filteredTags, tags, setFilteredTags }) => () => {
 	if (filteredTags.length === tags.length) return setFilteredTags([]);
-	return setFilteredTags(tags.map(prop('id')));
+	return setFilteredTags(reOrganizeItems(tags, 'tag').map(prop('id')));
 };
 
 const getClickHandler = ({
