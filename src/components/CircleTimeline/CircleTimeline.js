@@ -330,7 +330,9 @@ CircleTimeline.propTypes = {
 	),
 	filteredTags: PropTypes.arrayOf(PropTypes.string).isRequired,
 	tags: PropTypes.arrayOf(PropTypes.shape({
-		id: PropTypes.string.isRequired,
+		Tag: PropTypes.shape({
+			id: PropTypes.string.isRequired,
+		}),
 	})).isRequired,
 	protagonists: PropTypes.objectOf(
 		PropTypes.arrayOf(PropTypes.shape({

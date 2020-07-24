@@ -53,7 +53,9 @@ SummarySection.propTypes = {
 	setHoveredElement: PropTypes.func,
 	filteredTags: PropTypes.arrayOf(PropTypes.string).isRequired,
 	tags: PropTypes.arrayOf(PropTypes.shape({
-		id: PropTypes.string.isRequired,
+		Tag: PropTypes.shape({
+			id: PropTypes.string.isRequired,
+		}),
 	})).isRequired,
 	hoveredElement: PropTypes.oneOfType([
 		PropTypes.shape({

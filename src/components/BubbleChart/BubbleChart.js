@@ -31,13 +31,18 @@ BubbleChart.propTypes = {
 	activeElementId: PropTypes.string,
 	bubbleLayoutItems: PropTypes.arrayOf(
 		PropTypes.shape({
-			id: PropTypes.string,
-			stakeholderFullName: PropTypes.string,
+			Stakeholder: PropTypes.shape({
+				id: PropTypes.string,
+				stakeholderFullName: PropTypes.string,
+			}),
 		}),
 	),
 	images: PropTypes.arrayOf(
 		PropTypes.shape({
 			id: PropTypes.string.isRequired,
+			size: PropTypes.number,
+			x: PropTypes.number,
+			y: PropTypes.number,
 			url: PropTypes.string,
 		}),
 	),

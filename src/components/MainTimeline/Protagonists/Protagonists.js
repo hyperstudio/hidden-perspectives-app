@@ -19,8 +19,10 @@ Stakeholders.propTypes = {
 	items: PropTypes.objectOf(
 		PropTypes.arrayOf(
 			PropTypes.shape({
-				id: PropTypes.string.isRequired,
-				stakeholderFullName: PropTypes.string.isRequired,
+				Stakeholder: PropTypes.shape({
+					id: PropTypes.string.isRequired,
+					stakeholderFullName: PropTypes.string.isRequired,
+				}),
 			}),
 		),
 	),

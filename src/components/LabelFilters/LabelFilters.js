@@ -70,8 +70,10 @@ const LabelFilters = ({
 
 LabelFilters.propTypes = {
 	tags: PropTypes.arrayOf(PropTypes.shape({
-		id: PropTypes.string.isRequired,
-		name: PropTypes.string.isRequired,
+		Tag: PropTypes.shape({
+			id: PropTypes.string.isRequired,
+			name: PropTypes.string.isRequired,
+		}),
 	})).isRequired,
 	filteredTags: PropTypes.arrayOf(PropTypes.string).isRequired,
 	setFilteredTags: PropTypes.func.isRequired,

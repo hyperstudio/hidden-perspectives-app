@@ -257,8 +257,6 @@ const structureEventData = (data) => {
 		eventTags,
 	} = data;
 
-	console.log(data);
-
 	const coreInformation = {
 		groupLabel: 'Core information',
 		values: [
