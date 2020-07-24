@@ -7,8 +7,6 @@ import {
 import { withApollo } from 'react-apollo';
 import gql from 'graphql-tag';
 import {
-	defaultTo,
-	head,
 	pipe,
 	prop,
 } from 'ramda';
