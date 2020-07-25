@@ -46,7 +46,7 @@ const SearchResults = ({
 	setActiveResult,
 	setActiveTab,
 	onResultClick,
-	// counts,
+	counts,
 }) => (
 	<Container show={!!searchQuery}>
 		<Content>
@@ -58,7 +58,7 @@ const SearchResults = ({
 							className={activeTab === key && 'active'}
 							onClick={() => setActiveTab(key)}
 						>
-							{`${title}`}
+							{`${title} (${counts[key]})`}
 						</Tab>
 					))}
 				</Tabs>

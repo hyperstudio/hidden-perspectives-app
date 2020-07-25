@@ -32,7 +32,7 @@ export const getSearchQuery = (limit) => {
 				}
 			]
 		}
-		${limit ? `first: ${limit}` : ''}
+		${(limit && suffix !== 'Count') ? `first: ${limit}` : ''}
 	)`;
 	const getDocumentsQuery = (suffix = '') => `documents${suffix}(
 		where: {
@@ -52,7 +52,7 @@ export const getSearchQuery = (limit) => {
 				}
 			]
 		}
-		${limit ? `first: ${limit}` : ''}
+		${(limit && suffix !== 'Count') ? `first: ${limit}` : ''}
 	)`;
 	const getStakeholderQuery = (suffix = '') => `stakeholders${suffix}(
 		where: {
@@ -67,7 +67,7 @@ export const getSearchQuery = (limit) => {
 				}
 			]
 		}
-		${limit ? `first: ${limit}` : ''}
+		${(limit && suffix !== 'Count') ? `first: ${limit}` : ''}
 	)`;
 
 	return gql`
@@ -75,18 +75,18 @@ export const getSearchQuery = (limit) => {
 			${getEventsQuery()} {
 				id
 				eventTitle
-				eventCount
 			}
 			${getDocumentsQuery()} {
 				id
 				documentTitle
-				documentCount
 			}
 			${getStakeholderQuery()} {
 				id
 				stakeholderFullName
-				stakeholderCount
 			}
+			${getEventsQuery('Count')}
+			${getDocumentsQuery('Count')}
+			${getStakeholderQuery('Count')}
 		}
 	`;
 };
@@ -113,9 +113,9 @@ export const handleSearchResults = (props, value) => ({ data }) => {
 	const withHighlights = allSearchResults.filter(({ title }) => contains(title, value));
 	const withoutHighlights = allSearchResults.filter(({ title }) => !contains(title, value));
 	const searchResults = [...withHighlights, ...withoutHighlights];
-	const documentCount = data.documents[0] ? data.documents[0].documentCount : 0;
-	const eventCount = data.events[0] ? data.events[0].eventCount : 0;
-	const stakeholderCount = data.stakeholders[0] ? data.stakeholders[0].stakeholderCount : 0;
+	const documentCount = data.documentsCount;
+	const eventCount = data.eventsCount;
+	const stakeholderCount = data.stakeholdersCount;
 
 	stopLoading();
 	setSearchResults(searchResults);
