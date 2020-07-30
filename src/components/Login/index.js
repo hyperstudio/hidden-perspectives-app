@@ -10,12 +10,17 @@ import Login from './Login';
 import { logUserIn, logUserOut } from '../../utils/localStorageUtil';
 
 const SIGNUP_MUTATION = gql`
-mutation CreateUser($userName: String!, $authProviderData: AuthProviderSignupData!) {
+mutation CreateUser($userName: String!, $email: String!, $password: String!) {
   createUser(
     userName: $userName
-    authProvider: $authProviderData
+    email: $email
+    password: $password
   ) {
-    id
+		token
+		user{
+			id
+			role
+		}
   }
 }
 `;
