@@ -21,14 +21,15 @@ mutation CreateUser($userName: String!, $authProviderData: AuthProviderSignupDat
 `;
 
 const LOGIN_MUTATION = gql`
-mutation SigninUser($email: AUTH_PROVIDER_EMAIL!) {
+mutation SigninUser($email: String!, $password: String!) {
   signinUser(
-    email: $email
+    email: $email,
+		password: $password
   ) {
     token
     user {
       id
-	  role
+	  	role
     }
   }
 }
@@ -49,14 +50,13 @@ const getLoginCallback = (props) => ({
 };
 
 const getLoginVariables = ({ email, password }) => ({
-	email: { email, password },
+	email, password,
 });
 
 const getSignupVariables = ({ name: userName, email, password }) => (({
 	userName,
-	authProviderData: {
-		email: { email, password },
-	},
+	email,
+	password,
 }));
 
 const getLoginMutation = (values) => ({
@@ -82,7 +82,7 @@ export default compose(
 		loginButtonText: 'Login',
 		signupButtonText: 'Sign up',
 		callToLoginText: 'Already have an account?',
-		callToSignupText: 'Not yet an account?',
+		callToSignupText: 'Don\'t have an account?',
 		clearFields() {
 			history.push('/');
 		},
