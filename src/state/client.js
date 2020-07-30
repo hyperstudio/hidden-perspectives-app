@@ -35,9 +35,9 @@ const httpLink = new HttpLink({
 });
 
 const subscriptionLink = new WebSocketLink({
-	uri: process.env.REACT_APP_GRAPHQL_SUSBSCRIPTION_API,
+	uri: process.env.REACT_APP_GRAPHQL_SUBSCRIPTION_API,
 	options: {
-		reconnect: true,
+		reconnect: false,
 	},
 });
 
