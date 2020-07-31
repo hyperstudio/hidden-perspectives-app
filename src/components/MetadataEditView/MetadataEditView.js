@@ -29,9 +29,9 @@ const MetadataEditView = ({
 		<ScrollContainer>
 			<Content>
 				{data.map(({ values, groupLabel }) => (
-					<Fieldset title={groupLabel} key={groupLabel}>
+					<Fieldset title={groupLabel} key={groupLabel} mode="edit">
 						{values.map(({ label, ValueComponent = DefaultValueComponent, value }) => (
-							<MetadataRow key={label} label={label}>
+							<MetadataRow key={label} label={label} mode="edit">
 								{Array.isArray(value)
 									? value.map(({ name, ...props }) => (
 										<ValueComponent
