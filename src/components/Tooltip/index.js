@@ -104,7 +104,7 @@ export default compose(
 		authors,
 		isLoading,
 	}) => ({
-		path: `/${itemType}/context/${id}`,
+		path: `/${itemType}/context/${id.trim()}`,
 		itemTypeName: ucFirst(itemType),
 		subtitle: subtitle || getPrefetchedData('subtitle', prefetchedData),
 		summary: summary || getPrefetchedData('summary', prefetchedData),

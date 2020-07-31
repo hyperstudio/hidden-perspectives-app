@@ -5,7 +5,7 @@ import NodeHeader from './NodeHeader';
 
 const createUrl = curry(({ itemType, id }, path) => {
 	const type = itemType === 'stakeholder' ? 'protagonist' : itemType;
-	return `/${type}/${path}/${id}`;
+	return `/${type}/${path}/${id.trim()}`;
 });
 
 const createTab = (props, page) => ({
