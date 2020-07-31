@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import MetadataRow from '../_library/MetadataRow';
 import Fieldset from '../_library/Fieldset';
 import LoadingIndicator from '../LoadingIndicator';
-import NodeSidebar from '../NodeSidebar';
 import Errors from '../Errors';
 import { LoadingContainer } from '../LoadingIndicator/styles';
 import { Container, Content, ScrollContainer } from './styles';
@@ -20,8 +19,6 @@ DefaultValueComponent.propTypes = {
 const MetadataEditView = ({
 	data,
 	isLoading,
-	id,
-	itemType,
 	errors,
 }) => (
 	<Container>
@@ -29,7 +26,6 @@ const MetadataEditView = ({
 		<LoadingContainer isLoading={isLoading}>
 			<LoadingIndicator />
 		</LoadingContainer>
-		<NodeSidebar id={id} itemType={itemType} />
 		<ScrollContainer>
 			<Content>
 				{data.map(({ values, groupLabel }) => (

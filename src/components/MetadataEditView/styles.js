@@ -8,10 +8,10 @@ export const Container = styled.div`
 `;
 
 export const ScrollContainer = styled.div`
-	padding-top: 3.5rem;
+	padding-top: 1rem;
 	height: calc(100vh - 7rem);
 	overflow-y: auto;
-	width: calc(100vw - 25rem);
+	width: calc(100vw);
 `;
 
 export const Content = styled.div`
