@@ -4,9 +4,6 @@ import { compose, lifecycle, withState } from '@hypnosphi/recompose';
 import { withApollo } from 'react-apollo';
 import gql from 'graphql-tag';
 import {
-	prop,
-	pipe,
-	length,
 	ifElse,
 	identity,
 	always,
@@ -162,12 +159,6 @@ const mapEvents = ({ Event: { id, eventTitle } }) => ({
 	id, name: eventTitle,
 });
 
-const propHasValue = (propName) => pipe(
-	prop(propName),
-	ifElse(Array.isArray, length, Boolean),
-);
-const hasValue = propHasValue('value');
-const hasValues = propHasValue('values');
 const formatIfValidDate = ifElse(identity, getFormattedDate, always(null));
 
 const passValueAsChild = (Component, itemType) => {
@@ -205,7 +196,7 @@ const structureDocumentData = (data) => {
 			},
 			{ label: 'Creation date', value: formatIfValidDate(data.documentCreationDate) },
 			{ label: 'Publication date', value: formatIfValidDate(data.documentPublicationDate) },
-		].filter(hasValue),
+		],
 	};
 
 	const appearences = {
@@ -221,7 +212,7 @@ const structureDocumentData = (data) => {
 				value: data.mentionedLocations.map(mapLocation),
 				ValueComponent: passValueAsChild(Item, 'location'),
 			},
-		].filter(hasValue),
+		],
 	};
 	const categorization = {
 		groupLabel: 'Categorization',
@@ -233,14 +224,14 @@ const structureDocumentData = (data) => {
 				value: reOrganizeItems(data.documentTags, 'tag'),
 				ValueComponent: passValueAsChild(Tag),
 			},
-		].filter(hasValue),
+		],
 	};
 
 	return [
 		coreInformation,
 		appearences,
 		categorization,
-	].filter(hasValues);
+	];
 };
 
 const structureEventData = (data) => {
@@ -261,7 +252,7 @@ const structureEventData = (data) => {
 			{ label: 'Description', value: eventDescription },
 			{ label: 'Start date', value: formatIfValidDate(eventStartDate) },
 			{ label: 'End date', value: formatIfValidDate(eventEndDate) },
-		].filter(hasValue),
+		],
 	};
 
 	const appearences = {
@@ -277,7 +268,7 @@ const structureEventData = (data) => {
 				value: eventLocations.map(mapLocation),
 				ValueComponent: passValueAsChild(Item, 'location'),
 			},
-		].filter(hasValue),
+		],
 	};
 
 	const categorization = {
@@ -288,14 +279,14 @@ const structureEventData = (data) => {
 				value: reOrganizeItems(eventTags, 'tag'),
 				ValueComponent: passValueAsChild(Tag),
 			},
-		].filter(hasValue),
+		],
 	};
 
 	return [
 		coreInformation,
 		appearences,
 		categorization,
-	].filter(hasValues);
+	];
 };
 
 const structureStakeholderData = (data) => {
@@ -314,7 +305,7 @@ const structureStakeholderData = (data) => {
 			{ label: 'Title', value: stakeholderFullName },
 			{ label: 'Description', value: stakeholderDescription },
 			{ label: 'Wikipedia', value: stakeholderWikipediaUri },
-		].filter(hasValue),
+		],
 	};
 
 	const authored = {
@@ -325,7 +316,7 @@ const structureStakeholderData = (data) => {
 				value: documents.map(mapDocuments),
 				ValueComponent: passValueAsChild(Item, 'document'),
 			},
-		].filter(hasValue),
+		],
 	};
 
 	const appearences = {
@@ -341,14 +332,14 @@ const structureStakeholderData = (data) => {
 				value: eventsInvolvedIn.map(mapEvents),
 				ValueComponent: passValueAsChild(Item, 'event'),
 			},
-		].filter(hasValue),
+		],
 	};
 
 	return [
 		coreInformation,
 		authored,
 		appearences,
-	].filter(hasValues);
+	];
 };
 
 const structureLocationData = (data) => {
@@ -366,7 +357,7 @@ const structureLocationData = (data) => {
 			{ label: 'Title', value: locationName },
 			{ label: 'Description', value: locationDescription },
 			{ label: 'Wikipedia', value: locationWikipediaUri },
-		].filter(hasValue),
+		],
 	};
 
 	const appearences = {
@@ -382,13 +373,13 @@ const structureLocationData = (data) => {
 				value: locationEvents.map(mapEvents),
 				ValueComponent: passValueAsChild(Item, 'event'),
 			},
-		].filter(hasValue),
+		],
 	};
 
 	return [
 		coreInformation,
 		appearences,
-	].filter(hasValues);
+	];
 };
 
 const getStructuredData = (data, itemType) => {
