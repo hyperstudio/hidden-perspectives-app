@@ -73,7 +73,7 @@
     "react-bubble-chart": "^0.4.0",
     "react-day-picker": "^7.2.4",
     "react-dom": "^16.5.2",
-    "react-final-form": "^3.6.7",
+    "react-final-form": "^6.5.1",
     "react-helmet": "^5.2.0",
     "react-outside-click-handler": "^1.2.2",
     "react-pdf": "5.0.0-beta.2",
