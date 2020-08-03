@@ -1,13 +1,16 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
+import { BrowserRouter as Router } from 'react-router-dom';
 import BubbleChart from '../components/BubbleChart';
 import { StoryWrapper } from './styles';
 
 const testDataSingle = {
 	itemKey: [
 		{
-			id: '123',
-			stakeholderFullName: 'Item 1',
+			Stakeholder: {
+				id: '123',
+				stakeholderFullName: 'Bill Clinton',
+			},
 		},
 	],
 };
@@ -15,32 +18,44 @@ const testDataSingle = {
 const testDataMultiple = {
 	firstItemKey: [
 		{
-			id: '123',
-			stakeholderFullName: 'Item 1',
+			Stakeholder: {
+				id: '123',
+				stakeholderFullName: 'Hillary Clinton',
+			},
 		},
 	],
 	secondItemKey: [
 		{
-			id: '234',
-			stakeholderFullName: 'Item 2',
+			Stakeholder: {
+				id: '234',
+				stakeholderFullName: 'Bill Clinton',
+			},
 		},
 		{
-			id: '234',
-			stakeholderFullName: 'Item 2',
+			Stakeholder: {
+				id: '234',
+				stakeholderFullName: 'Mohammad Khatami',
+			},
 		},
 	],
 	thirdItemKey: [
 		{
-			id: '345',
-			stakeholderFullName: 'Item 3',
+			Stakeholder: {
+				id: '345',
+				stakeholderFullName: 'US Department of State',
+			},
 		},
 		{
-			id: '345',
-			stakeholderFullName: 'Item 3',
+			Stakeholder: {
+				id: '345',
+				stakeholderFullName: 'US Department of Defense',
+			},
 		},
 		{
-			id: '345',
-			stakeholderFullName: 'Item 3',
+			Stakeholder: {
+				id: '345',
+				stakeholderFullName: 'Reuters',
+			},
 		},
 	],
 };
@@ -48,20 +63,24 @@ const testDataMultiple = {
 storiesOf('BubbleChart', module)
 	.add('With one item', () => (
 		<StoryWrapper maxWidth={380}>
-			<BubbleChart
-				items={testDataSingle}
-				diameter={300}
-				bubblesPadding={15}
-			/>
+			<Router>
+				<BubbleChart
+					items={testDataSingle}
+					diameter={300}
+					bubblesPadding={15}
+				/>
+			</Router>
 		</StoryWrapper>
 	))
 	.add('With multiple items', () => (
 		<StoryWrapper maxWidth={380}>
-			<BubbleChart
-				items={testDataMultiple}
-				diameter={300}
-				bubblesPadding={15}
-			/>
+			<Router>
+				<BubbleChart
+					items={testDataMultiple}
+					diameter={300}
+					bubblesPadding={15}
+				/>
+			</Router>
 		</StoryWrapper>
 	))
 	.add('With loading items', () => (
