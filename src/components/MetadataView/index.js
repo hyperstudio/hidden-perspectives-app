@@ -208,11 +208,11 @@ const structureDocumentData = (data) => {
 		].filter(hasValue),
 	};
 
-	const appearences = {
-		groupLabel: 'Appearences',
+	const appearances = {
+		groupLabel: 'Appearances',
 		values: [
 			{
-				label: 'Protagonists',
+				label: 'Stakeholders',
 				value: data.mentionedStakeholders.map(mapStakeholder),
 				ValueComponent: passValueAsChild(Stakeholder, 'protagonist'),
 			},
@@ -238,7 +238,7 @@ const structureDocumentData = (data) => {
 
 	return [
 		coreInformation,
-		appearences,
+		appearances,
 		categorization,
 	].filter(hasValues);
 };
@@ -264,11 +264,11 @@ const structureEventData = (data) => {
 		].filter(hasValue),
 	};
 
-	const appearences = {
-		groupLabel: 'Appearences',
+	const appearances = {
+		groupLabel: 'Appearances',
 		values: [
 			{
-				label: 'Protagonists',
+				label: 'Stakeholders',
 				value: eventStakeholders.map(mapStakeholder),
 				ValueComponent: passValueAsChild(Stakeholder, 'protagonist'),
 			},
@@ -293,7 +293,7 @@ const structureEventData = (data) => {
 
 	return [
 		coreInformation,
-		appearences,
+		appearances,
 		categorization,
 	].filter(hasValues);
 };
@@ -328,8 +328,8 @@ const structureStakeholderData = (data) => {
 		].filter(hasValue),
 	};
 
-	const appearences = {
-		groupLabel: 'Appearences',
+	const appearances = {
+		groupLabel: 'Appearances',
 		values: [
 			{
 				label: 'Documents',
@@ -347,7 +347,7 @@ const structureStakeholderData = (data) => {
 	return [
 		coreInformation,
 		authored,
-		appearences,
+		appearances,
 	].filter(hasValues);
 };
 
@@ -369,8 +369,8 @@ const structureLocationData = (data) => {
 		].filter(hasValue),
 	};
 
-	const appearences = {
-		groupLabel: 'Appearences',
+	const appearances = {
+		groupLabel: 'Appearances',
 		values: [
 			{
 				label: 'Documents',
@@ -387,7 +387,7 @@ const structureLocationData = (data) => {
 
 	return [
 		coreInformation,
-		appearences,
+		appearances,
 	].filter(hasValues);
 };
 
