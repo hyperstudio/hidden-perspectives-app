@@ -33,6 +33,7 @@ const SelectInput = ({
 		})}
 		components={{ Control, Menu }}
 		appTheme={theme}
+		menuPlacement="top"
 	/>
 );
 

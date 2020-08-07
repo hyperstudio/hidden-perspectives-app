@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import 'react-day-picker/lib/style.css';
 
 export const Container = styled.div`
 	height: calc(100vh - 7rem);
