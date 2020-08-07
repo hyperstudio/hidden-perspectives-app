@@ -105,7 +105,7 @@ export const DNSAKindList = [
 	},
 	{
 		value: 'news-press',
-		label: 'News/Press',
+		label: 'News-Press',
 	},
 	{
 		value: 'note',

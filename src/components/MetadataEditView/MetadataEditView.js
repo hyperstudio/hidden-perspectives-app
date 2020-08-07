@@ -7,6 +7,9 @@ import Fieldset from '../_library/Fieldset';
 import InputWrapper from '../_library/InputWrapper';
 import DatePicker from '../_library/DatePicker';
 import Select from '../_library/Select';
+import Stakeholder from '../_library/Stakeholder';
+import Item from '../_library/Item';
+import Tag from '../_library/Tag';
 import { isTodayOrPrior } from '../../utils/dateUtil';
 import LoadingIndicator from '../LoadingIndicator';
 import Errors from '../Errors';
@@ -125,8 +128,31 @@ const MetadataEditView = ({
 											<Field
 												name="authors"
 												placeholder="Authors"
-												component="div"
-											/>
+											>
+												{({ input, meta }) => (
+													<InputWrapper
+														label="Authors"
+														placeholder="Add authors"
+														nolabel
+														{...getMeta(meta)}
+														{...input}
+													>
+														{() => (
+															Array.isArray(input.value) ? input.value.map((author) => (
+																<Stakeholder
+																	id={author.id}
+																	value={author.name}
+																	key={author.name}
+																	itemType="protagonist"
+																>
+																	{author.name}
+																</Stakeholder>
+															))
+																: <div />
+														)}
+													</InputWrapper>
+												)}
+											</Field>
 										</MetadataRow>
 										<MetadataRow
 											label="Creation date"
@@ -260,8 +286,31 @@ const MetadataEditView = ({
 										<Field
 											name="stakeholderAuthoredDocuments"
 											placeholder="Documents"
-											component="div"
-										/>
+										>
+											{({ input, meta }) => (
+												<InputWrapper
+													label="Documents"
+													placeholder="Add documents"
+													nolabel
+													{...getMeta(meta)}
+													{...input}
+												>
+													{(props) => (
+														Array.isArray(input.value) ? input.value.map((document) => (
+															<Item
+																itemType="document"
+																key={document.name}
+																value={document.name}
+																{...props}
+															>
+																{document.name}
+															</Item>
+														))
+															: <div />
+													)}
+												</InputWrapper>
+											)}
+										</Field>
 									</MetadataRow>
 								</Fieldset>
 							)}
@@ -275,8 +324,31 @@ const MetadataEditView = ({
 											<Field
 												name="stakeholders"
 												placeholder="Stakeholders"
-												component="div"
-											/>
+											>
+												{({ input, meta }) => (
+													<InputWrapper
+														label="Authors"
+														placeholder="Add authors"
+														nolabel
+														{...getMeta(meta)}
+														{...input}
+													>
+														{() => (
+															Array.isArray(input.value) ? input.value.map((stakeholder) => (
+																<Stakeholder
+																	id={stakeholder.id}
+																	value={stakeholder.name}
+																	key={stakeholder.name}
+																	itemType="protagonist"
+																>
+																	{stakeholder.name}
+																</Stakeholder>
+															))
+																: <div />
+														)}
+													</InputWrapper>
+												)}
+											</Field>
 										</MetadataRow>
 										<MetadataRow
 											label="Locations"
@@ -285,8 +357,31 @@ const MetadataEditView = ({
 											<Field
 												name="locations"
 												placeholder="Locations"
-												component="div"
-											/>
+											>
+												{({ input, meta }) => (
+													<InputWrapper
+														label="Locations"
+														placeholder="Add locations"
+														nolabel
+														{...getMeta(meta)}
+														{...input}
+													>
+														{(props) => (
+															Array.isArray(input.value) ? input.value.map((location) => (
+																<Item
+																	itemType="location"
+																	key={location.name}
+																	value={location.name}
+																	{...props}
+																>
+																	{location.name}
+																</Item>
+															))
+																: <div />
+														)}
+													</InputWrapper>
+												)}
+											</Field>
 										</MetadataRow>
 									</>
 								)}
@@ -299,8 +394,31 @@ const MetadataEditView = ({
 											<Field
 												name="documentsMentionedIn"
 												placeholder="Documents"
-												component="div"
-											/>
+											>
+												{({ input, meta }) => (
+													<InputWrapper
+														label="Documents"
+														placeholder="Add documents"
+														nolabel
+														{...getMeta(meta)}
+														{...input}
+													>
+														{(props) => (
+															Array.isArray(input.value) ? input.value.map((document) => (
+																<Item
+																	itemType="document"
+																	key={document.name}
+																	value={document.name}
+																	{...props}
+																>
+																	{document.name}
+																</Item>
+															))
+																: <div />
+														)}
+													</InputWrapper>
+												)}
+											</Field>
 										</MetadataRow>
 										<MetadataRow
 											label="Events"
@@ -309,8 +427,31 @@ const MetadataEditView = ({
 											<Field
 												name="eventsInvolvedIn"
 												placeholder="Events"
-												component="div"
-											/>
+											>
+												{({ input, meta }) => (
+													<InputWrapper
+														label="Events"
+														placeholder="Add events"
+														nolabel
+														{...getMeta(meta)}
+														{...input}
+													>
+														{(props) => (
+															Array.isArray(input.value) ? input.value.map((event) => (
+																<Item
+																	itemType="event"
+																	key={event.name}
+																	value={event.name}
+																	{...props}
+																>
+																	{event.name}
+																</Item>
+															))
+																: <div />
+														)}
+													</InputWrapper>
+												)}
+											</Field>
 										</MetadataRow>
 									</>
 								)}
@@ -372,8 +513,31 @@ const MetadataEditView = ({
 										<Field
 											name="tags"
 											placeholder="Tags"
-											component="div"
-										/>
+										>
+											{({ input, meta }) => (
+												<InputWrapper
+													label="Tags"
+													placeholder="Add tags"
+													nolabel
+													{...getMeta(meta)}
+													{...input}
+												>
+													{(props) => (
+														Array.isArray(input.value) ? input.value.map((tag) => (
+															<Tag
+																itemType="tag"
+																key={tag.name}
+																value={tag.name}
+																{...props}
+															>
+																{tag.name}
+															</Tag>
+														))
+															: <div />
+													)}
+												</InputWrapper>
+											)}
+										</Field>
 									</MetadataRow>
 								</Fieldset>
 							)}
