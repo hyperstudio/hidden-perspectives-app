@@ -13,6 +13,7 @@ import EventMetadataPage from '../../pages/eventMetadata';
 import EventMetadataEditPage from '../../pages/eventMetadataEdit';
 import ProtagonistPage from '../../pages/protagonist';
 import ProtagonistMetadataPage from '../../pages/protagonistMetadata';
+import ProtagonistMetadataEditPage from '../../pages/protagonistMetadataEdit';
 import LocationPage from '../../pages/location';
 import LocationMetadataPage from '../../pages/locationMetadata';
 import TranscriptPage from '../../pages/transcript';
@@ -39,6 +40,7 @@ const App = () => (
 				<Route exact path="/event/metadata/:id/edit" component={EventMetadataEditPage} />
 				<Route exact path="/protagonist/context/:id" component={ProtagonistPage} />
 				<Route exact path="/protagonist/metadata/:id" component={ProtagonistMetadataPage} />
+				<Route exact path="/protagonist/metadata/:id/edit" component={ProtagonistMetadataEditPage} />
 				<Route exact path="/location/context/:id" component={LocationPage} />
 				<Route exact path="/location/metadata/:id" component={LocationMetadataPage} />
 				<Route exact path="/search/:query" component={SearchPage} />

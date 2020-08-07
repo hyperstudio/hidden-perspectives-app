@@ -207,58 +207,14 @@ const structureEventData = (data) => ({
 	tags: reOrganizeItems(data.eventTags, 'tag'),
 });
 
-const structureStakeholderData = (data) => {
-	const {
-		documents,
-		documentsMentionedIn,
-		eventsInvolvedIn,
-		stakeholderDescription,
-		stakeholderFullName,
-		stakeholderWikipediaUri,
-	} = data;
-
-	const coreInformation = {
-		groupLabel: 'Core information',
-		values: [
-			{ label: 'Title', value: stakeholderFullName },
-			{ label: 'Description', value: stakeholderDescription },
-			{ label: 'Wikipedia', value: stakeholderWikipediaUri },
-		],
-	};
-
-	const authored = {
-		groupLabel: 'Authored',
-		values: [
-			{
-				label: 'Documents',
-				value: documents.map(mapDocuments),
-				ValueComponent: passValueAsChild(Item, 'document'),
-			},
-		],
-	};
-
-	const appearances = {
-		groupLabel: 'Appearances',
-		values: [
-			{
-				label: 'Documents',
-				value: documentsMentionedIn.map(mapDocuments),
-				ValueComponent: passValueAsChild(Item, 'document'),
-			},
-			{
-				label: 'Events',
-				value: eventsInvolvedIn.map(mapEvents),
-				ValueComponent: passValueAsChild(Item, 'event'),
-			},
-		],
-	};
-
-	return [
-		coreInformation,
-		authored,
-		appearances,
-	];
-};
+const structureStakeholderData = (data) => ({
+	title: data.stakeholderFullName,
+	description: data.stakeholderDescription,
+	stakeholderWikipediaUri: data.stakeholderWikipediaUri,
+	stakeholderAuthoredDocuments: data.documents.map(mapDocuments),
+	documentsMentionedIn: data.documentsMentionedIn.map(mapDocuments),
+	eventsInvolvedIn: data.eventsInvolvedIn.map(mapEvents),
+});
 
 const structureLocationData = (data) => {
 	const {
