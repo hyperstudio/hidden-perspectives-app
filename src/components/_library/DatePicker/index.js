@@ -31,8 +31,8 @@ const DatePicker = ({
 			{isFocused && (
 				<DayPicker
 					onDayClick={onDaySelect}
-					selectedDays={new Date(`${value} 00:00`)}
-					month={new Date(`${value} 00:00`)}
+					selectedDays={!Number.isNaN(Date.parse(value)) ? new Date(`${value} 00:00`) : new Date()}
+					month={!Number.isNaN(Date.parse(value)) ? new Date(`${value} 00:00`) : new Date()}
 					disabledDays={(day) => {
 						if (todayOrPrior) return !isTodayOrPrior(day);
 						if (todayOrAfter) return !isTodayOrAfter(day);
