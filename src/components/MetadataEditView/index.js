@@ -11,8 +11,6 @@ import {
 import { withLoading, withErrors, getErrorHandler } from '../../utils/hocUtil';
 import MetadataEditView from './MetadataEditView';
 import { getFormattedDate } from '../../utils/dateUtil';
-import Tag from '../_library/Tag';
-import Stakeholder from '../_library/Stakeholder';
 import Item from '../_library/Item';
 import reOrganizeItems from '../../utils/reorganizeUtil';
 
@@ -199,60 +197,15 @@ const structureDocumentData = (data) => ({
 	tags: reOrganizeItems(data.documentTags, 'tag'),
 });
 
-const structureEventData = (data) => {
-	const {
-		eventTitle,
-		eventDescription,
-		eventStartDate,
-		eventEndDate,
-		eventStakeholders,
-		eventLocations,
-		eventTags,
-	} = data;
-
-	const coreInformation = {
-		groupLabel: 'Core information',
-		values: [
-			{ label: 'Title', value: eventTitle },
-			{ label: 'Description', value: eventDescription },
-			{ label: 'Start date', value: formatIfValidDate(eventStartDate) },
-			{ label: 'End date', value: formatIfValidDate(eventEndDate) },
-		],
-	};
-
-	const appearances = {
-		groupLabel: 'Appearances',
-		values: [
-			{
-				label: 'Stakeholders',
-				value: eventStakeholders.map(mapStakeholder),
-				ValueComponent: passValueAsChild(Stakeholder, 'stakeholder'),
-			},
-			{
-				label: 'Locations',
-				value: eventLocations.map(mapLocation),
-				ValueComponent: passValueAsChild(Item, 'location'),
-			},
-		],
-	};
-
-	const categorization = {
-		groupLabel: 'Categorization',
-		values: [
-			{
-				label: 'Tags',
-				value: reOrganizeItems(eventTags, 'tag'),
-				ValueComponent: passValueAsChild(Tag),
-			},
-		],
-	};
-
-	return [
-		coreInformation,
-		appearances,
-		categorization,
-	];
-};
+const structureEventData = (data) => ({
+	title: data.eventTitle,
+	description: data.eventDescription,
+	eventStartDate: formatIfValidDate(data.eventStartDate),
+	eventEndDate: formatIfValidDate(data.eventEndDate),
+	stakeholders: data.eventStakeholders.map(mapStakeholder),
+	locations: data.eventLocations.map(mapLocation),
+	tags: reOrganizeItems(data.eventTags, 'tag'),
+});
 
 const structureStakeholderData = (data) => {
 	const {

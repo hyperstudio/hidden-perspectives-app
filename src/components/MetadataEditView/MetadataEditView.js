@@ -38,6 +38,7 @@ const MetadataEditView = ({
 	data,
 	isLoading,
 	errors,
+	itemType,
 }) => (
 	<Container>
 		<Errors errors={errors} />
@@ -98,62 +99,116 @@ const MetadataEditView = ({
 										)}
 									/>
 								</MetadataRow>
-								<MetadataRow
-									label="Authors"
-									mode="edit"
-								>
-									<Field
-										name="authors"
-										placeholder="Authors"
-										component="div"
-									/>
-								</MetadataRow>
-								<MetadataRow
-									label="Creation date"
-									mode="edit"
-								>
-									<Field
-										name="creationDate"
-										placeholder="Creation date"
-										validate={mustBeTodayOrPrior && required}
-									>
-										{({ meta, input }) => (
-											<InputWrapper
-												label="Creation date"
-												placeholder="YYYY-MM-DD"
-												todayOrPrior
-												nolabel
-												{...getMeta(meta)}
-												{...input}
+								{itemType === 'document' && (
+									<>
+										<MetadataRow
+											label="Authors"
+											mode="edit"
+										>
+											<Field
+												name="authors"
+												placeholder="Authors"
+												component="div"
+											/>
+										</MetadataRow>
+										<MetadataRow
+											label="Creation date"
+											mode="edit"
+										>
+											<Field
+												name="creationDate"
+												placeholder="Creation date"
+												validate={mustBeTodayOrPrior && required}
 											>
-												{(props) => <DatePicker {...props} />}
-											</InputWrapper>
-										)}
-									</Field>
-								</MetadataRow>
-								<MetadataRow
-									label="Publication date"
-									mode="edit"
-								>
-									<Field
-										name="publicationDate"
-										placeholder="Publication date"
-										validate={mustBeTodayOrPrior}
-									>
-										{({ meta, input }) => (
-											<InputWrapper
-												label="Publication date"
-												placeholder="YYYY-MM-DD"
-												todayOrPrior
-												nolabel
-												{...getMeta(meta)}
-												{...input}
+												{({ meta, input }) => (
+													<InputWrapper
+														label="Creation date"
+														placeholder="YYYY-MM-DD"
+														todayOrPrior
+														nolabel
+														{...getMeta(meta)}
+														{...input}
+													>
+														{(props) => <DatePicker {...props} />}
+													</InputWrapper>
+												)}
+											</Field>
+										</MetadataRow>
+										<MetadataRow
+											label="Publication date"
+											mode="edit"
+										>
+											<Field
+												name="publicationDate"
+												placeholder="Publication date"
+												validate={mustBeTodayOrPrior}
 											>
-												{(props) => <DatePicker {...props} />}
-											</InputWrapper>
-										)}
-									</Field>
-								</MetadataRow>
+												{({ meta, input }) => (
+													<InputWrapper
+														label="Publication date"
+														placeholder="YYYY-MM-DD"
+														todayOrPrior
+														nolabel
+														{...getMeta(meta)}
+														{...input}
+													>
+														{(props) => <DatePicker {...props} />}
+													</InputWrapper>
+												)}
+											</Field>
+										</MetadataRow>
+									</>
+								)}
+								{itemType === 'event' && (
+									<>
+										<MetadataRow
+											label="Start date"
+											mode="edit"
+										>
+											<Field
+												name="eventStartDate"
+												placeholder="Start date"
+												validate={mustBeTodayOrPrior && required}
+											>
+												{({ meta, input }) => (
+													<InputWrapper
+														label="Start date"
+														placeholder="YYYY-MM-DD"
+														todayOrPrior
+														nolabel
+														{...getMeta(meta)}
+														{...input}
+													>
+														{(props) => <DatePicker {...props} />}
+													</InputWrapper>
+												)}
+											</Field>
+										</MetadataRow>
+										<MetadataRow
+											label="End date"
+											mode="edit"
+										>
+											<Field
+												name="eventEndDate"
+												placeholder="End date"
+												validate={mustBeTodayOrPrior}
+											>
+												{({ meta, input }) => (
+													<InputWrapper
+														label="End date"
+														placeholder="YYYY-MM-DD"
+														todayOrPrior
+														nolabel
+														{...getMeta(meta)}
+														{...input}
+													>
+														{(props) => <DatePicker {...props} />}
+													</InputWrapper>
+												)}
+											</Field>
+										</MetadataRow>
+									</>
+								)}
 							</Fieldset>
 							<Fieldset title="Appearances" key="Appearances" mode="edit">
 								<MetadataRow
@@ -178,50 +233,54 @@ const MetadataEditView = ({
 								</MetadataRow>
 							</Fieldset>
 							<Fieldset title="Categorization" key="Categorization" mode="edit">
-								<MetadataRow
-									label="Kind"
-									mode="edit"
-								>
-									<Field
-										name="kind"
-										placeholder="Kind"
-									>
-										{({ input, meta }) => (
-											<InputWrapper
-												label="Kind"
-												{...getMeta(meta)}
-												placeholder="Select a kind"
-												nolabel
-												options={DNSAKindList}
-												{...input}
+								{itemType === 'document' && (
+									<>
+										<MetadataRow
+											label="Kind"
+											mode="edit"
+										>
+											<Field
+												name="kind"
+												placeholder="Kind"
 											>
-												{(props) => <Select {...props} />}
-											</InputWrapper>
-										)}
-									</Field>
-								</MetadataRow>
-								<MetadataRow
-									label="Classification"
-									mode="edit"
-								>
-									<Field
-										name="classification"
-										placeholder="Classification"
-									>
-										{({ input, meta }) => (
-											<InputWrapper
-												label="Classification"
-												{...getMeta(meta)}
-												placeholder="Select a classification"
-												nolabel
-												options={DNSAClassificationList}
-												{...input}
+												{({ input, meta }) => (
+													<InputWrapper
+														label="Kind"
+														{...getMeta(meta)}
+														placeholder="Select a kind"
+														nolabel
+														options={DNSAKindList}
+														{...input}
+													>
+														{(props) => <Select {...props} />}
+													</InputWrapper>
+												)}
+											</Field>
+										</MetadataRow>
+										<MetadataRow
+											label="Classification"
+											mode="edit"
+										>
+											<Field
+												name="classification"
+												placeholder="Classification"
 											>
-												{(props) => <Select {...props} />}
-											</InputWrapper>
-										)}
-									</Field>
-								</MetadataRow>
+												{({ input, meta }) => (
+													<InputWrapper
+														label="Classification"
+														{...getMeta(meta)}
+														placeholder="Select a classification"
+														nolabel
+														options={DNSAClassificationList}
+														{...input}
+													>
+														{(props) => <Select {...props} />}
+													</InputWrapper>
+												)}
+											</Field>
+										</MetadataRow>
+									</>
+								)}
 								<MetadataRow
 									label="Tags"
 									mode="edit"
