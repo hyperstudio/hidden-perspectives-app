@@ -84,6 +84,7 @@
     "reactour": "^1.13.1",
     "styled-components": "^4.0.2",
     "subscriptions-transport-ws": "^0.9.15",
+    "validator": "^13.1.1",
     "wikijs": "^5.0.0-alpha.1"
   },
   "devDependencies": {

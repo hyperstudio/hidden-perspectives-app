@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Form, Field } from 'react-final-form';
+import isURL from 'validator/lib/isURL';
 import MetadataRow from '../_library/MetadataRow';
 import Fieldset from '../_library/Fieldset';
 import InputWrapper from '../_library/InputWrapper';
@@ -19,8 +20,20 @@ const required = (value) => {
 	if (!value) return error;
 	return undefined;
 };
+
+const isValidURL = (value) => {
+	if (!value) return undefined;
+	const error = 'This field must be a valid URL';
+	return isURL(value) ? undefined : error;
+};
+
 const mustBeTodayOrPrior = (value) => {
 	if (!value) return undefined;
+	return isTodayOrPrior(!Number.isNaN(Date.parse(value)) ? new Date(`${value} 00:00`) : new Date(value)) ? undefined : 'The date must be prior or equal to today';
+};
+
+const mustBeTodayOrPriorAndRequired = (value) => {
+	if (!value) return 'This field is required!';
 	return isTodayOrPrior(!Number.isNaN(Date.parse(value)) ? new Date(`${value} 00:00`) : new Date(value)) ? undefined : 'The date must be prior or equal to today';
 };
 
@@ -65,15 +78,18 @@ const MetadataEditView = ({
 										placeholder="Title"
 										validate={required}
 										render={(args) => (
-											<InputWrapper
-												name={args.input.name}
-												placeholder="Title"
-												value={args.input.value}
-												onChange={args.input.onChange}
-												label="Title"
-												nolabel
-												{...getMeta(args.meta)}
-											/>
+											<>
+												<InputWrapper
+													name={args.input.name}
+													placeholder="Title"
+													value={args.input.value}
+													onChange={args.input.onChange}
+													onBlur={args.input.onBlur}
+													label="Title"
+													nolabel
+													{...getMeta(args.meta)}
+												/>
+											</>
 										)}
 									/>
 								</MetadataRow>
@@ -91,6 +107,7 @@ const MetadataEditView = ({
 												placeholder="Summary"
 												value={args.input.value}
 												onChange={args.input.onChange}
+												onBlur={args.input.onBlur}
 												label="Title"
 												nolabel
 												multiline
@@ -118,7 +135,7 @@ const MetadataEditView = ({
 											<Field
 												name="creationDate"
 												placeholder="Creation date"
-												validate={mustBeTodayOrPrior && required}
+												validate={mustBeTodayOrPriorAndRequired}
 											>
 												{({ meta, input }) => (
 													<InputWrapper
@@ -168,7 +185,7 @@ const MetadataEditView = ({
 											<Field
 												name="eventStartDate"
 												placeholder="Start date"
-												validate={mustBeTodayOrPrior && required}
+												validate={mustBeTodayOrPriorAndRequired}
 											>
 												{({ meta, input }) => (
 													<InputWrapper
@@ -209,89 +226,157 @@ const MetadataEditView = ({
 										</MetadataRow>
 									</>
 								)}
+								{itemType === 'stakeholder' && (
+									<MetadataRow
+										label="Wikipedia URL"
+										mode="edit"
+									>
+										<Field
+											name="stakeholderWikipediaUri"
+											placeholder="Wikipedia URL"
+											validate={isValidURL}
+											render={(args) => (
+												<InputWrapper
+													name={args.input.name}
+													placeholder="Wikipedia URL"
+													value={args.input.value}
+													onChange={args.input.onChange}
+													onBlur={args.input.onBlur}
+													label="Wikipedia URL"
+													nolabel
+													{...getMeta(args.meta)}
+												/>
+											)}
+										/>
+									</MetadataRow>
+								)}
 							</Fieldset>
+							{itemType === 'stakeholder' && (
+								<Fieldset title="Authored" key="Authored" mode="edit">
+									<MetadataRow
+										label="Documents"
+										mode="edit"
+									>
+										<Field
+											name="stakeholderAuthoredDocuments"
+											placeholder="Documents"
+											component="div"
+										/>
+									</MetadataRow>
+								</Fieldset>
+							)}
 							<Fieldset title="Appearances" key="Appearances" mode="edit">
-								<MetadataRow
-									label="Stakeholders"
-									mode="edit"
-								>
-									<Field
-										name="stakeholders"
-										placeholder="Stakeholders"
-										component="div"
-									/>
-								</MetadataRow>
-								<MetadataRow
-									label="Locations"
-									mode="edit"
-								>
-									<Field
-										name="locations"
-										placeholder="Locations"
-										component="div"
-									/>
-								</MetadataRow>
-							</Fieldset>
-							<Fieldset title="Categorization" key="Categorization" mode="edit">
-								{itemType === 'document' && (
+								{(itemType === 'document' || itemType === 'event') && (
 									<>
 										<MetadataRow
-											label="Kind"
+											label="Stakeholders"
 											mode="edit"
 										>
 											<Field
-												name="kind"
-												placeholder="Kind"
-											>
-												{({ input, meta }) => (
-													<InputWrapper
-														label="Kind"
-														{...getMeta(meta)}
-														placeholder="Select a kind"
-														nolabel
-														options={DNSAKindList}
-														{...input}
-													>
-														{(props) => <Select {...props} />}
-													</InputWrapper>
-												)}
-											</Field>
+												name="stakeholders"
+												placeholder="Stakeholders"
+												component="div"
+											/>
 										</MetadataRow>
 										<MetadataRow
-											label="Classification"
+											label="Locations"
 											mode="edit"
 										>
 											<Field
-												name="classification"
-												placeholder="Classification"
-											>
-												{({ input, meta }) => (
-													<InputWrapper
-														label="Classification"
-														{...getMeta(meta)}
-														placeholder="Select a classification"
-														nolabel
-														options={DNSAClassificationList}
-														{...input}
-													>
-														{(props) => <Select {...props} />}
-													</InputWrapper>
-												)}
-											</Field>
+												name="locations"
+												placeholder="Locations"
+												component="div"
+											/>
 										</MetadataRow>
 									</>
 								)}
-								<MetadataRow
-									label="Tags"
-									mode="edit"
-								>
-									<Field
-										name="tags"
-										placeholder="Tags"
-										component="div"
-									/>
-								</MetadataRow>
+								{(itemType === 'stakeholder' || itemType === 'location') && (
+									<>
+										<MetadataRow
+											label="Documents"
+											mode="edit"
+										>
+											<Field
+												name="documentsMentionedIn"
+												placeholder="Documents"
+												component="div"
+											/>
+										</MetadataRow>
+										<MetadataRow
+											label="Events"
+											mode="edit"
+										>
+											<Field
+												name="eventsInvolvedIn"
+												placeholder="Events"
+												component="div"
+											/>
+										</MetadataRow>
+									</>
+								)}
 							</Fieldset>
+							{(itemType === 'document' || itemType === 'event') && (
+								<Fieldset title="Categorization" key="Categorization" mode="edit">
+									{itemType === 'document' && (
+										<>
+											<MetadataRow
+												label="Kind"
+												mode="edit"
+											>
+												<Field
+													name="kind"
+													placeholder="Kind"
+												>
+													{({ input, meta }) => (
+														<InputWrapper
+															label="Kind"
+															{...getMeta(meta)}
+															placeholder="Select a kind"
+															nolabel
+															options={DNSAKindList}
+															{...input}
+														>
+															{(props) => <Select {...props} />}
+														</InputWrapper>
+													)}
+												</Field>
+											</MetadataRow>
+											<MetadataRow
+												label="Classification"
+												mode="edit"
+											>
+												<Field
+													name="classification"
+													placeholder="Classification"
+												>
+													{({ input, meta }) => (
+														<InputWrapper
+															label="Classification"
+															{...getMeta(meta)}
+															placeholder="Select a classification"
+															nolabel
+															options={DNSAClassificationList}
+															{...input}
+														>
+															{(props) => <Select {...props} />}
+														</InputWrapper>
+													)}
+												</Field>
+											</MetadataRow>
+										</>
+									)}
+									<MetadataRow
+										label="Tags"
+										mode="edit"
+									>
+										<Field
+											name="tags"
+											placeholder="Tags"
+											component="div"
+										/>
+									</MetadataRow>
+								</Fieldset>
+							)}
 						</form>
 					)}
 				/>
@@ -311,8 +396,14 @@ MetadataEditView.propTypes = {
 		publicationDate: PropTypes.string,
 		stakeholders: PropTypes.array,
 		locations: PropTypes.array,
-		kind: PropTypes.string,
-		classification: PropTypes.string,
+		kind: PropTypes.shape({
+			value: PropTypes.string,
+			label: PropTypes.string,
+		}),
+		classification: PropTypes.shape({
+			value: PropTypes.string,
+			label: PropTypes.string,
+		}),
 		tags: PropTypes.array,
 	}),
 	errors: Errors.propTypes.errors,
