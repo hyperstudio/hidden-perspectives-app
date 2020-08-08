@@ -10,6 +10,7 @@ import Select from '../_library/Select';
 import Stakeholder from '../_library/Stakeholder';
 import Item from '../_library/Item';
 import Tag from '../_library/Tag';
+import SearchInput from '../SearchInput';
 import { isTodayOrPrior } from '../../utils/dateUtil';
 import LoadingIndicator from '../LoadingIndicator';
 import Errors from '../Errors';
@@ -138,17 +139,24 @@ const MetadataEditView = ({
 														{...input}
 													>
 														{() => (
-															Array.isArray(input.value) ? input.value.map((author) => (
-																<Stakeholder
-																	id={author.id}
-																	value={author.name}
-																	key={author.name}
-																	itemType="protagonist"
-																>
-																	{author.name}
-																</Stakeholder>
-															))
-																: <div />
+															<SearchInput
+																type="stakeholder"
+																onChange={input.onChange}
+															>
+																{() => (
+																	Array.isArray(input.value) ? input.value.map((author) => (
+																		<Stakeholder
+																			id={author.id}
+																			value={author.name}
+																			key={author.name}
+																			itemType="protagonist"
+																		>
+																			{author.name}
+																		</Stakeholder>
+																	))
+																		: <div />
+																)}
+															</SearchInput>
 														)}
 													</InputWrapper>
 												)}
@@ -334,17 +342,24 @@ const MetadataEditView = ({
 														{...input}
 													>
 														{() => (
-															Array.isArray(input.value) ? input.value.map((stakeholder) => (
-																<Stakeholder
-																	id={stakeholder.id}
-																	value={stakeholder.name}
-																	key={stakeholder.name}
-																	itemType="protagonist"
-																>
-																	{stakeholder.name}
-																</Stakeholder>
-															))
-																: <div />
+															<SearchInput
+																type="stakeholder"
+																onChange={input.onChange}
+															>
+																{() => (
+																	Array.isArray(input.value) ? input.value.map((stakeholder) => (
+																		<Stakeholder
+																			id={stakeholder.id}
+																			value={stakeholder.name}
+																			key={stakeholder.name}
+																			itemType="protagonist"
+																		>
+																			{stakeholder.name}
+																		</Stakeholder>
+																	))
+																		: <div />
+																)}
+															</SearchInput>
 														)}
 													</InputWrapper>
 												)}
