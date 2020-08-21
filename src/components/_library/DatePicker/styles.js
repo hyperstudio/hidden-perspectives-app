@@ -13,7 +13,7 @@ export const Container = styled.div`
 		border-style: solid;
 		min-width: 100%;
 		padding: .5rem 0 0;
-		z-index: 2;
+		z-index: 5;
 		margin-bottom: 3rem;
 	}
 `;
@@ -22,7 +22,7 @@ export const DayPicker = styled(OriginalDayPicker)`
 	position: absolute;
 	top: 100%;
 	left: 50%;
-	z-index: 1;
+	z-index: 3;
 	transform: translateX(-50%);
 `;
 

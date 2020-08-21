@@ -151,12 +151,33 @@ const LOCATION_QUERY = gql`
 `;
 
 const DOCUMENT_MUTATION = gql`
-mutation UpdateDoc($id: String, $data: DocumentUpdateInput!){
+mutation UpdateDocument($id: String, $data: DocumentUpdateInput!){
   updateOneDocument(where: {id: $id}, data: $data){
     documentTitle
     documentDescription
     documentCreationDate
     documentPublicationDate
+  }
+}
+`;
+
+const EVENT_MUTATION = gql`
+mutation UpdateEvent($id: String, $data: EventUpdateInput!){
+  updateOneEvent(where: {id: $id}, data: $data){
+    eventTitle
+    eventDescription
+    eventStartDate
+		eventEndDate
+  }
+}
+`;
+
+const STAKEHOLDER_MUTATION = gql`
+mutation UpdateStakeholder($id: String, $data: StakeholderUpdateInput!){
+  updateOneStakeholder(where: {id: $id}, data: $data){
+    stakeholderFullName
+    stakeholderDescription
+    stakeholderWikipediaUri
   }
 }
 `;
@@ -299,13 +320,26 @@ const getItemQuery = (itemType) => {
 	}
 };
 
+const dateExists = (date) => date && date !== '' && date !== null;
+
 const getDestructuredData = (data) => {
 	switch (data.itemType) {
 	case 'document': return {
 		documentTitle: data.title,
 		documentDescription: data.description,
-		documentCreationDate: (data.creationDate && data.creationDate !== '' && !data.creationDate !== null) ? new Date(`${data.creationDate} 00:00`) : undefined,
-		documentPublicationDate: (data.publicationDate && data.publicationDate !== '' && !data.publicationDate !== null) ? new Date(`${data.publicationDate} 00:00`) : undefined,
+		documentCreationDate: dateExists(data.creationDate) ? new Date(`${data.creationDate} 00:00`) : undefined,
+		documentPublicationDate: dateExists(data.publicationDate) ? new Date(`${data.publicationDate} 00:00`) : undefined,
+	};
+	case 'event': return {
+		eventTitle: data.title,
+		eventDescription: data.description,
+		eventStartDate: dateExists(data.eventStartDate) ? new Date(`${data.eventStartDate} 00:00`) : undefined,
+		eventEndDate: dateExists(data.eventEndDate) ? new Date(`${data.eventEndDate} 00:00`) : undefined,
+	};
+	case 'stakeholder': return {
+		stakeholderFullName: data.title,
+		stakeholderDescription: data.description,
+		stakeholderWikipediaUri: data.stakeholderWikipediaUri,
 	};
 	default: return '';
 	}
@@ -314,6 +348,8 @@ const getDestructuredData = (data) => {
 const getItemMutation = (itemType) => {
 	switch (itemType) {
 	case 'document': return DOCUMENT_MUTATION;
+	case 'event': return EVENT_MUTATION;
+	case 'stakeholder': return STAKEHOLDER_MUTATION;
 	default: return '';
 	}
 };
@@ -321,7 +357,9 @@ const getItemMutation = (itemType) => {
 const getMutationCallback = (props) => ({
 	errors,
 }) => {
-	const urlString = `/document/context/${props.id}`;
+	let { itemType } = props;
+	if (props.itemType === 'stakeholder') itemType = 'protagonist';
+	const urlString = `/${itemType}/context/${props.id}`;
 	if (errors) {
 		props.setErrors(errors);
 		return;
