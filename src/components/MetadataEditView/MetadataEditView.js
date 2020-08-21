@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Form, Field } from 'react-final-form';
+import { Alert, Button } from '@smooth-ui/core-sc';
 import isURL from 'validator/lib/isURL';
 import MetadataRow from '../_library/MetadataRow';
 import Fieldset from '../_library/Fieldset';
@@ -15,7 +16,9 @@ import { isTodayOrPrior } from '../../utils/dateUtil';
 import LoadingIndicator from '../LoadingIndicator';
 import Errors from '../Errors';
 import { LoadingContainer } from '../LoadingIndicator/styles';
-import { Container, Content, ScrollContainer } from './styles';
+import {
+	AlertsContainer, Container, Content, ScrollContainer,
+} from './styles';
 import { DNSAKindList, DNSAClassificationList } from '../../utils/listUtil';
 
 const required = (value) => {
@@ -49,11 +52,10 @@ const getMeta = (meta) => ({
 	error: getError(meta),
 });
 
-const onSubmit = async (values) => values;
-
 const MetadataEditView = ({
 	data,
 	isLoading,
+	onSubmit,
 	errors,
 	itemType,
 }) => (
@@ -62,65 +64,67 @@ const MetadataEditView = ({
 		<LoadingContainer isLoading={isLoading}>
 			<LoadingIndicator />
 		</LoadingContainer>
-		<ScrollContainer>
-			<Content>
-				<Form
-					onSubmit={onSubmit}
-					initialValues={data}
-					render={({
-						handleSubmit,
-						form,
-					}) => (
-						<form onSubmit={handleSubmit}>
-							<Fieldset title="Core Information" key="Core Information" mode="edit">
-								<MetadataRow
-									label="Title"
-									mode="edit"
-								>
-									<Field
-										name="title"
-										placeholder="Title"
-										validate={required}
-										render={(args) => (
-											<>
+		{!isLoading && (
+			<ScrollContainer>
+				<Content>
+					<Form
+						onSubmit={onSubmit}
+						initialValues={{ ...data, itemType }}
+						render={({
+							handleSubmit,
+							form,
+							submitting,
+						}) => (
+							<form onSubmit={handleSubmit}>
+								<Fieldset title="Core Information" key="Core Information" mode="edit">
+									<MetadataRow
+										label="Title"
+										mode="edit"
+									>
+										<Field
+											name="title"
+											placeholder="Title"
+											validate={required}
+											render={(args) => (
+												<>
+													<InputWrapper
+														name={args.input.name}
+														placeholder="Title"
+														value={args.input.value}
+														onChange={args.input.onChange}
+														onBlur={args.input.onBlur}
+														label="Title"
+														nolabel
+														{...getMeta(args.meta)}
+													/>
+												</>
+											)}
+										/>
+									</MetadataRow>
+									<MetadataRow
+										label="Summary"
+										mode="edit"
+									>
+										<Field
+											name="description"
+											placeholder="Summary"
+											validate={required}
+											render={(args) => (
 												<InputWrapper
 													name={args.input.name}
-													placeholder="Title"
+													placeholder="Summary"
 													value={args.input.value}
 													onChange={args.input.onChange}
 													onBlur={args.input.onBlur}
 													label="Title"
 													nolabel
+													multiline
 													{...getMeta(args.meta)}
 												/>
-											</>
-										)}
-									/>
-								</MetadataRow>
-								<MetadataRow
-									label="Summary"
-									mode="edit"
-								>
-									<Field
-										name="description"
-										placeholder="Summary"
-										validate={required}
-										render={(args) => (
-											<InputWrapper
-												name={args.input.name}
-												placeholder="Summary"
-												value={args.input.value}
-												onChange={args.input.onChange}
-												onBlur={args.input.onBlur}
-												label="Title"
-												nolabel
-												multiline
-												{...getMeta(args.meta)}
-											/>
-										)}
-									/>
-								</MetadataRow>
-								{itemType === 'document' && (
+											)}
+										/>
+									</MetadataRow>
+									{itemType === 'document' && (
 									<>
 										<MetadataRow
 											label="Authors"
@@ -141,6 +145,7 @@ const MetadataEditView = ({
 														{() => (
 															<SearchInput
 																type="stakeholder"
+																name="documentAuthors"
 																onChange={input.onChange}
 															>
 																{() => (
@@ -209,8 +214,8 @@ const MetadataEditView = ({
 											</Field>
 										</MetadataRow>
 									</>
-								)}
-								{itemType === 'event' && (
+									)}
+									{itemType === 'event' && (
 									<>
 										<MetadataRow
 											label="Start date"
@@ -259,71 +264,71 @@ const MetadataEditView = ({
 											</Field>
 										</MetadataRow>
 									</>
-								)}
-								{itemType === 'stakeholder' && (
-									<MetadataRow
-										label="Wikipedia URL"
-										mode="edit"
-									>
-										<Field
-											name="stakeholderWikipediaUri"
-											placeholder="Wikipedia URL"
-											validate={isValidURL}
-											render={(args) => (
-												<InputWrapper
-													name={args.input.name}
-													placeholder="Wikipedia URL"
-													value={args.input.value}
-													onChange={args.input.onChange}
-													onBlur={args.input.onBlur}
-													label="Wikipedia URL"
-													nolabel
-													{...getMeta(args.meta)}
-												/>
-											)}
-										/>
-									</MetadataRow>
-								)}
-							</Fieldset>
-							{itemType === 'stakeholder' && (
-								<Fieldset title="Authored" key="Authored" mode="edit">
-									<MetadataRow
-										label="Documents"
-										mode="edit"
-									>
-										<Field
-											name="stakeholderAuthoredDocuments"
-											placeholder="Documents"
+									)}
+									{itemType === 'stakeholder' && (
+										<MetadataRow
+											label="Wikipedia URL"
+											mode="edit"
 										>
-											{({ input, meta }) => (
-												<InputWrapper
-													label="Documents"
-													placeholder="Add documents"
-													nolabel
-													{...getMeta(meta)}
-													{...input}
-												>
-													{(props) => (
-														Array.isArray(input.value) ? input.value.map((document) => (
-															<Item
-																itemType="document"
-																key={document.name}
-																value={document.name}
-																{...props}
-															>
-																{document.name}
-															</Item>
-														))
-															: <div />
-													)}
-												</InputWrapper>
-											)}
-										</Field>
-									</MetadataRow>
+											<Field
+												name="stakeholderWikipediaUri"
+												placeholder="Wikipedia URL"
+												validate={isValidURL}
+												render={(args) => (
+													<InputWrapper
+														name={args.input.name}
+														placeholder="Wikipedia URL"
+														value={args.input.value}
+														onChange={args.input.onChange}
+														onBlur={args.input.onBlur}
+														label="Wikipedia URL"
+														nolabel
+														{...getMeta(args.meta)}
+													/>
+												)}
+											/>
+										</MetadataRow>
+									)}
 								</Fieldset>
-							)}
-							<Fieldset title="Appearances" key="Appearances" mode="edit">
-								{(itemType === 'document' || itemType === 'event') && (
+								{itemType === 'stakeholder' && (
+									<Fieldset title="Authored" key="Authored" mode="edit">
+										<MetadataRow
+											label="Documents"
+											mode="edit"
+										>
+											<Field
+												name="stakeholderAuthoredDocuments"
+												placeholder="Documents"
+											>
+												{({ input, meta }) => (
+													<InputWrapper
+														label="Documents"
+														placeholder="Add documents"
+														nolabel
+														{...getMeta(meta)}
+														{...input}
+													>
+														{(props) => (
+															Array.isArray(input.value) ? input.value.map((document) => (
+																<Item
+																	itemType="document"
+																	key={document.name}
+																	value={document.name}
+																	{...props}
+																>
+																	{document.name}
+																</Item>
+															))
+																: <div />
+														)}
+													</InputWrapper>
+												)}
+											</Field>
+										</MetadataRow>
+									</Fieldset>
+								)}
+								<Fieldset title="Appearances" key="Appearances" mode="edit">
+									{(itemType === 'document' || itemType === 'event') && (
 									<>
 										<MetadataRow
 											label="Stakeholders"
@@ -335,8 +340,8 @@ const MetadataEditView = ({
 											>
 												{({ input, meta }) => (
 													<InputWrapper
-														label="Authors"
-														placeholder="Add authors"
+														label="Stakeholders"
+														placeholder="Add stakeholders"
 														nolabel
 														{...getMeta(meta)}
 														{...input}
@@ -344,6 +349,7 @@ const MetadataEditView = ({
 														{() => (
 															<SearchInput
 																type="stakeholder"
+																name="documentInvolvedStakeholders"
 																onChange={input.onChange}
 															>
 																{() => (
@@ -399,8 +405,8 @@ const MetadataEditView = ({
 											</Field>
 										</MetadataRow>
 									</>
-								)}
-								{(itemType === 'stakeholder' || itemType === 'location') && (
+									)}
+									{(itemType === 'stakeholder' || itemType === 'location') && (
 									<>
 										<MetadataRow
 											label="Documents"
@@ -469,11 +475,11 @@ const MetadataEditView = ({
 											</Field>
 										</MetadataRow>
 									</>
-								)}
-							</Fieldset>
-							{(itemType === 'document' || itemType === 'event') && (
-								<Fieldset title="Categorization" key="Categorization" mode="edit">
-									{itemType === 'document' && (
+									)}
+								</Fieldset>
+								{(itemType === 'document' || itemType === 'event') && (
+									<Fieldset title="Categorization" key="Categorization" mode="edit">
+										{itemType === 'document' && (
 										<>
 											<MetadataRow
 												label="Kind"
@@ -520,53 +526,67 @@ const MetadataEditView = ({
 												</Field>
 											</MetadataRow>
 										</>
-									)}
-									<MetadataRow
-										label="Tags"
-										mode="edit"
-									>
-										<Field
-											name="tags"
-											placeholder="Tags"
+										)}
+										<MetadataRow
+											label="Tags"
+											mode="edit"
 										>
-											{({ input, meta }) => (
-												<InputWrapper
-													label="Tags"
-													placeholder="Add tags"
-													nolabel
-													{...getMeta(meta)}
-													{...input}
-												>
-													{(props) => (
-														Array.isArray(input.value) ? input.value.map((tag) => (
-															<Tag
-																itemType="tag"
-																key={tag.name}
-																value={tag.name}
-																{...props}
-															>
-																{tag.name}
-															</Tag>
-														))
-															: <div />
-													)}
-												</InputWrapper>
-											)}
-										</Field>
-									</MetadataRow>
-								</Fieldset>
-							)}
-						</form>
-					)}
-				/>
-			</Content>
-		</ScrollContainer>
+											<Field
+												name="tags"
+												placeholder="Tags"
+											>
+												{({ input, meta }) => (
+													<InputWrapper
+														label="Tags"
+														placeholder="Add tags"
+														nolabel
+														{...getMeta(meta)}
+														{...input}
+													>
+														{(props) => (
+															Array.isArray(input.value) ? input.value.map((tag) => (
+																<Tag
+																	itemType="tag"
+																	key={tag.name}
+																	value={tag.name}
+																	{...props}
+																>
+																	{tag.name}
+																</Tag>
+															))
+																: <div />
+														)}
+													</InputWrapper>
+												)}
+											</Field>
+										</MetadataRow>
+									</Fieldset>
+								)}
+								<AlertsContainer>
+									{errors.map(({ message }) => (
+										<Alert key={message} variant="danger">{message}</Alert>
+									))}
+								</AlertsContainer>
+								<Button
+									type="submit"
+									alignSelf="flex-end"
+									disabled={submitting || isLoading}
+								>
+									Submit
+								</Button>
+							</form>
+						)}
+					/>
+				</Content>
+			</ScrollContainer>
+		)}
 	</Container>
 );
 
 MetadataEditView.propTypes = {
 	itemType: PropTypes.string.isRequired,
 	isLoading: PropTypes.bool,
+	onSubmit: PropTypes.func.isRequired,
 	data: PropTypes.shape({
 		title: PropTypes.string,
 		description: PropTypes.string,
@@ -585,13 +605,15 @@ MetadataEditView.propTypes = {
 		}),
 		tags: PropTypes.array,
 	}),
-	errors: Errors.propTypes.errors,
+	errors: PropTypes.arrayOf(PropTypes.shape({
+		message: PropTypes.string.isRequired,
+	})),
 };
 
 MetadataEditView.defaultProps = {
 	isLoading: true,
 	data: {},
-	errors: Errors.defaultProps.errors,
+	errors: [],
 };
 
 export default MetadataEditView;

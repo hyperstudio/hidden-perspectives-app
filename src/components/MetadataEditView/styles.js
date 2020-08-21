@@ -21,3 +21,11 @@ export const Content = styled.div`
 	padding: 2rem 0 3rem 0;
 	position: relative;
 `;
+
+export const AlertsContainer = styled.div`
+	margin-bottom: 2rem;
+
+	& > div {
+		padding: 1rem 1.25rem .75rem;
+	}
+`;

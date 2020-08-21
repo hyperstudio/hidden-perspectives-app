@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import MetadataEditView from '../../components/MetadataEditView';
 import Header from '../../components/Header';
 
-const DocumentMetadataEditPage = ({ match }) => (
+const DocumentMetadataEditPage = ({ match }, props) => (
 	<>
 		<Header />
-		<MetadataEditView id={match.params.id} itemType="document" />
+		<MetadataEditView id={match.params.id} itemType="document" {...props} />
 	</>
 );
 

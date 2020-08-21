@@ -1,6 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { compose, lifecycle, withState } from '@hypnosphi/recompose';
+import { withRouter } from 'react-router-dom';
+import {
+	compose,
+	lifecycle,
+	withState,
+	withHandlers,
+} from '@hypnosphi/recompose';
 import { withApollo } from 'react-apollo';
 import gql from 'graphql-tag';
 import {
@@ -8,7 +14,7 @@ import {
 	identity,
 	always,
 } from 'ramda';
-import { withLoading, withErrors, getErrorHandler } from '../../utils/hocUtil';
+import { withLoading, getErrorHandler } from '../../utils/hocUtil';
 import MetadataEditView from './MetadataEditView';
 import { getFormattedDate } from '../../utils/dateUtil';
 import Item from '../_library/Item';
@@ -142,6 +148,17 @@ const LOCATION_QUERY = gql`
 			locationWikipediaUri
 		}
 	}
+`;
+
+const DOCUMENT_MUTATION = gql`
+mutation UpdateDoc($id: String, $data: DocumentUpdateInput!){
+  updateOneDocument(where: {id: $id}, data: $data){
+    documentTitle
+    documentDescription
+    documentCreationDate
+    documentPublicationDate
+  }
+}
 `;
 
 const mapStakeholder = ({ Stakeholder: { id, stakeholderFullName } }) => ({
@@ -282,11 +299,65 @@ const getItemQuery = (itemType) => {
 	}
 };
 
+const getDestructuredData = (data) => {
+	switch (data.itemType) {
+	case 'document': return {
+		documentTitle: data.title,
+		documentDescription: data.description,
+		documentCreationDate: (data.creationDate && data.creationDate !== '' && !data.creationDate !== null) ? new Date(`${data.creationDate} 00:00`) : undefined,
+		documentPublicationDate: (data.publicationDate && data.publicationDate !== '' && !data.publicationDate !== null) ? new Date(`${data.publicationDate} 00:00`) : undefined,
+	};
+	default: return '';
+	}
+};
+
+const getItemMutation = (itemType) => {
+	switch (itemType) {
+	case 'document': return DOCUMENT_MUTATION;
+	default: return '';
+	}
+};
+
+const getMutationCallback = (props) => ({
+	errors,
+}) => {
+	const urlString = `/document/context/${props.id}`;
+	if (errors) {
+		props.setErrors(errors);
+		return;
+	}
+	props.history.push(urlString);
+	props.history.go(0);
+};
+
+
 export default compose(
 	withApollo,
+	withRouter,
 	withLoading,
-	withErrors,
 	withState('data', 'setData', {}),
+	withState('errors', 'setErrors', []),
+	withHandlers({
+		onSubmit(props) {
+			props.startLoading();
+			return (values) => {
+				props.client.mutate({
+					mutation: getItemMutation(props.itemType),
+					variables: {
+						id: props.id,
+						data: getDestructuredData(values),
+					},
+				})
+					.then((data) => {
+						// Do stuff with data
+						const mutationCallback = getMutationCallback(props);
+						props.stopLoading();
+						return mutationCallback(data);
+					})
+					.catch((err) => props.setErrors(err));
+			};
+		},
+	}),
 	lifecycle({
 		componentDidMount() {
 			const { id, client, itemType } = this.props;
