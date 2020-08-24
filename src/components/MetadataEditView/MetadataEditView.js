@@ -126,47 +126,49 @@ const MetadataEditView = ({
 									</MetadataRow>
 									{itemType === 'document' && (
 									<>
-										<MetadataRow
-											label="Authors"
-											mode="edit"
-										>
-											<Field
-												name="authors"
-												placeholder="Authors"
+										{process.env.ENABLE_SEARCH_INPUTS && (
+											<MetadataRow
+												label="Authors"
+												mode="edit"
 											>
-												{({ input, meta }) => (
-													<InputWrapper
-														label="Authors"
-														placeholder="Add authors"
-														nolabel
-														{...getMeta(meta)}
-														{...input}
-													>
-														{() => (
-															<SearchInput
-																type="stakeholder"
-																name="documentAuthors"
-																onChange={input.onChange}
-															>
-																{() => (
-																	Array.isArray(input.value) ? input.value.map((author) => (
-																		<Stakeholder
-																			id={author.id}
-																			value={author.name}
-																			key={author.name}
-																			itemType="protagonist"
-																		>
-																			{author.name}
-																		</Stakeholder>
-																	))
-																		: <div />
-																)}
-															</SearchInput>
-														)}
-													</InputWrapper>
-												)}
-											</Field>
-										</MetadataRow>
+												<Field
+													name="authors"
+													placeholder="Authors"
+												>
+													{({ input, meta }) => (
+														<InputWrapper
+															label="Authors"
+															placeholder="Add authors"
+															nolabel
+															{...getMeta(meta)}
+															{...input}
+														>
+															{() => (
+																<SearchInput
+																	type="stakeholder"
+																	name="documentAuthors"
+																	onChange={input.onChange}
+																>
+																	{() => (
+																		Array.isArray(input.value) ? input.value.map((author) => (
+																			<Stakeholder
+																				id={author.id}
+																				value={author.name}
+																				key={author.name}
+																				itemType="protagonist"
+																			>
+																				{author.name}
+																			</Stakeholder>
+																		))
+																			: <div />
+																	)}
+																</SearchInput>
+															)}
+														</InputWrapper>
+													)}
+												</Field>
+											</MetadataRow>
+										)}
 										<MetadataRow
 											label="Creation date"
 											mode="edit"
@@ -330,47 +332,49 @@ const MetadataEditView = ({
 								<Fieldset title="Appearances" key="Appearances" mode="edit">
 									{(itemType === 'document' || itemType === 'event') && (
 									<>
-										<MetadataRow
-											label="Stakeholders"
-											mode="edit"
-										>
-											<Field
-												name="stakeholders"
-												placeholder="Stakeholders"
+										{process.env.ENABLE_SEARCH_INPUTS && (
+											<MetadataRow
+												label="Stakeholders"
+												mode="edit"
 											>
-												{({ input, meta }) => (
-													<InputWrapper
-														label="Stakeholders"
-														placeholder="Add stakeholders"
-														nolabel
-														{...getMeta(meta)}
-														{...input}
-													>
-														{() => (
-															<SearchInput
-																type="stakeholder"
-																name="documentInvolvedStakeholders"
-																onChange={input.onChange}
-															>
-																{() => (
-																	Array.isArray(input.value) ? input.value.map((stakeholder) => (
-																		<Stakeholder
-																			id={stakeholder.id}
-																			value={stakeholder.name}
-																			key={stakeholder.name}
-																			itemType="protagonist"
-																		>
-																			{stakeholder.name}
-																		</Stakeholder>
-																	))
-																		: <div />
-																)}
-															</SearchInput>
-														)}
-													</InputWrapper>
-												)}
-											</Field>
-										</MetadataRow>
+												<Field
+													name="stakeholders"
+													placeholder="Stakeholders"
+												>
+													{({ input, meta }) => (
+														<InputWrapper
+															label="Stakeholders"
+															placeholder="Add stakeholders"
+															nolabel
+															{...getMeta(meta)}
+															{...input}
+														>
+															{() => (
+																<SearchInput
+																	type="stakeholder"
+																	name="documentInvolvedStakeholders"
+																	onChange={input.onChange}
+																>
+																	{() => (
+																		Array.isArray(input.value) ? input.value.map((stakeholder) => (
+																			<Stakeholder
+																				id={stakeholder.id}
+																				value={stakeholder.name}
+																				key={stakeholder.name}
+																				itemType="protagonist"
+																			>
+																				{stakeholder.name}
+																			</Stakeholder>
+																		))
+																			: <div />
+																	)}
+																</SearchInput>
+															)}
+														</InputWrapper>
+													)}
+												</Field>
+											</MetadataRow>
+										)}
 										<MetadataRow
 											label="Locations"
 											mode="edit"
@@ -479,7 +483,7 @@ const MetadataEditView = ({
 								</Fieldset>
 								{(itemType === 'document' || itemType === 'event') && (
 									<Fieldset title="Categorization" key="Categorization" mode="edit">
-										{itemType === 'document' && (
+										{itemType === 'document' && process.env.ENABLE_SELECT_INPUTS && (
 										<>
 											<MetadataRow
 												label="Kind"
