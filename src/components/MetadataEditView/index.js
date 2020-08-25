@@ -349,6 +349,18 @@ const getDestructuredData = (data) => {
 				},
 			},
 		} : undefined,
+		documentTags: (Array.isArray(data.tags) && data.tags.length) > 0
+			? {
+				create: data.tags.map((tag) => ({
+					Tag: {
+						connect: {
+							// eslint-disable-next-line quote-props
+							'name': tag.name,
+						},
+					},
+				})),
+			}
+			: undefined,
 	};
 	case 'event': return {
 		eventTitle: data.title,

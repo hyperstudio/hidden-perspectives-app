@@ -1,8 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Form, Field } from 'react-final-form';
-import { Alert, Button } from '@smooth-ui/core-sc';
+import arrayMutators from 'final-form-arrays';
+import { FieldArray } from 'react-final-form-arrays';
+import { Alert } from '@smooth-ui/core-sc';
 import isURL from 'validator/lib/isURL';
+import Button from '../_library/Button';
 import MetadataRow from '../_library/MetadataRow';
 import Fieldset from '../_library/Fieldset';
 import InputWrapper from '../_library/InputWrapper';
@@ -17,7 +20,7 @@ import LoadingIndicator from '../LoadingIndicator';
 import Errors from '../Errors';
 import { LoadingContainer } from '../LoadingIndicator/styles';
 import {
-	AlertsContainer, Container, Content, ScrollContainer,
+	AlertsContainer, Container, Content, RemoveButton, ScrollContainer, TagsEditWrapper,
 } from './styles';
 import { DNSAKindList, DNSAClassificationList } from '../../utils/listUtil';
 
@@ -58,6 +61,7 @@ const MetadataEditView = ({
 	onSubmit,
 	errors,
 	itemType,
+	removeText,
 }) => (
 	<Container>
 		<Errors errors={errors} />
@@ -69,6 +73,10 @@ const MetadataEditView = ({
 				<Content>
 					<Form
 						onSubmit={onSubmit}
+						mutators={{
+							// potentially other mutators could be merged here
+							...arrayMutators,
+						}}
 						initialValues={{ ...data, itemType }}
 						render={({
 							handleSubmit,
@@ -535,34 +543,38 @@ const MetadataEditView = ({
 											label="Tags"
 											mode="edit"
 										>
-											<Field
+											<FieldArray
 												name="tags"
 												placeholder="Tags"
 											>
-												{({ input, meta }) => (
-													<InputWrapper
-														label="Tags"
-														placeholder="Add tags"
-														nolabel
-														{...getMeta(meta)}
-														{...input}
-													>
-														{(props) => (
-															Array.isArray(input.value) ? input.value.map((tag) => (
-																<Tag
-																	itemType="tag"
-																	key={tag.name}
-																	value={tag.name}
-																	{...props}
-																>
-																	{tag.name}
-																</Tag>
-															))
-																: <div />
-														)}
-													</InputWrapper>
+												{({ fields }) => (
+													<TagsEditWrapper>
+														{fields.map((name, index) => (
+															<div
+																key={name}
+																index={index}
+															>
+																<Field name={`${name}.name`}>
+																	{// eslint-disable-next-line no-shadow
+																		({ input: { name, value } }) => (
+																			<Tag name={name}>
+																				{value}
+																				<RemoveButton
+																					onClick={() => fields.remove(index)}
+																					role="button"
+																					aria-label="Remove"
+																				>
+																					{removeText}
+																				</RemoveButton>
+																			</Tag>
+																		)
+																	}
+																</Field>
+															</div>
+														))}
+													</TagsEditWrapper>
 												)}
-											</Field>
+											</FieldArray>
 										</MetadataRow>
 									</Fieldset>
 								)}
@@ -578,6 +590,9 @@ const MetadataEditView = ({
 								>
 									Submit
 								</Button>
+								<>
+									<pre>{JSON.stringify(data, null, '\t')}</pre>
+								</>
 							</form>
 						)}
 					/>
@@ -612,12 +627,14 @@ MetadataEditView.propTypes = {
 	errors: PropTypes.arrayOf(PropTypes.shape({
 		message: PropTypes.string.isRequired,
 	})),
+	removeText: PropTypes.string,
 };
 
 MetadataEditView.defaultProps = {
 	isLoading: true,
 	data: {},
 	errors: [],
+	removeText: '✕',
 };
 
 export default MetadataEditView;

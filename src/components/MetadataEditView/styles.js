@@ -29,3 +29,24 @@ export const AlertsContainer = styled.div`
 		padding: 1rem 1.25rem .75rem;
 	}
 `;
+
+export const RemoveButton = styled.span`
+	display: inline-block;
+	cursor: pointer;
+	margin-left: 0.5rem;
+	vertical-align: middle;
+
+	transition: color 250ms ease-in;
+	&:hover {
+		color: red;
+		transition: color 0ms ease-in;
+	}
+`;
+
+export const TagsEditWrapper = styled.div`
+	display: flex;
+	flex-wrap: wrap;
+	padding-top: 1rem;
+	padding-left: 1rem;
+	width: 100%;
+`;
