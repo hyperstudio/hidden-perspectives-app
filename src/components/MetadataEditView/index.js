@@ -329,6 +329,26 @@ const getDestructuredData = (data) => {
 		documentDescription: data.description,
 		documentCreationDate: dateExists(data.creationDate) ? new Date(`${data.creationDate} 00:00`) : undefined,
 		documentPublicationDate: dateExists(data.publicationDate) ? new Date(`${data.publicationDate} 00:00`) : undefined,
+		documentKind: data.kind.value ? {
+			create: {
+				Kind: {
+					connect: {
+						// eslint-disable-next-line quote-props
+						'name': data.kind.value.toLowerCase(),
+					},
+				},
+			},
+		} : undefined,
+		documentClassification: data.classification.value ? {
+			create: {
+				Classification: {
+					connect: {
+						// eslint-disable-next-line quote-props
+						'name': data.kind.classification.toLowerCase(),
+					},
+				},
+			},
+		} : undefined,
 	};
 	case 'event': return {
 		eventTitle: data.title,
