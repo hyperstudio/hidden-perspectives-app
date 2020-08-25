@@ -344,7 +344,7 @@ const getDestructuredData = (data) => {
 				Classification: {
 					connect: {
 						// eslint-disable-next-line quote-props
-						'name': data.kind.classification.toLowerCase(),
+						'name': data.classification.value.toLowerCase(),
 					},
 				},
 			},

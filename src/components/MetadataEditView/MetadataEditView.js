@@ -483,7 +483,7 @@ const MetadataEditView = ({
 								</Fieldset>
 								{(itemType === 'document' || itemType === 'event') && (
 									<Fieldset title="Categorization" key="Categorization" mode="edit">
-										{itemType === 'document' && process.env.ENABLE_SELECT_INPUTS && (
+										{itemType === 'document' && (
 										<>
 											<MetadataRow
 												label="Kind"
