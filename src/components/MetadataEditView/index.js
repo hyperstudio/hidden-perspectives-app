@@ -367,6 +367,18 @@ const getDestructuredData = (data) => {
 		eventDescription: data.description,
 		eventStartDate: dateExists(data.eventStartDate) ? new Date(`${data.eventStartDate} 00:00`) : undefined,
 		eventEndDate: dateExists(data.eventEndDate) ? new Date(`${data.eventEndDate} 00:00`) : undefined,
+		eventTags: (Array.isArray(data.tags) && data.tags.length) > 0
+			? {
+				create: data.tags.map((tag) => ({
+					Tag: {
+						connect: {
+							// eslint-disable-next-line quote-props
+							'name': tag.name,
+						},
+					},
+				})),
+			}
+			: undefined,
 	};
 	case 'stakeholder': return {
 		stakeholderFullName: data.title,
