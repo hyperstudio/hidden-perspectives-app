@@ -227,11 +227,14 @@ const structureDocumentData = (data) => ({
 	publicationDate: formatIfValidDate(data.documentPublicationDate),
 	stakeholders: data.mentionedStakeholders.map(mapStakeholder),
 	locations: data.mentionedLocations.map(mapLocation),
-	kind: { value: data.documentKind[0].Kind.name, label: data.documentKind[0].Kind.name },
-	classification: {
+	kind: data.documentKind[0] ? {
+		value: data.documentKind[0].Kind.name,
+		label: data.documentKind[0].Kind.name,
+	} : undefined,
+	classification: data.documentClassification[0] ? {
 		value: data.documentClassification[0].Classification.name,
 		label: data.documentClassification[0].Classification.name,
-	},
+	} : undefined,
 	tags: reOrganizeItems(data.documentTags, 'tag'),
 });
 
@@ -349,13 +352,13 @@ const getDestructuredData = (data) => {
 				},
 			},
 		} : undefined,
-		documentTags: (Array.isArray(data.tags) && data.tags.length) > 0
+		documentTags: (Array.isArray(data.tags) && data.tags.length > 0)
 			? {
 				create: data.tags.map((tag) => ({
 					Tag: {
-						connect: {
-							// eslint-disable-next-line quote-props
-							'name': tag.name,
+						connectOrCreate: {
+							where: { 'name': tag.name }, // eslint-disable-line quote-props
+							create: { 'name': tag.name }, // eslint-disable-line quote-props
 						},
 					},
 				})),
@@ -367,13 +370,13 @@ const getDestructuredData = (data) => {
 		eventDescription: data.description,
 		eventStartDate: dateExists(data.eventStartDate) ? new Date(`${data.eventStartDate} 00:00`) : undefined,
 		eventEndDate: dateExists(data.eventEndDate) ? new Date(`${data.eventEndDate} 00:00`) : undefined,
-		eventTags: (Array.isArray(data.tags) && data.tags.length) > 0
+		eventTags: (Array.isArray(data.tags) && data.tags.length > 0)
 			? {
 				create: data.tags.map((tag) => ({
 					Tag: {
-						connect: {
-							// eslint-disable-next-line quote-props
-							'name': tag.name,
+						connectOrCreate: {
+							where: { 'name': tag.name }, // eslint-disable-line quote-props
+							create: { 'name': tag.name }, // eslint-disable-line quote-props
 						},
 					},
 				})),
@@ -419,6 +422,8 @@ export default compose(
 	withLoading,
 	withState('data', 'setData', {}),
 	withState('errors', 'setErrors', []),
+	withState('addingTag', 'setAddingTag', false),
+	withState('tagInputState', 'setTagInputState', ''),
 	withHandlers({
 		onSubmit(props) {
 			props.startLoading();

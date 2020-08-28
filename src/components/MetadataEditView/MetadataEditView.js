@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Form, Field } from 'react-final-form';
 import arrayMutators from 'final-form-arrays';
 import { FieldArray } from 'react-final-form-arrays';
-import { Alert } from '@smooth-ui/core-sc';
+import { Alert, ControlFeedback } from '@smooth-ui/core-sc';
 import isURL from 'validator/lib/isURL';
 import Button from '../_library/Button';
 import MetadataRow from '../_library/MetadataRow';
@@ -20,7 +20,14 @@ import LoadingIndicator from '../LoadingIndicator';
 import Errors from '../Errors';
 import { LoadingContainer } from '../LoadingIndicator/styles';
 import {
-	AlertsContainer, Container, Content, RemoveButton, ScrollContainer, TagsEditWrapper,
+	AlertsContainer,
+	Container,
+	Content,
+	RemoveButton,
+	ScrollContainer,
+	TagLikeContainer,
+	TagsEditWrapper,
+	TagsInput,
 } from './styles';
 import { DNSAKindList, DNSAClassificationList } from '../../utils/listUtil';
 
@@ -62,6 +69,10 @@ const MetadataEditView = ({
 	errors,
 	itemType,
 	removeText,
+	addingTag,
+	setAddingTag,
+	tagInputState,
+	setTagInputState,
 }) => (
 	<Container>
 		<Errors errors={errors} />
@@ -74,13 +85,14 @@ const MetadataEditView = ({
 					<Form
 						onSubmit={onSubmit}
 						mutators={{
-							// potentially other mutators could be merged here
 							...arrayMutators,
 						}}
 						initialValues={{ ...data, itemType }}
 						render={({
 							handleSubmit,
-							form,
+							form: {
+								mutators: { push },
+							},
 							submitting,
 						}) => (
 							<form onSubmit={handleSubmit}>
@@ -572,6 +584,40 @@ const MetadataEditView = ({
 																</Field>
 															</div>
 														))}
+														{!addingTag && (
+															<TagLikeContainer
+																interactive={!addingTag}
+																type="button"
+																onClick={() => setAddingTag(true)}
+															>
+																+
+															</TagLikeContainer>
+														)}
+														{addingTag && (
+															<>
+																<TagsInput
+																	type="text"
+																	placeholder="Enter tag"
+																	onKeyDown={(evt) => {
+																		if (evt.key === 'Tab' && tagInputState !== '') {
+																			push('tags', { name: tagInputState, value: tagInputState });
+																			setAddingTag(false);
+																			setTagInputState('');
+																		}
+																	}}
+																	value={tagInputState}
+																	onChange={(evt) => {
+																		setTagInputState(evt.target.value);
+																	}}
+																/>
+																{tagInputState === '' && (
+																	<ControlFeedback valid={false}>
+																		Start typing a tag, then select one from the list,
+																		or press TAB to create a new tag.
+																	</ControlFeedback>
+																)}
+															</>
+														)}
 													</TagsEditWrapper>
 												)}
 											</FieldArray>
@@ -605,6 +651,10 @@ const MetadataEditView = ({
 MetadataEditView.propTypes = {
 	itemType: PropTypes.string.isRequired,
 	isLoading: PropTypes.bool,
+	addingTag: PropTypes.bool,
+	setAddingTag: PropTypes.func.isRequired,
+	tagInputState: PropTypes.string,
+	setTagInputState: PropTypes.func.isRequired,
 	onSubmit: PropTypes.func.isRequired,
 	data: PropTypes.shape({
 		title: PropTypes.string,
@@ -635,6 +685,8 @@ MetadataEditView.defaultProps = {
 	data: {},
 	errors: [],
 	removeText: '✕',
+	addingTag: false,
+	tagInputState: '',
 };
 
 export default MetadataEditView;
