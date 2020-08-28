@@ -422,8 +422,7 @@ export default compose(
 	withLoading,
 	withState('data', 'setData', {}),
 	withState('errors', 'setErrors', []),
-	withState('addingTag', 'setAddingTag', false),
-	withState('tagInputState', 'setTagInputState', ''),
+	withState('specialInputState', 'setSpecialInputState', { addingTag: false, tagInputState: '' }),
 	withHandlers({
 		onSubmit(props) {
 			props.startLoading();

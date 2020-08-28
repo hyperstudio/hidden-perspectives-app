@@ -69,10 +69,8 @@ const MetadataEditView = ({
 	errors,
 	itemType,
 	removeText,
-	addingTag,
-	setAddingTag,
-	tagInputState,
-	setTagInputState,
+	specialInputState,
+	setSpecialInputState,
 }) => (
 	<Container>
 		<Errors errors={errors} />
@@ -584,33 +582,40 @@ const MetadataEditView = ({
 																</Field>
 															</div>
 														))}
-														{!addingTag && (
+														{!specialInputState.addingTag && (
 															<TagLikeContainer
-																interactive={!addingTag}
+																interactive={!specialInputState.addingTag}
 																type="button"
-																onClick={() => setAddingTag(true)}
+																onClick={
+																	() => setSpecialInputState(
+																		{ ...specialInputState, addingTag: true },
+																	)
+																}
 															>
 																+
 															</TagLikeContainer>
 														)}
-														{addingTag && (
+														{specialInputState.addingTag && (
 															<>
 																<TagsInput
 																	type="text"
 																	placeholder="Enter tag"
 																	onKeyDown={(evt) => {
-																		if (evt.key === 'Tab' && tagInputState !== '') {
-																			push('tags', { name: tagInputState, value: tagInputState });
-																			setAddingTag(false);
-																			setTagInputState('');
+																		if (evt.key === 'Tab' && specialInputState.tagInputState !== '') {
+																			push('tags', { name: specialInputState.tagInputState, value: specialInputState.tagInputState });
+																			setSpecialInputState(
+																				{ ...specialInputState, addingTag: false, tagInputState: '' },
+																			);
 																		}
 																	}}
-																	value={tagInputState}
+																	value={specialInputState.tagInputState}
 																	onChange={(evt) => {
-																		setTagInputState(evt.target.value);
+																		setSpecialInputState(
+																			{ ...specialInputState, tagInputState: evt.target.value },
+																		);
 																	}}
 																/>
-																{tagInputState === '' && (
+																{specialInputState.tagInputState === '' && (
 																	<ControlFeedback valid={false}>
 																		Start typing a tag, then select one from the list,
 																		or press TAB to create a new tag.
@@ -651,10 +656,11 @@ const MetadataEditView = ({
 MetadataEditView.propTypes = {
 	itemType: PropTypes.string.isRequired,
 	isLoading: PropTypes.bool,
-	addingTag: PropTypes.bool,
-	setAddingTag: PropTypes.func.isRequired,
-	tagInputState: PropTypes.string,
-	setTagInputState: PropTypes.func.isRequired,
+	setSpecialInputState: PropTypes.func.isRequired,
+	specialInputState: PropTypes.shape({
+		addingTag: PropTypes.bool,
+		tagInputState: PropTypes.string,
+	}),
 	onSubmit: PropTypes.func.isRequired,
 	data: PropTypes.shape({
 		title: PropTypes.string,
@@ -685,8 +691,7 @@ MetadataEditView.defaultProps = {
 	data: {},
 	errors: [],
 	removeText: '✕',
-	addingTag: false,
-	tagInputState: '',
+	specialInputState: { addingTag: false, tagInputState: '' },
 };
 
 export default MetadataEditView;
