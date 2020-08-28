@@ -27,7 +27,6 @@ import {
 	ScrollContainer,
 	TagLikeContainer,
 	TagsEditWrapper,
-	TagsInput,
 } from './styles';
 import { DNSAKindList, DNSAClassificationList } from '../../utils/listUtil';
 
@@ -597,17 +596,12 @@ const MetadataEditView = ({
 														)}
 														{specialInputState.addingTag && (
 															<>
-																<TagsInput
-																	type="text"
-																	placeholder="Enter tag"
-																	onKeyDown={(evt) => {
-																		if (evt.key === 'Tab' && specialInputState.tagInputState !== '') {
-																			push('tags', { name: specialInputState.tagInputState, value: specialInputState.tagInputState });
-																			setSpecialInputState(
-																				{ ...specialInputState, addingTag: false, tagInputState: '' },
-																			);
-																		}
-																	}}
+																<SearchInput
+																	type="tag"
+																	name="tag"
+																	push={push}
+																	specialInputState={specialInputState}
+																	setSpecialInputState={setSpecialInputState}
 																	value={specialInputState.tagInputState}
 																	onChange={(evt) => {
 																		setSpecialInputState(
@@ -618,7 +612,7 @@ const MetadataEditView = ({
 																{specialInputState.tagInputState === '' && (
 																	<ControlFeedback valid={false}>
 																		Start typing a tag, then select one from the list,
-																		or press TAB to create a new tag.
+																		or press ENTER to create a new tag.
 																	</ControlFeedback>
 																)}
 															</>

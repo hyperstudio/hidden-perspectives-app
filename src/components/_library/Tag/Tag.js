@@ -21,7 +21,7 @@ const Tag = ({
 
 Tag.propTypes = {
 	path: PropTypes.string,
-	children: PropTypes.string.isRequired,
+	children: PropTypes.oneOfType([PropTypes.string, PropTypes.array]).isRequired,
 	onClick: PropTypes.func,
 };
 

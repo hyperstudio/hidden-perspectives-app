@@ -69,6 +69,21 @@ export const getSearchQuery = (limit) => {
 		}
 		${(limit && suffix !== 'Count') ? `first: ${limit}` : ''}
 	)`;
+	const getTagQuery = (suffix = '') => `tags${suffix}(
+		where: {
+			OR: [
+				{ name: { 
+						contains: $searchQuery
+					} 
+				}
+				{ description: {
+						contains: $searchQuery 
+					}
+				}
+			]
+		}
+		${(limit && suffix !== 'Count') ? `first: ${limit}` : ''}
+	)`;
 
 	return gql`
 		query Search($searchQuery: String!) {
@@ -83,6 +98,10 @@ export const getSearchQuery = (limit) => {
 			${getStakeholderQuery()} {
 				id
 				stakeholderFullName
+			}
+			${getTagQuery()} {
+				id
+				name
 			}
 			${getEventsQuery('Count')}
 			${getDocumentsQuery('Count')}
@@ -100,6 +119,7 @@ const getElementParser = (type, titleKey) => (items) => items.map((item) => ({
 const parseDocuments = getElementParser('document', 'documentTitle');
 const parseEvents = getElementParser('event', 'eventTitle');
 const parseStakeholders = getElementParser('stakeholder', 'stakeholderFullName');
+const parseTags = getElementParser('tag', 'name');
 const contains = (container, containment) => container.toLowerCase()
 	.includes(containment.toLowerCase());
 
@@ -108,7 +128,8 @@ export const handleSearchResults = (props, value) => ({ data }) => {
 	const documents = parseDocuments(data.documents);
 	const events = parseEvents(data.events);
 	const stakeholders = parseStakeholders(data.stakeholders);
-	const unorderedSearchResults = [...stakeholders, ...documents, ...events];
+	const tags = parseTags(data.tags);
+	const unorderedSearchResults = [...stakeholders, ...documents, ...events, ...tags];
 	const allSearchResults = sortBy(prop('title'), unorderedSearchResults);
 	const withHighlights = allSearchResults.filter(({ title }) => contains(title, value));
 	const withoutHighlights = allSearchResults.filter(({ title }) => !contains(title, value));
@@ -146,10 +167,19 @@ export const withSearch = compose(
 		};
 	}),
 	withHandlers({
-		onResultClick: ({ setSearchQuery, history }) => ({ id, type }) => {
+		onResultClick: ({
+			setSearchQuery, history, push, setSpecialInputState, specialInputState,
+		}) => ({ id, title, type }) => {
 			setSearchQuery('');
-			const itemType = type === 'stakeholder' ? 'protagonist' : type;
-			history.push(`/${itemType}/context/${id}`);
+			if (type !== 'tag') {
+				const itemType = type === 'stakeholder' ? 'protagonist' : type;
+				history.push(`/${itemType}/context/${id}`);
+			} else {
+				push('tags', { name: title, value: title });
+				setSpecialInputState(
+					{ ...specialInputState, addingTag: false, tagInputState: '' },
+				);
+			}
 		},
 		onArrow: (props) => (evt) => {
 			evt.preventDefault();
@@ -168,18 +198,33 @@ export const withSearch = compose(
 		},
 		onEnter: ({ searchQuery, setSearchQuery, ...props }) => (evt) => {
 			evt.preventDefault();
-			setSearchQuery('');
-			const { history, searchResults, activeResult } = props;
-			const activeResultObj = searchResults.find(propEq('id', activeResult));
-			if (!activeResultObj) {
-				if (searchQuery) {
-					history.push(`/search/${encodeURIComponent(searchQuery)}`);
+			if (props.type !== 'tag') {
+				setSearchQuery('');
+				const { history, searchResults, activeResult } = props;
+				const activeResultObj = searchResults.find(propEq('id', activeResult));
+				if (!activeResultObj) {
+					if (searchQuery) {
+						history.push(`/search/${encodeURIComponent(searchQuery)}`);
+					}
+					return;
 				}
-				return;
+				const { id, type } = activeResultObj;
+				const itemType = type === 'stakeholder' ? 'protagonist' : type;
+				history.push(`/${itemType}/context/${id}`);
+			} else {
+				const { searchResults, activeResult } = props;
+				const activeResultObj = searchResults.find(propEq('id', activeResult));
+				if (!activeResultObj) {
+					if (searchQuery) {
+						setSearchQuery(searchQuery);
+					}
+				}
+				const { title } = activeResultObj;
+				props.push('tags', { name: title, value: title });
+				props.setSpecialInputState(
+					{ ...props.specialInputState, addingTag: false, tagInputState: '' },
+				);
 			}
-			const { id, type } = activeResultObj;
-			const itemType = type === 'stakeholder' ? 'protagonist' : type;
-			history.push(`/${itemType}/context/${id}`);
 		},
 		onEscape: (props) => (evt) => {
 			evt.preventDefault();

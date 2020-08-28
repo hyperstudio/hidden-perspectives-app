@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-	Container, Field, FieldChildren, ClearButton,
+	Container, Field, FieldChildren, ClearButton, TagsInput,
 } from './styles';
 import TextInput from '../../_library/TextInput';
 
@@ -15,30 +15,49 @@ const SearchInputField = ({
 	onChange,
 }) => (
 	<Container autoComplete="off" onSubmit={(evt) => evt.preventDefault()}>
-		<Field
-			type="text"
-			value={searchQuery}
-			placeholder={`Search for ${type}s`}
-			onChange={(evt) => onSearch(evt.target.value)}
-			id={`search-bar-${type}`}
-			autoComplete="off"
-		/>
-		<FieldChildren>
-			{children({
-				name,
-				value,
-				onChange,
-				id: name,
-			})}
-		</FieldChildren>
-		{searchQuery && (
-			<ClearButton
-				onClick={() => onSearch('')}
-				spellCheck="false"
-			>
-				✕
-			</ClearButton>
-		)}
+		{type === 'tag'
+			? (
+				<TagsInput
+					type="text"
+					value={value}
+					placeholder="Enter tag"
+					onChange={(evt) => {
+						onChange(evt);
+						onSearch(evt.target.value);
+					}}
+					id={`search-bar-${type}`}
+					autoComplete="off"
+				/>
+			)
+			: (
+				<>
+					<Field
+						type="text"
+						value={searchQuery}
+						placeholder={`Search for ${type}s`}
+						onChange={(evt) => onSearch(evt.target.value)}
+						id={`search-bar-${type}`}
+						autoComplete="off"
+					/>
+					<FieldChildren>
+						{children({
+							name,
+							value,
+							type,
+							onChange,
+							id: name,
+						})}
+					</FieldChildren>
+					{searchQuery && (
+						<ClearButton
+							onClick={() => onSearch('')}
+							spellCheck="false"
+						>
+							✕
+						</ClearButton>
+					)}
+				</>
+			)}
 	</Container>
 );
 
@@ -61,13 +80,18 @@ SearchInputField.defaultProps = {
 	value: undefined,
 	searchQuery: '',
 	onSearch: () => {},
-	children: (props) => (
-		<TextInput
-			{...props}
-			// eslint-disable-next-line react/prop-types
-			onChange={(evt) => props.onChange(evt.target.value)}
-		/>
-	),
+	children: (props) => {
+		if (props.type === 'tag') { // eslint-disable-line react/prop-types
+			return (<></>);
+		}
+		return (
+			<TextInput
+				{...props}
+				// eslint-disable-next-line react/prop-types
+				onChange={(evt) => props.onChange(evt.target.value)}
+			/>
+		);
+	},
 };
 
 export default SearchInputField;

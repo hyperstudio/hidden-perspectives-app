@@ -54,7 +54,7 @@ const SearchInputResults = ({
 								type={type}
 								className={activeResult === id && 'highlighted'}
 								onMouseEnter={() => setActiveResult(id)}
-								onClick={() => onResultClick({ id, type })}
+								onClick={() => onResultClick({ id, title, type })}
 							>
 								{getFormattedTitle(title, searchQuery)}
 							</Result>

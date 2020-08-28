@@ -20,9 +20,9 @@ SearchInput.propTypes = {
 	searchResults: PropTypes.arrayOf(PropTypes.shape({
 		id: PropTypes.string.isRequired,
 		title: PropTypes.string.isRequired,
-		type: PropTypes.oneOf(['event', 'document', 'stakeholder', 'location']).isRequired,
+		type: PropTypes.oneOf(['event', 'document', 'stakeholder', 'location', 'tag']).isRequired,
 	})),
-	type: PropTypes.oneOf(['event', 'document', 'stakeholder', 'location']).isRequired,
+	type: PropTypes.oneOf(['event', 'document', 'stakeholder', 'location', 'tag']).isRequired,
 	errors: Errors.propTypes.errors,
 };
 

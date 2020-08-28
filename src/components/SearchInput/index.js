@@ -24,13 +24,15 @@ const requestLast = (request) => new Promise((resolve, reject) => {
 });
 
 const performQuery = debounce((props) => {
-	const { value } = document.getElementById(`search-bar-${props.type}`);
-	requestLast(props.client.query({
-		query: getSearchQuery(10),
-		variables: { searchQuery: value },
-	}))
-		.then(handleSearchResults(props, value))
-		.catch(getErrorHandler(props, value));
+	if (document.getElementById(`search-bar-${props.type}`)) {
+		const { value } = document.getElementById(`search-bar-${props.type}`);
+		requestLast(props.client.query({
+			query: getSearchQuery(10),
+			variables: { searchQuery: value },
+		}))
+			.then(handleSearchResults(props, value))
+			.catch(getErrorHandler(props, value));
+	}
 }, 350, { leading: false, trailing: true });
 
 const getOnKeyUpHandler = ({

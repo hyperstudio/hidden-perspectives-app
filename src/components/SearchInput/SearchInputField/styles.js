@@ -5,7 +5,6 @@ export const Container = styled.div`
 	height: 100%;
 	width: 100%;
 	z-index: 2;
-	background: white;
 `;
 
 export const Field = styled.input`
@@ -61,5 +60,20 @@ export const ClearButton = styled.span`
 
 	&:hover {
 		color: ${({ theme }) => theme.gray800};
+	}
+`;
+
+export const TagsInput = styled.input`
+	border-radius: 1rem;
+	border: none;
+	text-decoration: none;
+	padding: .6rem 1rem .4rem;
+	margin: 0 .5rem .5rem 0;
+	font-size: .875rem;
+	line-height: 1rem;
+	display: inline-block;
+	&:focus {
+		${({ theme }) => (theme.controlFocus()('primary'))}
+		z-index: 1;
 	}
 `;
