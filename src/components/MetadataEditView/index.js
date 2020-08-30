@@ -364,6 +364,28 @@ const getDestructuredData = (data) => {
 				})),
 			}
 			: undefined,
+		documentAuthors: (Array.isArray(data.authors) && data.authors.length > 0)
+			? {
+				create: data.authors.map((author) => ({
+					Stakeholder: {
+						connect: {
+							id: author.id,
+						},
+					},
+				})),
+			}
+			: undefined,
+		mentionedStakeholders: (Array.isArray(data.stakeholders) && data.stakeholders.length > 0)
+			? {
+				create: data.stakeholders.map((stakeholder) => ({
+					Stakeholder: {
+						connect: {
+							id: stakeholder.id,
+						},
+					},
+				})),
+			}
+			: undefined,
 	};
 	case 'event': return {
 		eventTitle: data.title,
@@ -422,7 +444,7 @@ export default compose(
 	withLoading,
 	withState('data', 'setData', {}),
 	withState('errors', 'setErrors', []),
-	withState('specialInputState', 'setSpecialInputState', { addingTag: false, tagInputState: '' }),
+	withState('specialInputState', 'setSpecialInputState', { addingTag: '', tagInputState: '' }),
 	withHandlers({
 		onSubmit(props) {
 			props.startLoading();

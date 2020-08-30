@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { ControlFeedback } from '@smooth-ui/core-sc';
 import 'react-day-picker/lib/style.css';
 
 export const Container = styled.div`
@@ -48,6 +49,7 @@ export const TagsEditWrapper = styled.div`
 	flex-wrap: wrap;
 	padding-top: 1rem;
 	padding-left: 1rem;
+	padding-bottom: 1rem;
 	width: 100%;
 `;
 
@@ -105,4 +107,8 @@ export const TagsInput = styled.input`
 		${({ theme }) => (theme.controlFocus()('primary'))}
 		z-index: 1;
 	}
+`;
+
+export const ControlFeedbackBlack = styled(ControlFeedback)`
+	color: black;
 `;

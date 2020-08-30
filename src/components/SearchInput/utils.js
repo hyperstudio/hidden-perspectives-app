@@ -168,18 +168,13 @@ export const withSearch = compose(
 	}),
 	withHandlers({
 		onResultClick: ({
-			setSearchQuery, history, push, setSpecialInputState, specialInputState,
-		}) => ({ id, title, type }) => {
+			setSearchQuery, push, setSpecialInputState, specialInputState, name,
+		}) => ({ title, id }) => {
 			setSearchQuery('');
-			if (type !== 'tag') {
-				const itemType = type === 'stakeholder' ? 'protagonist' : type;
-				history.push(`/${itemType}/context/${id}`);
-			} else {
-				push('tags', { name: title, value: title });
-				setSpecialInputState(
-					{ ...specialInputState, addingTag: false, tagInputState: '' },
-				);
-			}
+			push(`${name}s`, { id, name: title });
+			setSpecialInputState(
+				{ ...specialInputState, addingTag: '', tagInputState: '' },
+			);
 		},
 		onArrow: (props) => (evt) => {
 			evt.preventDefault();
@@ -198,31 +193,24 @@ export const withSearch = compose(
 		},
 		onEnter: ({ searchQuery, setSearchQuery, ...props }) => (evt) => {
 			evt.preventDefault();
-			if (props.type !== 'tag') {
-				setSearchQuery('');
-				const { history, searchResults, activeResult } = props;
-				const activeResultObj = searchResults.find(propEq('id', activeResult));
-				if (!activeResultObj) {
-					if (searchQuery) {
-						history.push(`/search/${encodeURIComponent(searchQuery)}`);
+			const { searchResults, activeResult, name } = props;
+			const activeResultObj = searchResults.find(propEq('id', activeResult));
+			if (!activeResultObj) {
+				if (searchQuery) {
+					setSearchQuery(searchQuery);
+					if (props.type === 'tag') {
+						const title = searchQuery;
+						props.push(`${name}s`, { name: title, value: title });
+						props.setSpecialInputState(
+							{ ...props.specialInputState, addingTag: '', tagInputState: '' },
+						);
 					}
-					return;
 				}
-				const { id, type } = activeResultObj;
-				const itemType = type === 'stakeholder' ? 'protagonist' : type;
-				history.push(`/${itemType}/context/${id}`);
 			} else {
-				const { searchResults, activeResult } = props;
-				const activeResultObj = searchResults.find(propEq('id', activeResult));
-				if (!activeResultObj) {
-					if (searchQuery) {
-						setSearchQuery(searchQuery);
-					}
-				}
-				const { title } = activeResultObj;
-				props.push('tags', { name: title, value: title });
+				const { title, id } = activeResultObj;
+				props.push(`${name}s`, { id, name: title });
 				props.setSpecialInputState(
-					{ ...props.specialInputState, addingTag: false, tagInputState: '' },
+					{ ...props.specialInputState, addingTag: '', tagInputState: '' },
 				);
 			}
 		},
