@@ -40,6 +40,10 @@ export const Container = styled.span`
 		background: ${theme.primaryLight};
 		` : '')};
 	}
+
+	img {
+		vertical-align: sub;
+	}
 `;
 
 export const Link = styled(NavLink)`

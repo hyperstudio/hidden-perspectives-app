@@ -185,7 +185,10 @@ export const withSearch = compose(
 			setSearchQuery, push, setSpecialInputState, specialInputState, name,
 		}) => ({ title, id }) => {
 			setSearchQuery('');
-			push(`${name}s`, { id, name: title });
+			if (name === 'documentsMentionedIn'
+				|| name === 'eventsInvolvedIn'
+				|| name === 'stakeholderAuthoredDocuments') push(name, { id, name: title });
+			else push(`${name}s`, { id, name: title });
 			setSpecialInputState(
 				{ ...specialInputState, addingTag: '', tagInputState: '' },
 			);
@@ -222,7 +225,10 @@ export const withSearch = compose(
 				}
 			} else {
 				const { title, id } = activeResultObj;
-				props.push(`${name}s`, { id, name: title });
+				if (name === 'documentsMentionedIn'
+					|| name === 'eventsInvolvedIn'
+					|| name === 'stakeholderAuthoredDocuments') props.push(name, { id, name: title });
+				else props.push(`${name}s`, { id, name: title });
 				props.setSpecialInputState(
 					{ ...props.specialInputState, addingTag: '', tagInputState: '' },
 				);

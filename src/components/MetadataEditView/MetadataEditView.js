@@ -11,7 +11,6 @@ import Fieldset from '../_library/Fieldset';
 import InputWrapper from '../_library/InputWrapper';
 import DatePicker from '../_library/DatePicker';
 import Select from '../_library/Select';
-import Item from '../_library/Item';
 import Tag from '../_library/Tag';
 import SearchInput from '../SearchInput';
 import { isTodayOrPrior } from '../../utils/dateUtil';
@@ -346,34 +345,76 @@ const MetadataEditView = ({
 											label="Documents"
 											mode="edit"
 										>
-											<Field
+											<FieldArray
 												name="stakeholderAuthoredDocuments"
-												placeholder="Documents"
+												placeholder="Documents Authored By"
 											>
-												{({ input, meta }) => (
-													<InputWrapper
-														label="Documents"
-														placeholder="Add documents"
-														nolabel
-														{...getMeta(meta)}
-														{...input}
-													>
-														{(props) => (
-															Array.isArray(input.value) ? input.value.map((document) => (
-																<Item
-																	itemType="document"
-																	key={document.name}
-																	value={document.name}
-																	{...props}
-																>
-																	{document.name}
-																</Item>
-															))
-																: <div />
+												{({ fields }) => (
+													<TagsEditWrapper type="documents">
+														{fields.map((name, index) => (
+															<div
+																key={name}
+																index={index}
+															>
+																<Field name={`${name}.name`}>
+																	{// eslint-disable-next-line no-shadow
+																		({ input: { name, value } }) => (
+																			<Tag
+																				name={name}
+																				type="document"
+																			>
+																				{value}
+																				<RemoveButton
+																					onClick={() => fields.remove(index)}
+																					role="button"
+																					aria-label="Remove"
+																				>
+																					{removeText}
+																				</RemoveButton>
+																			</Tag>
+																		)
+																	}
+																</Field>
+															</div>
+														))}
+														{specialInputState.addingTag !== 'stakeholderAuthoredDocuments' && (
+															<TagLikeContainer
+																interactive={specialInputState.addingTag !== 'stakeholderAuthoredDocuments'}
+																type="button"
+																onClick={
+																	() => setSpecialInputState(
+																		{ ...specialInputState, addingTag: 'stakeholderAuthoredDocuments' },
+																	)
+																}
+															>
+																+
+															</TagLikeContainer>
 														)}
-													</InputWrapper>
+														{specialInputState.addingTag === 'stakeholderAuthoredDocuments' && (
+															<>
+																<SearchInput
+																	type="document"
+																	name="stakeholderAuthoredDocuments"
+																	push={push}
+																	specialInputState={specialInputState}
+																	setSpecialInputState={setSpecialInputState}
+																	value={specialInputState.tagInputState}
+																	onChange={(evt) => {
+																		setSpecialInputState(
+																			{ ...specialInputState, tagInputState: evt.target.value },
+																		);
+																	}}
+																/>
+																{specialInputState.tagInputState === '' && (
+																	<ControlFeedbackBlack valid>
+																		Start typing a document name, then select one from the list.
+																	</ControlFeedbackBlack>
+																)}
+															</>
+														)}
+													</TagsEditWrapper>
 												)}
-											</Field>
+											</FieldArray>
 										</MetadataRow>
 									</Fieldset>
 								)}
@@ -535,67 +576,151 @@ const MetadataEditView = ({
 											label="Documents"
 											mode="edit"
 										>
-											<Field
+											<FieldArray
 												name="documentsMentionedIn"
-												placeholder="Documents"
+												placeholder="Documents Mentioned In"
 											>
-												{({ input, meta }) => (
-													<InputWrapper
-														label="Documents"
-														placeholder="Add documents"
-														nolabel
-														{...getMeta(meta)}
-														{...input}
-													>
-														{(props) => (
-															Array.isArray(input.value) ? input.value.map((document) => (
-																<Item
-																	itemType="document"
-																	key={document.name}
-																	value={document.name}
-																	{...props}
-																>
-																	{document.name}
-																</Item>
-															))
-																: <div />
+												{({ fields }) => (
+													<TagsEditWrapper type="documents">
+														{fields.map((name, index) => (
+															<div
+																key={name}
+																index={index}
+															>
+																<Field name={`${name}.name`}>
+																	{// eslint-disable-next-line no-shadow
+																		({ input: { name, value } }) => (
+																			<Tag
+																				name={name}
+																				type="document"
+																			>
+																				{value}
+																				<RemoveButton
+																					onClick={() => fields.remove(index)}
+																					role="button"
+																					aria-label="Remove"
+																				>
+																					{removeText}
+																				</RemoveButton>
+																			</Tag>
+																		)
+																	}
+																</Field>
+															</div>
+														))}
+														{specialInputState.addingTag !== 'documentsMentionedIn' && (
+															<TagLikeContainer
+																interactive={specialInputState.addingTag !== 'documentsMentionedIn'}
+																type="button"
+																onClick={
+																	() => setSpecialInputState(
+																		{ ...specialInputState, addingTag: 'documentsMentionedIn' },
+																	)
+																}
+															>
+																+
+															</TagLikeContainer>
 														)}
-													</InputWrapper>
+														{specialInputState.addingTag === 'documentsMentionedIn' && (
+															<>
+																<SearchInput
+																	type="document"
+																	name="documentsMentionedIn"
+																	push={push}
+																	specialInputState={specialInputState}
+																	setSpecialInputState={setSpecialInputState}
+																	value={specialInputState.tagInputState}
+																	onChange={(evt) => {
+																		setSpecialInputState(
+																			{ ...specialInputState, tagInputState: evt.target.value },
+																		);
+																	}}
+																/>
+																{specialInputState.tagInputState === '' && (
+																	<ControlFeedbackBlack valid>
+																		Start typing a document name, then select one from the list.
+																	</ControlFeedbackBlack>
+																)}
+															</>
+														)}
+													</TagsEditWrapper>
 												)}
-											</Field>
+											</FieldArray>
 										</MetadataRow>
 										<MetadataRow
 											label="Events"
 											mode="edit"
 										>
-											<Field
+											<FieldArray
 												name="eventsInvolvedIn"
 												placeholder="Events"
 											>
-												{({ input, meta }) => (
-													<InputWrapper
-														label="Events"
-														placeholder="Add events"
-														nolabel
-														{...getMeta(meta)}
-														{...input}
-													>
-														{(props) => (
-															Array.isArray(input.value) ? input.value.map((event) => (
-																<Item
-																	itemType="event"
-																	key={event.name}
-																	value={event.name}
-																	{...props}
-																>
-																	{event.name}
-																</Item>
-															))
-																: <div />
+												{({ fields }) => (
+													<TagsEditWrapper type="events">
+														{fields.map((name, index) => (
+															<div
+																key={name}
+																index={index}
+															>
+																<Field name={`${name}.name`}>
+																	{// eslint-disable-next-line no-shadow
+																		({ input: { name, value } }) => (
+																			<Tag
+																				name={name}
+																				type="event"
+																			>
+																				{value}
+																				<RemoveButton
+																					onClick={() => fields.remove(index)}
+																					role="button"
+																					aria-label="Remove"
+																				>
+																					{removeText}
+																				</RemoveButton>
+																			</Tag>
+																		)
+																	}
+																</Field>
+															</div>
+														))}
+														{specialInputState.addingTag !== 'eventsInvolvedIn' && (
+															<TagLikeContainer
+																interactive={specialInputState.addingTag !== 'eventsInvolvedIn'}
+																type="button"
+																onClick={
+																	() => setSpecialInputState(
+																		{ ...specialInputState, addingTag: 'eventsInvolvedIn' },
+																	)
+																}
+															>
+																+
+															</TagLikeContainer>
 														)}
-													</InputWrapper>
+														{specialInputState.addingTag === 'eventsInvolvedIn' && (
+															<>
+																<SearchInput
+																	type="event"
+																	name="eventsInvolvedIn"
+																	push={push}
+																	specialInputState={specialInputState}
+																	setSpecialInputState={setSpecialInputState}
+																	value={specialInputState.tagInputState}
+																	onChange={(evt) => {
+																		setSpecialInputState(
+																			{ ...specialInputState, tagInputState: evt.target.value },
+																		);
+																	}}
+																/>
+																{specialInputState.tagInputState === '' && (
+																	<ControlFeedbackBlack valid>
+																		Start typing an event name, then select one from the list.
+																	</ControlFeedbackBlack>
+																)}
+															</>
+														)}
+													</TagsEditWrapper>
 												)}
-											</Field>
+											</FieldArray>
 										</MetadataRow>
 									</>
 									)}

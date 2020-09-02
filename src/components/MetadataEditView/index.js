@@ -444,6 +444,42 @@ const getDestructuredData = (data) => {
 		stakeholderFullName: { set: data.title },
 		stakeholderDescription: { set: data.description },
 		stakeholderWikipediaUri: { set: data.stakeholderWikipediaUri },
+		documents:
+			Array.isArray(data.stakeholderAuthoredDocuments)
+				? {
+					create: data.stakeholderAuthoredDocuments.map((document) => ({
+						Document: {
+							connect: {
+								id: document.id,
+							},
+						},
+					})),
+				}
+				: undefined,
+		documentsMentionedIn:
+			Array.isArray(data.documentsMentionedIn)
+				? {
+					create: data.documentsMentionedIn.map((document) => ({
+						Document: {
+							connect: {
+								id: document.id,
+							},
+						},
+					})),
+				}
+				: undefined,
+		eventsInvolvedIn:
+			Array.isArray(data.eventsInvolvedIn)
+				? {
+					create: data.eventsInvolvedIn.map((event) => ({
+						Event: {
+							connect: {
+								id: event.id,
+							},
+						},
+					})),
+				}
+				: undefined,
 	};
 	default: return '';
 	}
