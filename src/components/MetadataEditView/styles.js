@@ -115,5 +115,5 @@ export const ControlFeedbackBlack = styled(ControlFeedback)`
 
 export const ButtonsContainer = styled.div`
 	display: flex;
-	place-content: flex-end;
+	justify-content: space-between;
 `;

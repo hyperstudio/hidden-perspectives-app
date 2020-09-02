@@ -205,6 +205,7 @@ const mapEvents = ({ Event: { id, eventTitle } }) => ({
 const formatIfValidDate = ifElse(identity, getFormattedDate, always(null));
 
 const structureDocumentData = (data) => ({
+	id: data.id,
 	title: data.documentTitle,
 	description: data.documentDescription,
 	authors: data.documentAuthors.map(mapStakeholder),
@@ -224,6 +225,7 @@ const structureDocumentData = (data) => ({
 });
 
 const structureEventData = (data) => ({
+	id: data.id,
 	title: data.eventTitle,
 	description: data.eventDescription,
 	eventStartDate: formatIfValidDate(data.eventStartDate),
@@ -234,6 +236,7 @@ const structureEventData = (data) => ({
 });
 
 const structureStakeholderData = (data) => ({
+	id: data.id,
 	title: data.stakeholderFullName,
 	description: data.stakeholderDescription,
 	wikipediaUri: data.stakeholderWikipediaUri,
@@ -243,6 +246,7 @@ const structureStakeholderData = (data) => ({
 });
 
 const structureLocationData = (data) => ({
+	id: data.id,
 	title: data.locationName,
 	description: data.locationDescription,
 	wikipediaUri: data.locationWikipediaUri,

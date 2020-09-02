@@ -858,12 +858,17 @@ const MetadataEditView = ({
 								</AlertsContainer>
 								<ButtonsContainer>
 									<Button
-										type="submit"
-										primary
-										alignSelf="flex-end"
+										to={itemType === 'stakeholder' ? `/protagonist/context/${data.id}` : `/${itemType}/context/${data.id}`}
 										disabled={submitting || isLoading}
 									>
-										Submit
+										Cancel
+									</Button>
+									<Button
+										type="submit"
+										primary
+										disabled={submitting || isLoading}
+									>
+										Save changes
 									</Button>
 								</ButtonsContainer>
 							</form>
@@ -874,7 +879,15 @@ const MetadataEditView = ({
 		)}
 	</Container>
 );
-
+/**
+									<Button
+										danger
+									>
+										Delete this
+										{' '}
+										{`${itemType}`}
+									</Button>
+ */
 MetadataEditView.propTypes = {
 	itemType: PropTypes.string.isRequired,
 	isLoading: PropTypes.bool,
@@ -885,6 +898,7 @@ MetadataEditView.propTypes = {
 	}),
 	onSubmit: PropTypes.func.isRequired,
 	data: PropTypes.shape({
+		id: PropTypes.string,
 		title: PropTypes.string,
 		description: PropTypes.string,
 		authors: PropTypes.array,
