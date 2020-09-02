@@ -416,6 +416,29 @@ const getDestructuredData = (data) => {
 				})),
 			}
 			: undefined,
+		eventStakeholders: (Array.isArray(data.stakeholders) && data.stakeholders.length > 0)
+			? {
+				create: data.stakeholders.map((stakeholder) => ({
+					Stakeholder: {
+						connect: {
+							id: stakeholder.id,
+						},
+					},
+				})),
+			}
+			: undefined,
+		eventLocations: (Array.isArray(data.locations) && data.locations.length > 0)
+			? {
+				create: data.locations.map((location) => ({
+					Location: {
+						connectOrCreate: {
+							where: { 'locationName': location.name }, // eslint-disable-line quote-props
+							create: { 'locationName': location.name }, // eslint-disable-line quote-props
+						},
+					},
+				})),
+			}
+			: undefined,
 	};
 	case 'stakeholder': return {
 		stakeholderFullName: data.title,
