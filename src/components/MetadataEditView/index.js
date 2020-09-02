@@ -352,7 +352,7 @@ const getDestructuredData = (data) => {
 				},
 			},
 		} : undefined,
-		documentTags: (Array.isArray(data.tags) && data.tags.length > 0)
+		documentTags: Array.isArray(data.tags)
 			? {
 				create: data.tags.map((tag) => ({
 					Tag: {
@@ -364,7 +364,7 @@ const getDestructuredData = (data) => {
 				})),
 			}
 			: undefined,
-		documentAuthors: (Array.isArray(data.authors) && data.authors.length > 0)
+		documentAuthors: Array.isArray(data.authors)
 			? {
 				create: data.authors.map((author) => ({
 					Stakeholder: {
@@ -375,7 +375,7 @@ const getDestructuredData = (data) => {
 				})),
 			}
 			: undefined,
-		mentionedStakeholders: (Array.isArray(data.stakeholders) && data.stakeholders.length > 0)
+		mentionedStakeholders: Array.isArray(data.stakeholders)
 			? {
 				create: data.stakeholders.map((stakeholder) => ({
 					Stakeholder: {
@@ -386,7 +386,7 @@ const getDestructuredData = (data) => {
 				})),
 			}
 			: undefined,
-		mentionedLocations: (Array.isArray(data.locations) && data.locations.length > 0)
+		mentionedLocations: Array.isArray(data.locations)
 			? {
 				create: data.locations.map((location) => ({
 					Location: {
@@ -404,7 +404,7 @@ const getDestructuredData = (data) => {
 		eventDescription: { set: data.description },
 		eventStartDate: dateExists(data.eventStartDate) ? { set: new Date(`${data.eventStartDate} 00:00`) } : undefined,
 		eventEndDate: dateExists(data.eventEndDate) ? { set: new Date(`${data.eventEndDate} 00:00`) } : undefined,
-		eventTags: (Array.isArray(data.tags) && data.tags.length > 0)
+		eventTags: Array.isArray(data.tags)
 			? {
 				create: data.tags.map((tag) => ({
 					Tag: {
@@ -416,7 +416,7 @@ const getDestructuredData = (data) => {
 				})),
 			}
 			: undefined,
-		eventStakeholders: (Array.isArray(data.stakeholders) && data.stakeholders.length > 0)
+		eventStakeholders: Array.isArray(data.stakeholders)
 			? {
 				create: data.stakeholders.map((stakeholder) => ({
 					Stakeholder: {
@@ -427,7 +427,7 @@ const getDestructuredData = (data) => {
 				})),
 			}
 			: undefined,
-		eventLocations: (Array.isArray(data.locations) && data.locations.length > 0)
+		eventLocations: Array.isArray(data.locations)
 			? {
 				create: data.locations.map((location) => ({
 					Location: {
