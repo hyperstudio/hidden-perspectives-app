@@ -328,10 +328,10 @@ const dateExists = (date) => date && date !== '' && date !== null;
 const getDestructuredData = (data) => {
 	switch (data.itemType) {
 	case 'document': return {
-		documentTitle: data.title,
-		documentDescription: data.description,
-		documentCreationDate: dateExists(data.creationDate) ? new Date(`${data.creationDate} 00:00`) : undefined,
-		documentPublicationDate: dateExists(data.publicationDate) ? new Date(`${data.publicationDate} 00:00`) : undefined,
+		documentTitle: { set: data.title },
+		documentDescription: { set: data.description },
+		documentCreationDate: dateExists(data.creationDate) ? { set: new Date(`${data.creationDate} 00:00`) } : undefined,
+		documentPublicationDate: dateExists(data.publicationDate) ? { set: new Date(`${data.publicationDate} 00:00`) } : undefined,
 		documentKind: data.kind.value ? {
 			create: {
 				Kind: {
@@ -400,10 +400,10 @@ const getDestructuredData = (data) => {
 			: undefined,
 	};
 	case 'event': return {
-		eventTitle: data.title,
-		eventDescription: data.description,
-		eventStartDate: dateExists(data.eventStartDate) ? new Date(`${data.eventStartDate} 00:00`) : undefined,
-		eventEndDate: dateExists(data.eventEndDate) ? new Date(`${data.eventEndDate} 00:00`) : undefined,
+		eventTitle: { set: data.title },
+		eventDescription: { set: data.description },
+		eventStartDate: dateExists(data.eventStartDate) ? { set: new Date(`${data.eventStartDate} 00:00`) } : undefined,
+		eventEndDate: dateExists(data.eventEndDate) ? { set: new Date(`${data.eventEndDate} 00:00`) } : undefined,
 		eventTags: (Array.isArray(data.tags) && data.tags.length > 0)
 			? {
 				create: data.tags.map((tag) => ({
@@ -441,9 +441,9 @@ const getDestructuredData = (data) => {
 			: undefined,
 	};
 	case 'stakeholder': return {
-		stakeholderFullName: data.title,
-		stakeholderDescription: data.description,
-		stakeholderWikipediaUri: data.stakeholderWikipediaUri,
+		stakeholderFullName: { set: data.title },
+		stakeholderDescription: { set: data.description },
+		stakeholderWikipediaUri: { set: data.stakeholderWikipediaUri },
 	};
 	default: return '';
 	}
