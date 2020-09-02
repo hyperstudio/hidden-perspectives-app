@@ -112,3 +112,8 @@ export const TagsInput = styled.input`
 export const ControlFeedbackBlack = styled(ControlFeedback)`
 	color: black;
 `;
+
+export const ButtonsContainer = styled.div`
+	display: flex;
+	place-content: flex-end;
+`;

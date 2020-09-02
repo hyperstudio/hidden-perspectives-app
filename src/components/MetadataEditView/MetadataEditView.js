@@ -19,6 +19,7 @@ import Errors from '../Errors';
 import { LoadingContainer } from '../LoadingIndicator/styles';
 import {
 	AlertsContainer,
+	ButtonsContainer,
 	Container,
 	Content,
 	ControlFeedbackBlack,
@@ -855,13 +856,16 @@ const MetadataEditView = ({
 										<Alert key={message} variant="danger">{message}</Alert>
 									))}
 								</AlertsContainer>
-								<Button
-									type="submit"
-									alignSelf="flex-end"
-									disabled={submitting || isLoading}
-								>
-									Submit
-								</Button>
+								<ButtonsContainer>
+									<Button
+										type="submit"
+										primary
+										alignSelf="flex-end"
+										disabled={submitting || isLoading}
+									>
+										Submit
+									</Button>
+								</ButtonsContainer>
 							</form>
 						)}
 					/>
