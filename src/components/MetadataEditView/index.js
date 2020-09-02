@@ -1,5 +1,3 @@
-import React from 'react';
-import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import {
 	compose,
@@ -17,7 +15,6 @@ import {
 import { withLoading, getErrorHandler } from '../../utils/hocUtil';
 import MetadataEditView from './MetadataEditView';
 import { getFormattedDate } from '../../utils/dateUtil';
-import Item from '../_library/Item';
 import reOrganizeItems from '../../utils/reorganizeUtil';
 
 const DOCUMENT_QUERY = gql`
@@ -182,6 +179,16 @@ mutation UpdateStakeholder($id: String, $data: StakeholderUpdateInput!){
 }
 `;
 
+const LOCATION_MUTATION = gql`
+mutation UpdateStakeholder($id: String, $data: LocationUpdateInput!){
+  updateOneLocation(where: {id: $id}, data: $data){
+		locationName
+		locationDescription
+		locationWikipediaUri
+  }
+}
+`;
+
 const mapStakeholder = ({ Stakeholder: { id, stakeholderFullName } }) => ({
 	id, name: stakeholderFullName,
 });
@@ -196,28 +203,6 @@ const mapEvents = ({ Event: { id, eventTitle } }) => ({
 });
 
 const formatIfValidDate = ifElse(identity, getFormattedDate, always(null));
-
-const passValueAsChild = (Component, itemType) => {
-	const WrapperComponent = ({ value, ...props }) => (
-		<Component
-			{...props}
-			to={itemType && `/${itemType}/context/${props.id}`}
-			itemType={itemType}
-		>
-			{value}
-		</Component>
-	);
-	WrapperComponent.propTypes = {
-		value: PropTypes.oneOfType([
-			PropTypes.string,
-			PropTypes.array,
-			PropTypes.shape({}),
-		]).isRequired,
-		id: PropTypes.string.isRequired,
-	};
-
-	return WrapperComponent;
-};
 
 const structureDocumentData = (data) => ({
 	title: data.documentTitle,
@@ -251,51 +236,19 @@ const structureEventData = (data) => ({
 const structureStakeholderData = (data) => ({
 	title: data.stakeholderFullName,
 	description: data.stakeholderDescription,
-	stakeholderWikipediaUri: data.stakeholderWikipediaUri,
+	wikipediaUri: data.stakeholderWikipediaUri,
 	stakeholderAuthoredDocuments: data.documents.map(mapDocuments),
 	documentsMentionedIn: data.documentsMentionedIn.map(mapDocuments),
 	eventsInvolvedIn: data.eventsInvolvedIn.map(mapEvents),
 });
 
-const structureLocationData = (data) => {
-	const {
-		locationDescription,
-		locationName,
-		locationWikipediaUri,
-		documentsMentionedIn,
-		locationEvents,
-	} = data;
-
-	const coreInformation = {
-		groupLabel: 'Core information',
-		values: [
-			{ label: 'Title', value: locationName },
-			{ label: 'Description', value: locationDescription },
-			{ label: 'Wikipedia', value: locationWikipediaUri },
-		],
-	};
-
-	const appearances = {
-		groupLabel: 'Appearances',
-		values: [
-			{
-				label: 'Documents',
-				value: documentsMentionedIn.map(mapDocuments),
-				ValueComponent: passValueAsChild(Item, 'document'),
-			},
-			{
-				label: 'Events',
-				value: locationEvents.map(mapEvents),
-				ValueComponent: passValueAsChild(Item, 'event'),
-			},
-		],
-	};
-
-	return [
-		coreInformation,
-		appearances,
-	];
-};
+const structureLocationData = (data) => ({
+	title: data.locationName,
+	description: data.locationDescription,
+	wikipediaUri: data.locationWikipediaUri,
+	documentsMentionedIn: data.documentsMentionedIn.map(mapDocuments),
+	eventsInvolvedIn: data.locationEvents.map(mapEvents),
+});
 
 const getStructuredData = (data, itemType) => {
 	switch (itemType) {
@@ -443,7 +396,7 @@ const getDestructuredData = (data) => {
 	case 'stakeholder': return {
 		stakeholderFullName: { set: data.title },
 		stakeholderDescription: { set: data.description },
-		stakeholderWikipediaUri: { set: data.stakeholderWikipediaUri },
+		stakeholderWikipediaUri: { set: data.wikipediaUri },
 		documents:
 			Array.isArray(data.stakeholderAuthoredDocuments)
 				? {
@@ -481,6 +434,35 @@ const getDestructuredData = (data) => {
 				}
 				: undefined,
 	};
+	case 'location': return {
+		locationName: { set: data.title },
+		locationDescription: { set: data.description },
+		locationWikipediaUri: { set: data.wikipediaUri },
+		documentsMentionedIn:
+			Array.isArray(data.documentsMentionedIn)
+				? {
+					create: data.documentsMentionedIn.map((document) => ({
+						Document: {
+							connect: {
+								id: document.id,
+							},
+						},
+					})),
+				}
+				: undefined,
+		locationEvents:
+			Array.isArray(data.eventsInvolvedIn)
+				? {
+					create: data.eventsInvolvedIn.map((event) => ({
+						Event: {
+							connect: {
+								id: event.id,
+							},
+						},
+					})),
+				}
+				: undefined,
+	};
 	default: return '';
 	}
 };
@@ -490,6 +472,7 @@ const getItemMutation = (itemType) => {
 	case 'document': return DOCUMENT_MUTATION;
 	case 'event': return EVENT_MUTATION;
 	case 'stakeholder': return STAKEHOLDER_MUTATION;
+	case 'location': return LOCATION_MUTATION;
 	default: return '';
 	}
 };

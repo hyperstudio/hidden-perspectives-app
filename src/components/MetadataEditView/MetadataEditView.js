@@ -314,13 +314,13 @@ const MetadataEditView = ({
 										</MetadataRow>
 									</>
 									)}
-									{itemType === 'stakeholder' && (
+									{(itemType === 'stakeholder' || itemType === 'location') && (
 										<MetadataRow
 											label="Wikipedia URL"
 											mode="edit"
 										>
 											<Field
-												name="stakeholderWikipediaUri"
+												name="wikipediaUri"
 												placeholder="Wikipedia URL"
 												validate={isValidURL}
 												render={(args) => (
@@ -862,9 +862,6 @@ const MetadataEditView = ({
 								>
 									Submit
 								</Button>
-								<>
-									<pre>{JSON.stringify(data, null, '\t')}</pre>
-								</>
 							</form>
 						)}
 					/>
