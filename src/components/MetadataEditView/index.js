@@ -386,6 +386,18 @@ const getDestructuredData = (data) => {
 				})),
 			}
 			: undefined,
+		mentionedLocations: (Array.isArray(data.locations) && data.locations.length > 0)
+			? {
+				create: data.locations.map((location) => ({
+					Location: {
+						connectOrCreate: {
+							where: { 'locationName': location.name }, // eslint-disable-line quote-props
+							create: { 'locationName': location.name }, // eslint-disable-line quote-props
+						},
+					},
+				})),
+			}
+			: undefined,
 	};
 	case 'event': return {
 		eventTitle: data.title,

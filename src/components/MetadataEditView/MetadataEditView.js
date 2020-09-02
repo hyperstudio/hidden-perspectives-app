@@ -458,34 +458,74 @@ const MetadataEditView = ({
 											label="Locations"
 											mode="edit"
 										>
-											<Field
+											<FieldArray
 												name="locations"
 												placeholder="Locations"
 											>
-												{({ input, meta }) => (
-													<InputWrapper
-														label="Locations"
-														placeholder="Add locations"
-														nolabel
-														{...getMeta(meta)}
-														{...input}
-													>
-														{(props) => (
-															Array.isArray(input.value) ? input.value.map((location) => (
-																<Item
-																	itemType="location"
-																	key={location.name}
-																	value={location.name}
-																	{...props}
-																>
-																	{location.name}
-																</Item>
-															))
-																: <div />
+												{({ fields }) => (
+													<TagsEditWrapper>
+														{fields.map((name, index) => (
+															<div
+																key={name}
+																index={index}
+															>
+																<Field name={`${name}.name`}>
+																	{// eslint-disable-next-line no-shadow
+																		({ input: { name, value } }) => (
+																			<Tag name={name}>
+																				{value}
+																				<RemoveButton
+																					onClick={() => fields.remove(index)}
+																					role="button"
+																					aria-label="Remove"
+																				>
+																					{removeText}
+																				</RemoveButton>
+																			</Tag>
+																		)
+																	}
+																</Field>
+															</div>
+														))}
+														{specialInputState.addingTag !== 'locations' && (
+															<TagLikeContainer
+																interactive={specialInputState.addingTag !== 'locations'}
+																type="button"
+																onClick={
+																	() => setSpecialInputState(
+																		{ ...specialInputState, addingTag: 'locations' },
+																	)
+																}
+															>
+																+
+															</TagLikeContainer>
 														)}
-													</InputWrapper>
+														{specialInputState.addingTag === 'locations' && (
+															<>
+																<SearchInput
+																	type="location"
+																	name="location"
+																	push={push}
+																	specialInputState={specialInputState}
+																	setSpecialInputState={setSpecialInputState}
+																	value={specialInputState.tagInputState}
+																	onChange={(evt) => {
+																		setSpecialInputState(
+																			{ ...specialInputState, tagInputState: evt.target.value },
+																		);
+																	}}
+																/>
+																{specialInputState.tagInputState === '' && (
+																	<ControlFeedbackBlack valid>
+																		Start typing a location, then select one from the list,
+																		or press ENTER to create a new location.
+																	</ControlFeedbackBlack>
+																)}
+															</>
+														)}
+													</TagsEditWrapper>
 												)}
-											</Field>
+											</FieldArray>
 										</MetadataRow>
 									</>
 									)}

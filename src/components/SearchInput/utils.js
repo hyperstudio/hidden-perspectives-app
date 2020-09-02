@@ -76,9 +76,17 @@ export const getSearchQuery = (limit) => {
 						contains: $searchQuery
 					} 
 				}
-				{ description: {
-						contains: $searchQuery 
-					}
+			]
+		}
+		${(limit && suffix !== 'Count') ? `first: ${limit}` : ''}
+	)`;
+
+	const getLocationQuery = (suffix = '') => `locations${suffix}(
+		where: {
+			OR: [
+				{ locationName: { 
+						contains: $searchQuery
+					} 
 				}
 			]
 		}
@@ -103,6 +111,10 @@ export const getSearchQuery = (limit) => {
 				id
 				name
 			}
+			${getLocationQuery()} {
+				id
+				locationName
+			}
 			${getEventsQuery('Count')}
 			${getDocumentsQuery('Count')}
 			${getStakeholderQuery('Count')}
@@ -120,6 +132,7 @@ const parseDocuments = getElementParser('document', 'documentTitle');
 const parseEvents = getElementParser('event', 'eventTitle');
 const parseStakeholders = getElementParser('stakeholder', 'stakeholderFullName');
 const parseTags = getElementParser('tag', 'name');
+const parseLocations = getElementParser('location', 'locationName');
 const contains = (container, containment) => container.toLowerCase()
 	.includes(containment.toLowerCase());
 
@@ -129,7 +142,8 @@ export const handleSearchResults = (props, value) => ({ data }) => {
 	const events = parseEvents(data.events);
 	const stakeholders = parseStakeholders(data.stakeholders);
 	const tags = parseTags(data.tags);
-	const unorderedSearchResults = [...stakeholders, ...documents, ...events, ...tags];
+	const locations = parseLocations(data.locations);
+	const unorderedSearchResults = [...stakeholders, ...documents, ...events, ...tags, ...locations];
 	const allSearchResults = sortBy(prop('title'), unorderedSearchResults);
 	const withHighlights = allSearchResults.filter(({ title }) => contains(title, value));
 	const withoutHighlights = allSearchResults.filter(({ title }) => !contains(title, value));
@@ -198,7 +212,7 @@ export const withSearch = compose(
 			if (!activeResultObj) {
 				if (searchQuery) {
 					setSearchQuery(searchQuery);
-					if (props.type === 'tag') {
+					if (props.type === 'tag' || props.type === 'location') {
 						const title = searchQuery;
 						props.push(`${name}s`, { name: title, value: title });
 						props.setSpecialInputState(
