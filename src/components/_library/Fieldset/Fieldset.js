@@ -6,7 +6,7 @@ import {
 } from './styles';
 
 const Fieldset = ({ title, children, mode }) => (
-	<Container>
+	<Container mode={mode}>
 		{mode === 'edit'
 			? (
 				<EditContainer>

@@ -3,9 +3,10 @@ import { Button as SmoothUiButton } from '@smooth-ui/core-sc';
 import { NavLink } from 'react-router-dom';
 
 const isPrimary = (variant) => (variant === 'primary');
+const isDanger = (variant) => (variant === 'danger');
 
 export const Button = styled(SmoothUiButton)`
-	font-weight: ${({ theme, variant }) => (isPrimary(variant)
+	font-weight: ${({ theme, variant }) => ((isPrimary(variant) || isDanger(variant))
 		? theme.btnPrimaryFontWeight
 		: theme.bthSecondaryFontWeight
 	)};
@@ -22,10 +23,12 @@ export const Button = styled(SmoothUiButton)`
 
 	border-width: ${({ theme }) => theme.btnBorderWidth};
 	border-style: solid;
-	border-color: ${({ variant, theme }) => (isPrimary(variant)
-		? theme.btnPrimaryBorderColor
-		: theme.btnSecondaryBorderColor
-	)};
+	border-color: ${({ variant, theme }) => {
+		if (isPrimary(variant)) return theme.btnPrimaryBorderColor;
+		if (isDanger(variant)) return '#ce1126';
+		return theme.btnSecondaryBorderColor;
+	}};
+
 	padding: .875rem 1rem .75rem;
 	user-select: none;
 

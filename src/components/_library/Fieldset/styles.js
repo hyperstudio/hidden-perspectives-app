@@ -6,7 +6,7 @@ export const Container = styled.fieldset`
 	padding: 0;
 
 	&:last-of-type {
-		margin-bottom: 2rem;
+		margin-bottom: ${({ mode }) => ((mode === 'edit') ? '4rem' : '2rem')};
 	}
 `;
 

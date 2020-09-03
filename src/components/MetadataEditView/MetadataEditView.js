@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Form, Field } from 'react-final-form';
 import arrayMutators from 'final-form-arrays';
 import { FieldArray } from 'react-final-form-arrays';
-import { Alert } from '@smooth-ui/core-sc';
+import { Alert, ControlFeedback } from '@smooth-ui/core-sc';
 import isURL from 'validator/lib/isURL';
 import Button from '../_library/Button';
 import MetadataRow from '../_library/MetadataRow';
@@ -851,6 +851,29 @@ const MetadataEditView = ({
 										</MetadataRow>
 									</Fieldset>
 								)}
+								<Fieldset title="Admin" key="Admin" mode="edit">
+									<MetadataRow
+										label={`Delete this ${itemType}`}
+										mode="edit"
+									>
+										<TagsEditWrapper>
+											<Button
+												danger
+												type="button"
+												onClick={(evt) => { evt.preventDefault(); }}
+											>
+												Delete this document
+											</Button>
+											<ControlFeedback style={{ 'margin-top': '1rem' }}>
+												Clicking this button will permanently delete this
+												{` ${itemType} `}
+												from the database. Any archive entries connected to it will lose
+												{' '}
+												that connection, but will otherwise remain unchanged.
+											</ControlFeedback>
+										</TagsEditWrapper>
+									</MetadataRow>
+								</Fieldset>
 								<AlertsContainer>
 									{errors.map(({ message }) => (
 										<Alert key={message} variant="danger">{message}</Alert>
