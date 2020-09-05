@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { isAuthenticated } from '../../utils/localStorageUtil';
+import { isAuthenticated, isAuthorized } from '../../utils/localStorageUtil';
 import {
 	Container,
 	BackButton,
@@ -9,10 +9,6 @@ import {
 	EditButton,
 	TabsContainer,
 } from './styles';
-
-
-// REMOVE THE PRODUCTION CHECK WHEN YOU PLAN TO INTRODUCE SIGN UP
-const isProduction = process && process.env && process.env.NODE_ENV === 'production';
 
 const NodeHeader = ({
 	tabs,
@@ -31,7 +27,7 @@ const NodeHeader = ({
 					<Tab key={label} to={url}>{label}</Tab>
 				))}
 			</Tabs>
-			{!isProduction && isAuthenticated() && <EditButton to={editUrl}>{editText}</EditButton>}
+			{isAuthenticated() && isAuthorized(['Editor', 'Admin']) && <EditButton to={editUrl}>{editText}</EditButton>}
 		</TabsContainer>
 	</Container>
 );
