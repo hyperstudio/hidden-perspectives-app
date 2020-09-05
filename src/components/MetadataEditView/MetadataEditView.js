@@ -3,7 +3,18 @@ import PropTypes from 'prop-types';
 import { Form, Field } from 'react-final-form';
 import arrayMutators from 'final-form-arrays';
 import { FieldArray } from 'react-final-form-arrays';
-import { Alert, ControlFeedback } from '@smooth-ui/core-sc';
+import {
+	Alert,
+	ControlFeedback,
+	Modal,
+	ModalBody,
+	ModalCloseButton,
+	ModalContent,
+	ModalDialog,
+	ModalFooter,
+	ModalHeader,
+	Typography,
+} from '@smooth-ui/core-sc';
 import isURL from 'validator/lib/isURL';
 import Button from '../_library/Button';
 import MetadataRow from '../_library/MetadataRow';
@@ -66,6 +77,8 @@ const MetadataEditView = ({
 	onSubmit,
 	handleDelete,
 	errors,
+	toggled,
+	onToggle,
 	itemType,
 	removeText,
 	specialInputState,
@@ -862,12 +875,44 @@ const MetadataEditView = ({
 												type="button"
 												onClick={(evt) => {
 													evt.preventDefault();
-													handleDelete();
+													return onToggle(true);
 												}}
 											>
 												Delete this
 												{` ${itemType}`}
 											</Button>
+											<Modal opened={toggled} onClose={() => (onToggle(false))}>
+												<ModalDialog>
+													<ModalContent>
+														<ModalCloseButton />
+														<ModalHeader>
+															<Typography variant="h5" m={0}>
+																{`Delete ${itemType}`}
+															</Typography>
+														</ModalHeader>
+														<ModalBody>
+															Are you sure you want to delete this
+															{` ${itemType}`}
+															? This action cannot be undone.
+														</ModalBody>
+														<ModalFooter>
+															<Button
+																type="button"
+																danger
+																onClick={(evt) => {
+																	evt.preventDefault();
+																	handleDelete();
+																}}
+															>
+																{`Delete ${itemType}`}
+															</Button>
+															<Button type="button" onClick={(evt) => { evt.preventDefault(); return onToggle(false); }}>
+																Cancel
+															</Button>
+														</ModalFooter>
+													</ModalContent>
+												</ModalDialog>
+											</Modal>
 											<ControlFeedback style={{ marginTop: '1rem' }} valid={false}>
 												Clicking this button will permanently delete this
 												{` ${itemType} `}
@@ -904,15 +949,7 @@ const MetadataEditView = ({
 		)}
 	</Container>
 );
-/**
-									<Button
-										danger
-									>
-										Delete this
-										{' '}
-										{`${itemType}`}
-									</Button>
- */
+
 MetadataEditView.propTypes = {
 	itemType: PropTypes.string.isRequired,
 	isLoading: PropTypes.bool,
@@ -923,6 +960,8 @@ MetadataEditView.propTypes = {
 	}),
 	onSubmit: PropTypes.func.isRequired,
 	handleDelete: PropTypes.func.isRequired,
+	toggled: PropTypes.bool.isRequired,
+	onToggle: PropTypes.func.isRequired,
 	data: PropTypes.shape({
 		id: PropTypes.string,
 		title: PropTypes.string,

@@ -552,6 +552,7 @@ export default compose(
 	withLoading,
 	withState('data', 'setData', {}),
 	withState('errors', 'setErrors', []),
+	withState('toggled', 'onToggle', false),
 	withState('specialInputState', 'setSpecialInputState', { addingTag: '', tagInputState: '' }),
 	withHandlers({
 		onSubmit(props) {
