@@ -189,6 +189,35 @@ mutation UpdateStakeholder($id: String, $data: LocationUpdateInput!){
 }
 `;
 
+const DOCUMENT_DELETION = gql`
+mutation DeleteDocument($id: String){
+	deleteOneDocument(where: {id: $id}){
+		id
+	}
+}
+`;
+const EVENT_DELETION = gql`
+mutation DeleteEvent($id: String){
+	deleteOneEvent(where: {id: $id}){
+		id
+	}
+}
+`;
+const STAKEHOLDER_DELETION = gql`
+mutation DeleteStakeholder($id: String){
+	deleteOneStakeholder(where: {id: $id}){
+		id
+	}
+}
+`;
+const LOCATION_DELETION = gql`
+mutation DeleteLocation($id: String){
+	deleteOneLocation(where: {id: $id}){
+		id
+	}
+}
+`;
+
 const mapStakeholder = ({ Stakeholder: { id, stakeholderFullName } }) => ({
 	id, name: stakeholderFullName,
 });
@@ -495,6 +524,27 @@ const getMutationCallback = (props) => ({
 	props.history.go(0);
 };
 
+const getItemDeletion = (itemType) => {
+	switch (itemType) {
+	case 'document': return DOCUMENT_DELETION;
+	case 'event': return EVENT_DELETION;
+	case 'stakeholder': return STAKEHOLDER_DELETION;
+	case 'location': return LOCATION_DELETION;
+	default: return '';
+	}
+};
+
+const getDeletionCallback = (props) => ({
+	errors,
+}) => {
+	if (errors) {
+		props.setErrors(errors);
+		return;
+	}
+	props.history.push('/');
+	props.history.go(0);
+};
+
 
 export default compose(
 	withApollo,
@@ -515,12 +565,29 @@ export default compose(
 					},
 				})
 					.then((data) => {
-						// Do stuff with data
 						const mutationCallback = getMutationCallback(props);
 						props.stopLoading();
 						return mutationCallback(data);
 					})
 					.catch((err) => props.setErrors(err));
+			};
+		},
+		handleDelete(props) {
+			props.startLoading();
+			return () => {
+				props.client.mutate({
+					mutation: getItemDeletion(props.itemType),
+					variables: {
+						id: props.id,
+					},
+				}).then((data) => {
+					const deletionCallabck = getDeletionCallback(props);
+					props.stopLoading();
+					return deletionCallabck(data);
+				}).catch((err) => {
+					props.stopLoading();
+					props.setErrors([err.message]);
+				});
 			};
 		},
 	}),

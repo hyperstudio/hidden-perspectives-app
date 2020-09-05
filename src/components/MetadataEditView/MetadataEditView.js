@@ -18,7 +18,6 @@ import LoadingIndicator from '../LoadingIndicator';
 import Errors from '../Errors';
 import { LoadingContainer } from '../LoadingIndicator/styles';
 import {
-	AlertsContainer,
 	ButtonsContainer,
 	Container,
 	Content,
@@ -65,6 +64,7 @@ const MetadataEditView = ({
 	data,
 	isLoading,
 	onSubmit,
+	handleDelete,
 	errors,
 	itemType,
 	removeText,
@@ -860,11 +860,15 @@ const MetadataEditView = ({
 											<Button
 												danger
 												type="button"
-												onClick={(evt) => { evt.preventDefault(); }}
+												onClick={(evt) => {
+													evt.preventDefault();
+													handleDelete();
+												}}
 											>
-												Delete this document
+												Delete this
+												{` ${itemType}`}
 											</Button>
-											<ControlFeedback style={{ 'margin-top': '1rem' }}>
+											<ControlFeedback style={{ marginTop: '1rem' }} valid={false}>
 												Clicking this button will permanently delete this
 												{` ${itemType} `}
 												from the database. Any archive entries connected to it will lose
@@ -874,11 +878,9 @@ const MetadataEditView = ({
 										</TagsEditWrapper>
 									</MetadataRow>
 								</Fieldset>
-								<AlertsContainer>
-									{errors.map(({ message }) => (
-										<Alert key={message} variant="danger">{message}</Alert>
-									))}
-								</AlertsContainer>
+								{errors.map(({ message }) => (
+									<Alert key={message} variant="danger">{message}</Alert>
+								))}
 								<ButtonsContainer>
 									<Button
 										to={itemType === 'stakeholder' ? `/protagonist/context/${data.id}` : `/${itemType}/context/${data.id}`}
@@ -920,6 +922,7 @@ MetadataEditView.propTypes = {
 		tagInputState: PropTypes.string,
 	}),
 	onSubmit: PropTypes.func.isRequired,
+	handleDelete: PropTypes.func.isRequired,
 	data: PropTypes.shape({
 		id: PropTypes.string,
 		title: PropTypes.string,
