@@ -7,8 +7,11 @@ import {
 	map, groupBy, union, either, prop, flatten, reduce, merge,
 } from 'ramda';
 import debounce from 'lodash.debounce';
+import { withRouter } from 'react-router-dom';
 import MainTimeline from './MainTimeline';
-import { withLoading, withErrors, getErrorHandler } from '../../utils/hocUtil';
+import {
+	withLoading, withErrors, withAlerts, getErrorHandler,
+} from '../../utils/hocUtil';
 import { getMinimap, isFullyInViewport } from '../../utils/timelineUtil';
 import isDocumentId from '../../utils/isDocumentId';
 import { getFormattedDate } from '../../utils/dateUtil';
@@ -159,6 +162,8 @@ const getEventsAndDocuments = ({
 	setDocumentsCount,
 	setEventsCount,
 	setTourIsOpen,
+	setAlerts,
+	history,
 }) => ({ data: { events, documents } }) => {
 	const items = parseItems({
 		events,
@@ -169,6 +174,10 @@ const getEventsAndDocuments = ({
 		],
 	});
 
+
+	if (history.location.state && history.location.state.alerts) {
+		setAlerts(history.location.state.alerts);
+	}
 	setTimelineItems(items);
 	setMinimapItems(getMinimap(items));
 	setDocumentsCount(documents.length);
@@ -241,6 +250,8 @@ export default compose(
 	withApollo,
 	withLoading,
 	withErrors,
+	withAlerts,
+	withRouter,
 	withState('timelineItems', 'setTimelineItems', []),
 	withState('eventsCount', 'setEventsCount', 0),
 	withState('documentsCount', 'setDocumentsCount', 0),
@@ -272,6 +283,7 @@ export default compose(
 				|| (nextProps.bubbleChartItems !== this.props.bubbleChartItems)
 				|| (nextProps.fetchingProtagonists !== this.props.fetchingProtagonists)
 				|| (nextProps.errors.length !== this.props.errors.length)
+				|| (nextProps.alerts.length !== this.props.alerts.length)
 				|| (nextProps.isLoading !== this.props.isLoading)
 				|| (nextProps.hoveredElement !== this.props.hoveredElement)
 				|| (nextProps.eventsCount !== this.props.eventsCount)

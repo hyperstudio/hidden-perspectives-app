@@ -14,6 +14,7 @@ import {
 } from 'ramda';
 import { withLoading, getErrorHandler } from '../../utils/hocUtil';
 import MetadataEditView from './MetadataEditView';
+import { ucFirst } from '../../utils/stringUtil';
 import { getFormattedDate } from '../../utils/dateUtil';
 import reOrganizeItems from '../../utils/reorganizeUtil';
 
@@ -520,7 +521,7 @@ const getMutationCallback = (props) => ({
 		props.setErrors(errors);
 		return;
 	}
-	props.history.push(urlString);
+	props.history.push(urlString, { alerts: [{ message: `${ucFirst(itemType)} edited successfully.`, variant: 'success' }] });
 	props.history.go(0);
 };
 
@@ -537,11 +538,12 @@ const getItemDeletion = (itemType) => {
 const getDeletionCallback = (props) => ({
 	errors,
 }) => {
+	const { itemType } = props;
 	if (errors) {
 		props.setErrors(errors);
 		return;
 	}
-	props.history.push('/');
+	props.history.push('/', { alerts: [{ message: `${ucFirst(itemType)} deleted successfully.`, variant: 'warning' }] });
 	props.history.go(0);
 };
 

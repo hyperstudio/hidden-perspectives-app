@@ -6,6 +6,7 @@ import LabelFilters from '../LabelFilters';
 import NodeInfo from '../NodeInfo';
 import FeaturesTour from '../FeaturesTour';
 import Errors from '../Errors';
+import Alerts from '../Alerts';
 import { Container, Sidebar, LeftSidebarContent } from './styles';
 
 const DetailView = ({
@@ -14,10 +15,12 @@ const DetailView = ({
 	tourIsOpen,
 	onTourClose,
 	errors,
+	alerts,
 	...rest
 }) => (
 	<Container>
 		<Errors errors={errors} />
+		<Alerts alerts={alerts} />
 		<FeaturesTour
 			page="circleTimeline"
 			isOpen={tourIsOpen}
@@ -69,6 +72,12 @@ DetailView.propTypes = {
 	tourIsOpen: PropTypes.bool,
 	onTourClose: PropTypes.func,
 	errors: Errors.propTypes.errors,
+	alerts: PropTypes.arrayOf(
+		PropTypes.shape({
+			message: PropTypes.string.isRequired,
+			variant: PropTypes.string.isRequired,
+		}),
+	),
 };
 
 DetailView.defaultProps = {
@@ -76,6 +85,7 @@ DetailView.defaultProps = {
 	isLoading: true,
 	documents: [],
 	events: [],
+	alerts: [],
 	protagonists: {},
 	tourIsOpen: false,
 	onTourClose: () => {},

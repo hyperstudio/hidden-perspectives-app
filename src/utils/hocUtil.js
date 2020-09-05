@@ -34,6 +34,14 @@ export const getErrorHandler = ({
 	setErrors([...errors, ...gqlErrors]);
 };
 
+
+export const withAlerts = compose(
+	withState('alerts', 'setAlerts', []),
+	withProps(({ alerts }) => ({
+		hasAlerts: Boolean(alerts && alerts.length > 0),
+	})),
+);
+
 export const withoutReRender = lifecycle({
 	shouldComponentUpdate() {
 		return false;

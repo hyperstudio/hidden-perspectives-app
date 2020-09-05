@@ -6,6 +6,7 @@ import { LoadingContainer } from '../LoadingIndicator/styles';
 import LoadingIndicator from '../LoadingIndicator';
 import { MainTimelineLegend } from '../Legend';
 import Errors from '../Errors';
+import Alerts from '../Alerts';
 import Minimap from './Minimap';
 import TimelineItems from './TimelineItems';
 import Protagonists from './Protagonists';
@@ -25,6 +26,7 @@ const MainTimeline = ({
 	minimapItems,
 	bubbleChartItems,
 	errors,
+	alerts,
 	isLoading,
 	fetchingProtagonists,
 	setHoveredElement,
@@ -53,6 +55,7 @@ const MainTimeline = ({
 				<LoadingIndicator />
 			</LoadingContainer>
 			<Errors errors={errors} />
+			<Alerts alerts={alerts} />
 			<Minimap
 				isLoading={isLoading}
 				items={minimapItems}
@@ -103,6 +106,12 @@ MainTimeline.propTypes = {
 	hoveredElement: TimelineItems.propTypes.hoveredElement,
 	setHoveredElement: PropTypes.func,
 	errors: PropTypes.arrayOf(PropTypes.string),
+	alerts: PropTypes.arrayOf(
+		PropTypes.shape({
+			message: PropTypes.string.isRequired,
+			variant: PropTypes.string.isRequired,
+		}),
+	),
 	isLoading: PropTypes.bool,
 	fetchingProtagonists: PropTypes.bool,
 	tourIsOpen: PropTypes.bool,
@@ -121,6 +130,7 @@ MainTimeline.defaultProps = {
 	bubbleChartItems: Protagonists.defaultProps.items,
 	minimapItems: [],
 	errors: [],
+	alerts: [],
 	isLoading: true,
 	tourIsOpen: false,
 	fetchingProtagonists: true,

@@ -18,7 +18,9 @@ import {
 	last,
 } from 'ramda';
 import DetailView from './DetailView';
-import { withLoading, withErrors, getErrorHandler } from '../../utils/hocUtil';
+import {
+	withLoading, withErrors, getErrorHandler, withAlerts,
+} from '../../utils/hocUtil';
 import { ucFirst } from '../../utils/stringUtil';
 import { formatHumanDate } from '../../utils/dateUtil';
 import { groupItemsBy } from '../../utils/timelineUtil';
@@ -501,9 +503,13 @@ const performQuery = (props) => {
 		id,
 		client,
 		itemType,
+		setAlerts,
 		startLoading,
 	} = props;
 	startLoading();
+	if (props.history.location.state && props.history.location.state.alerts) {
+		setAlerts(props.history.location.state.alerts);
+	}
 	client.query({
 		query: getQueryByItemId(itemType),
 		variables: { id },
@@ -516,6 +522,7 @@ export default compose(
 	withApollo,
 	withLoading,
 	withErrors,
+	withAlerts,
 	withRouter,
 	withState('item', 'setItem', undefined),
 	withState('documents', 'setDocuments', []),
@@ -547,6 +554,7 @@ export default compose(
 				|| this.props.isLoading !== nextProps.isLoading
 				|| this.props.itemType !== nextProps.itemType
 				|| this.props.errors !== nextProps.errors
+				|| this.props.alerts !== nextProps.alerts
 				|| this.props.tags !== nextProps.tags
 				|| this.props.tourIsOpen !== nextProps.tourIsOpen
 				|| this.props.filteredTags !== nextProps.filteredTags
