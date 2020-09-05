@@ -5,6 +5,7 @@ import UserInfo from './UserInfo';
 import Search from '../Search';
 import {
 	HeaderContainer,
+	LogoContainer,
 	UserInfoContainer,
 	LogButton,
 	Logo,
@@ -21,8 +22,10 @@ const Header = ({
 	<Redirect to="/unsupported-browser" />
 ) : (
 	<HeaderContainer>
-		<Logo to="/">US-Iran Relations</Logo>
-		<LogoH2 to="/">National Narratives, America, Iran, and the Clash of Civilizations</LogoH2>
+		<LogoContainer>
+			<Logo to="/">US-Iran Relations</Logo>
+			<LogoH2 to="/">National Narratives, America, Iran, and the Clash of Civilizations</LogoH2>
+		</LogoContainer>
 		<Search />
 		{!isProduction && (
 			!isAuthenticated() ? (

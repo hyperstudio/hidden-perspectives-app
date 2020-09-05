@@ -1,28 +1,40 @@
 import styled from 'styled-components';
 
 export const Container = styled.form`
-	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: space-around;
 	height: 100%;
 	width: 100%;
 	z-index: 2;
-`;
-
-export const Field = styled.input`
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
 	border: 1px solid ${({ theme }) => theme.commonBorderColor};
 	border-top-color: transparent;
 	border-bottom-color: transparent;
-	background: ${({ value }) => (value ? 'none' : 'url("/icons/loup.svg")')};
-	background-position: 3.5rem center;
-	background-size: 1.5rem 1.5rem;
-	background-repeat: no-repeat;
+	transition: color 200ms ease-out,
+		border 200ms ease-out,
+		box-shadow 200ms ease-out,
+		border-radius 200ms ease-out;
+	&:focus-within {
+		${({ theme }) => theme.controlFocus()('primary')}
+		border-color: ${({ theme }) => theme.primary};
+		border-radius: 1px;
+		border-top-width: 1px;
+		background: none;
+	}
+`;
+
+export const Loup = styled.span`
+	flex-grow: 1;
+	width: 1.5rem;
+	height: 1.5rem;
+`;
+
+export const Field = styled.input`
+	flex-grow: 9;
+	height: 100%;
+	border: none;
 	font-size: 1rem;
 	line-height: 1rem;
-	padding: 2.25rem 2rem 2rem 2rem;
 	border-radius: 0;
 	transition: color 200ms ease-out,
 		border 200ms ease-out,
@@ -35,12 +47,9 @@ export const Field = styled.input`
 	}
 
 	&:focus {
-		${({ theme }) => theme.controlFocus()('primary')}
-		border-color: ${({ theme }) => theme.primary};
-		border-radius: 1px;
-		border-top-width: 1px;
+		border: none;
+		outline: 0;
 		text-align: left;
-		background: none;
 	}
 `;
 

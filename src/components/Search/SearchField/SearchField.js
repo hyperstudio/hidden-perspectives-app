@@ -1,19 +1,27 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Container, Field, ClearButton } from './styles';
+import {
+	Container, Field, ClearButton, Loup,
+} from './styles';
 
 const SearchField = ({
 	searchQuery,
 	onSearch,
 }) => (
 	<Container autocomplete="off" onSubmit={(evt) => evt.preventDefault()}>
+		{!searchQuery && (
+			<Loup>
+				<img src="/icons/loup.svg" alt="Search" />
+			</Loup>
+		)}
 		<Field
-			type="text"
+			type="search"
+			name="searchfield"
 			value={searchQuery}
 			placeholder="Search for documents, events, locations or protagonists"
 			onChange={(evt) => onSearch(evt.target.value)}
 			id="search-bar"
-			autocomplete="false"
+			autocomplete="off"
 		/>
 		{searchQuery && (
 			<ClearButton

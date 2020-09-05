@@ -12,7 +12,8 @@ export const HeaderContainer = styled.header`
 	z-index: 3;
 	border-bottom: 1px solid ${({ theme }) => theme.commonBorderColor};
 	display: flex;
-	justify-content: space-between;
+	justify-content: space-around;
+	align-items: center;
 `;
 
 const HeaderLink = styled(NavLink)`
@@ -21,14 +22,10 @@ const HeaderLink = styled(NavLink)`
 	color: ${({ theme }) => theme.gray600};
 	font-family: inherit;
 	font-size: 1rem;
-	line-height: 1rem;
-	padding: 0.8rem 1rem 0.7rem;
-	margin: 1rem;
 	cursor: pointer;
 	outline: none;
 	text-decoration: none;
-	display: inline-block;
-	border-radius: 3px;
+	text-align: left;
 
 	&.active,
 	&:hover,
@@ -49,18 +46,22 @@ const HeaderLink = styled(NavLink)`
 	}
 `;
 
+export const LogoContainer = styled.div`
+	z-index: 1;
+	display: flex;
+	flex-direction: column;
+	padding-left: 1rem;
+	padding-right: 1rem;
+	flex-basis: 33%;
+	flex-shrink: 2;
+`;
+
 export const Logo = styled(HeaderLink)`
-	position: absolute;
-	top: -10px;
-	left: 0;
 	z-index: 1;
 `;
 
 export const LogoH2 = styled(HeaderLink)`
-	position:absolute;
-	top: 10px;
-	left: 0;
-	text-align: justify;
+	text-align: left;
 	font-size:12px;
 `;
 
@@ -70,10 +71,10 @@ export const LogButton = styled(HeaderLink)`
 
 export const UserInfoContainer = styled.div`
 	font-size: 12px;
-	position: absolute;
-	top: 0;
-	right: 0;
-	z-index: 1;
+	flex-basis: 33%;
+	padding-left: 1rem;
+	padding-right: 1rem;
+	flex-shrink: 1;
 `;
 
 export const UserAvatar = styled.span`
