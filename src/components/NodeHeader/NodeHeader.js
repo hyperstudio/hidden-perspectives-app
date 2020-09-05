@@ -26,8 +26,8 @@ const NodeHeader = ({
 				{tabs.map(({ label, url }) => (
 					<Tab key={label} to={url}>{label}</Tab>
 				))}
+				{isAuthenticated() && isAuthorized(['Editor', 'Admin']) && <EditButton to={editUrl}>{editText}</EditButton>}
 			</Tabs>
-			{isAuthenticated() && isAuthorized(['Editor', 'Admin']) && <EditButton to={editUrl}>{editText}</EditButton>}
 		</TabsContainer>
 	</Container>
 );
@@ -44,7 +44,7 @@ NodeHeader.propTypes = {
 
 NodeHeader.defaultProps = {
 	editUrl: undefined,
-	editText: '✎',
+	editText: '✎ Edit',
 	tabs: [],
 	isStatic: false,
 };

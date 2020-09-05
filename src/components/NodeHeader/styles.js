@@ -98,5 +98,12 @@ export const BackButton = styled(StyledButton)`
 `;
 
 export const EditButton = styled(StyledButton)`
-	right: .5rem;
+	position: relative;
+	border: 1px solid ${({ theme }) => theme.gray300};
+	padding: .5rem 1rem .4rem;
+	font-size: .875rem;
+	display: inline-block;
+	line-height: .875rem;
+	border-radius: 2rem;
+	top: 0;
 `;
