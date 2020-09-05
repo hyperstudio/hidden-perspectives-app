@@ -26,7 +26,12 @@ export const MainTimelineContainer = styled.div`
 `;
 
 export const LegendContainer = styled.span`
-	margin: 1rem 0 0;
+	background-color: white;
+	padding-top: 1rem;
+	padding-bottom: 0.5rem;
+	padding-left: ${({ position }) => (position === 'left' ? 0 : '0.5rem')};
+	padding-right: ${({ position }) => (position === 'right' ? 0 : '0.5rem')};
+	border-radius: 15px;
 	display: inline-block;
 	${({ position }) => (position !== 'center' && `float: ${position};`)}
 	${({ position }) => (position === 'center' && 'margin: 1rem auto;')}
