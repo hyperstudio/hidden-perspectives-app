@@ -948,7 +948,7 @@ const MetadataEditView = ({
 				</Content>
 			</ScrollContainer>
 		)}
-		{!isLoading && (!isAuthenticated || !isAuthorized(['Editor', 'Admin'])) && (
+		{!isLoading && (!isAuthenticated() || !isAuthorized(['Editor', 'Admin'])) && (
 			<ScrollContainer>
 				<Content style={{ textAlign: 'center' }}>
 					You do not have permission to view this page.
