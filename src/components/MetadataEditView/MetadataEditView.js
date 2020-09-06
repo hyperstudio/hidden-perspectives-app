@@ -16,6 +16,7 @@ import {
 	Typography,
 } from '@smooth-ui/core-sc';
 import isURL from 'validator/lib/isURL';
+import { isAuthenticated, isAuthorized } from '../../utils/localStorageUtil';
 import Button from '../_library/Button';
 import MetadataRow from '../_library/MetadataRow';
 import Fieldset from '../_library/Fieldset';
@@ -89,7 +90,7 @@ const MetadataEditView = ({
 		<LoadingContainer isLoading={isLoading}>
 			<LoadingIndicator />
 		</LoadingContainer>
-		{!isLoading && (
+		{!isLoading && isAuthenticated && isAuthorized(['Editor', 'Admin']) && (
 			<ScrollContainer>
 				<Content>
 					<Form
@@ -944,6 +945,13 @@ const MetadataEditView = ({
 							</form>
 						)}
 					/>
+				</Content>
+			</ScrollContainer>
+		)}
+		{!isLoading && (!isAuthenticated || !isAuthorized(['Editor', 'Admin'])) && (
+			<ScrollContainer>
+				<Content style={{ textAlign: 'center' }}>
+					You do not have permission to view this page.
 				</Content>
 			</ScrollContainer>
 		)}
