@@ -99,6 +99,8 @@ const addPage = async ({
 }, { pathname }) => {
 	if (pathname.startsWith('/unsupported-browser')) return;
 	if (pathname.startsWith('/login')) return;
+	const acceptablePathStarts = ['/document', '/event', '/protagonist', '/location', '/search'];
+	if (!(pathname === '/' || acceptablePathStarts.some((start) => pathname.startsWith(start)))) return;
 	const additionalInfo = await getAdditionalInfo(pathname, client);
 	setPages([
 		{
