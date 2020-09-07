@@ -90,7 +90,7 @@ const MetadataEditView = ({
 		<LoadingContainer isLoading={isLoading}>
 			<LoadingIndicator />
 		</LoadingContainer>
-		{!isLoading && isAuthenticated && isAuthorized(['Editor', 'Admin']) && (
+		{!isLoading && isAuthenticated() && isAuthorized(['Editor', 'Admin']) && (
 			<ScrollContainer>
 				<Content>
 					<Form

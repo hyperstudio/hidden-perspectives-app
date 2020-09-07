@@ -3,12 +3,17 @@ import PropTypes from 'prop-types';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 import { Link } from 'react-router-dom';
-import { logUserOut, getUserId } from '../../utils/localStorageUtil';
-import { LogButton, UserInfoContainer, UserAvatar } from './styles';
+import { logUserOut, getUserId, isAuthorized } from '../../utils/localStorageUtil';
+import {
+	LogButton, UserInfoContainer, UserAvatar,
+} from './styles';
 
-const UserInfo = ({ userName }) => (
+const UserInfo = ({ userName, adminText }) => (
 	<UserInfoContainer>
 		<UserAvatar>{userName[0].toUpperCase()}</UserAvatar>
+		{isAuthorized(['Admin']) && (
+			<LogButton to="/admin" as={Link}>{adminText}</LogButton>
+		)}
 		<LogButton to="/" onClick={logUserOut} as={Link}>
 			Logout
 		</LogButton>
@@ -17,6 +22,11 @@ const UserInfo = ({ userName }) => (
 
 UserInfo.propTypes = {
 	userName: PropTypes.string.isRequired,
+	adminText: PropTypes.string,
+};
+
+UserInfo.defaultProps = {
+	adminText: 'Admin',
 };
 
 const USERNAME_QUERY = gql`
