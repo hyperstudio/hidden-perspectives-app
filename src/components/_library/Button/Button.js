@@ -16,9 +16,11 @@ const CustomButton = ({
 	className,
 	history,
 	onClick,
+	disabled,
 }) => (to ? (
 	<Button
 		variant={getVariant(primary, danger)}
+		disabled={disabled}
 		className={className}
 		onClick={(evt) => {
 			history.push(to);
@@ -30,6 +32,7 @@ const CustomButton = ({
 ) : (
 	<Button
 		variant={getVariant(primary, danger)}
+		disabled={disabled}
 		className={className}
 		onClick={onClick}
 	>
@@ -40,6 +43,7 @@ const CustomButton = ({
 CustomButton.propTypes = {
 	primary: PropTypes.bool,
 	danger: PropTypes.bool,
+	disabled: PropTypes.bool,
 	to: PropTypes.string,
 	children: PropTypes.oneOfType([
 		PropTypes.string,
@@ -59,6 +63,7 @@ CustomButton.defaultProps = {
 	danger: false,
 	className: '',
 	onClick: undefined,
+	disabled: false,
 };
 
 export default CustomButton;

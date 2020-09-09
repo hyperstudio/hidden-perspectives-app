@@ -10,7 +10,7 @@ import {
 	ModalHeader,
 	Typography,
 } from '@smooth-ui/core-sc';
-import { isAuthenticated, isAuthorized } from '../../utils/localStorageUtil';
+import { isAuthenticated, isAuthorized, getUserId } from '../../utils/localStorageUtil';
 import InputWrapper from '../_library/InputWrapper';
 import Select from '../_library/Select';
 import LoadingIndicator from '../LoadingIndicator';
@@ -47,6 +47,8 @@ const AdminView = ({
 	errors,
 	toggled,
 	onToggle,
+	deletedUser,
+	refreshUsers,
 }) => (
 	<Container>
 		<Errors errors={errors} />
@@ -62,6 +64,17 @@ const AdminView = ({
 					</Title>
 					<Title variant="h4">
 						Users
+						{' '}
+						<Button
+							type="button"
+							disabled={isLoading}
+							onClick={(evt) => {
+								evt.preventDefault();
+								refreshUsers();
+							}}
+						>
+							<img src="/icons/refresh.svg" alt="Refresh" />
+						</Button>
 					</Title>
 					<div style={{ paddingBottom: '1rem' }}>
 						To change a user&apos;s role, select a different role in the dropdown menu.
@@ -77,7 +90,7 @@ const AdminView = ({
 							</tr>
 						</Thead>
 						<Tbody>
-							{users.map((user) => (
+							{users.map((user) => (user.id !== deletedUser && (
 								<tr key={user.id}>
 									<Td>
 										{user.email}
@@ -86,25 +99,31 @@ const AdminView = ({
 										{user.userName}
 									</Td>
 									<Td>
-										<InputWrapper
-											name="role"
-											label="Role"
-											placeholder="Role"
-											value={selectState[user.id]}
-											nolabel
-											options={optionsList}
-											onChange={(val) => {
-												setSelectState({ ...selectState, [user.id]: val });
-												handleSelectChange(user.id, val.value);
-											}}
-										>
-											{(props) => <Select {...props} />}
-										</InputWrapper>
+										{user.id !== getUserId() && (
+											<InputWrapper
+												name="role"
+												label="Role"
+												placeholder="Role"
+												value={selectState[user.id]}
+												nolabel
+												options={optionsList}
+												onChange={(val) => {
+													setSelectState({ ...selectState, [user.id]: val });
+													handleSelectChange(user.id, val.value);
+												}}
+											>
+												{(props) => <Select {...props} />}
+											</InputWrapper>
+										)}
+										{user.id === getUserId() && (
+											user.role
+										)}
 									</Td>
 									<Td>
 										<Button
 											type="button"
 											danger
+											disabled={user.id === getUserId()}
 											onClick={(evt) => {
 												evt.preventDefault();
 												return onToggle({ ...toggled, [user.id]: true });
@@ -157,7 +176,7 @@ const AdminView = ({
 
 									</Td>
 								</tr>
-							))}
+							)))}
 						</Tbody>
 					</Table>
 				</Content>
@@ -179,12 +198,14 @@ AdminView.propTypes = {
 	setSelectState: PropTypes.func.isRequired,
 	handleSelectChange: PropTypes.func.isRequired,
 	handleDelete: PropTypes.func.isRequired,
+	refreshUsers: PropTypes.func.isRequired,
 	users: PropTypes.arrayOf(PropTypes.shape({
 		id: PropTypes.string.isRequired,
 		email: PropTypes.string.isRequired,
 		role: PropTypes.string.isRequired,
 		userName: PropTypes.string.isRequired,
 	})),
+	deletedUser: PropTypes.string,
 	errors: PropTypes.arrayOf(PropTypes.string.isRequired),
 	alerts: PropTypes.arrayOf(
 		PropTypes.shape({
@@ -202,6 +223,7 @@ AdminView.defaultProps = {
 	errors: [],
 	alerts: [],
 	selectState: {},
+	deletedUser: '',
 };
 
 export default AdminView;

@@ -44,8 +44,7 @@ const getDeletionCallback = (props) => ({
 		props.setErrors(errors);
 		return;
 	}
-	props.history.push('/admin', { alerts: [{ message: 'User deleted successfully.', variant: 'warning' }] });
-	props.history.go(0);
+	props.setAlerts([{ message: 'User deleted successfully.', variant: 'warning' }]);
 };
 
 const getMutationCallback = (props) => ({
@@ -55,8 +54,7 @@ const getMutationCallback = (props) => ({
 		props.setErrors(errors);
 		return;
 	}
-	props.history.push('/admin', { alerts: [{ message: 'User\'s role changed successfully.', variant: 'success' }] });
-	props.history.go(0);
+	props.setAlerts([{ message: 'User\'s role changed successfully.', variant: 'success' }]);
 };
 
 const getDataHandler = ({
@@ -92,11 +90,26 @@ export default compose(
 	withRouter,
 	withLoading,
 	withAlerts,
+	withState('deletedUser', 'setDeletedUser', ''),
 	withState('errors', 'setErrors', []),
 	withState('users', 'setUsers', []),
 	withState('selectState', 'setSelectState', {}),
 	withState('toggled', 'onToggle', {}),
 	withHandlers({
+		refreshUsers: (props) => () => {
+			props.startLoading();
+			props.client.query({
+				query: getUsersQuery(),
+				fetchPolicy: 'network-only',
+			})
+				.then((data) => {
+					getDataHandler(props)(data);
+				})
+				.catch((err) => {
+					props.stopLoading();
+					props.setErrors([err.message]);
+				});
+		},
 		handleSelectChange: (props) => (id, role) => {
 			props.startLoading();
 			props.client.mutate({
@@ -107,6 +120,7 @@ export default compose(
 				},
 			})
 				.then((data) => {
+					getDataHandler(props);
 					const mutationCallback = getMutationCallback(props);
 					props.stopLoading();
 					return mutationCallback(data);
@@ -124,6 +138,7 @@ export default compose(
 					id,
 				},
 			}).then((data) => {
+				props.setDeletedUser(id);
 				const deletionCallabck = getDeletionCallback(props);
 				props.stopLoading();
 				return deletionCallabck(data);
