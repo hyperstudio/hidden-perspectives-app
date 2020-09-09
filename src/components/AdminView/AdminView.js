@@ -47,7 +47,7 @@ const AdminView = ({
 	errors,
 	toggled,
 	onToggle,
-	deletedUser,
+	deleted,
 	refreshUsers,
 }) => (
 	<Container>
@@ -90,7 +90,7 @@ const AdminView = ({
 							</tr>
 						</Thead>
 						<Tbody>
-							{users.map((user) => (user.id !== deletedUser && (
+							{users.map((user) => (!deleted.includes(user.id) && (
 								<tr key={user.id}>
 									<Td>
 										{user.email}
@@ -205,7 +205,7 @@ AdminView.propTypes = {
 		role: PropTypes.string.isRequired,
 		userName: PropTypes.string.isRequired,
 	})),
-	deletedUser: PropTypes.string,
+	deleted: PropTypes.arrayOf(PropTypes.string),
 	errors: PropTypes.arrayOf(PropTypes.string.isRequired),
 	alerts: PropTypes.arrayOf(
 		PropTypes.shape({
@@ -221,9 +221,9 @@ AdminView.defaultProps = {
 	isLoading: true,
 	users: [],
 	errors: [],
+	deleted: [],
 	alerts: [],
 	selectState: {},
-	deletedUser: '',
 };
 
 export default AdminView;

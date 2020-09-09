@@ -90,7 +90,7 @@ export default compose(
 	withRouter,
 	withLoading,
 	withAlerts,
-	withState('deletedUser', 'setDeletedUser', ''),
+	withState('deleted', 'setDeleted', []),
 	withState('errors', 'setErrors', []),
 	withState('users', 'setUsers', []),
 	withState('selectState', 'setSelectState', {}),
@@ -138,7 +138,8 @@ export default compose(
 					id,
 				},
 			}).then((data) => {
-				props.setDeletedUser(id);
+				props.setDeleted([...props.deleted, id]);
+				props.onToggle({ ...props.toggled, [id]: false });
 				const deletionCallabck = getDeletionCallback(props);
 				props.stopLoading();
 				return deletionCallabck(data);
