@@ -10,11 +10,12 @@ import Login from './Login';
 import { logUserIn, logUserOut } from '../../utils/localStorageUtil';
 
 const SIGNUP_MUTATION = gql`
-mutation CreateUser($userName: String!, $email: String!, $password: String!) {
+mutation CreateUser($userName: String!, $email: String!, $password: String!, $role: String!) {
   createUser(
     userName: $userName
     email: $email
     password: $password
+		role: $role
   ) {
 		token
 		user{
@@ -49,7 +50,7 @@ const getLoginCallback = (props) => ({
 		props.setErrors(errors);
 		return;
 	}
-	const { signinUser: { token, user: { id, role } } } = data;
+	const { token, user: { id, role } } = data.signInUser ? data.signInUser : data.createUser;
 	logUserIn(token, id, role);
 	props.clearFields();
 };
@@ -62,6 +63,7 @@ const getSignupVariables = ({ name: userName, email, password }) => (({
 	userName,
 	email,
 	password,
+	role: 'Viewer',
 }));
 
 const getLoginMutation = (values) => ({
@@ -98,9 +100,9 @@ export default compose(
 				props.client.mutate(props.login ? getLoginMutation(values) : getSignupMutation(values))
 					.then((data) => {
 						const loginCallback = getLoginCallback(props);
-						if (Object.prototype.hasOwnProperty.call(data, 'createUser')) {
+						if (props.login === false) {
 							return props.client.mutate(getLoginMutation(values))
-								.then(loginCallback);
+								.then(loginCallback(data));
 						}
 						return loginCallback(data);
 					})
