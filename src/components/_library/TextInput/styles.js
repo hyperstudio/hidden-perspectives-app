@@ -8,6 +8,7 @@ export const Input = styled(SmoothUiInput)`
 	padding: 1rem 1rem .75rem;
 	position: relative;
 	height: 100%;
+	${({ monospace }) => (monospace ? ('font-family: monospace; font-size: 16px;') : '')}
 
 	&:focus {
 		${({ theme, valid }) => (!valid ? theme.controlFocus()('red') : theme.controlFocus()('primary'))}

@@ -23,6 +23,7 @@ const InputWrapper = ({
 	placeholder,
 	description,
 	labelArticle,
+	monospace,
 	...rest
 }) => (
 	<FormGroup>
@@ -42,6 +43,7 @@ const InputWrapper = ({
 			type,
 			onChange,
 			multiline,
+			monospace,
 			id: name,
 			placeholder: placeholder || `Enter ${labelArticle} ${label.toLowerCase()}`,
 			'aria-labelledby': `${name}-label`,
@@ -71,6 +73,7 @@ InputWrapper.propTypes = {
 	optional: PropTypes.bool,
 	nolabel: PropTypes.bool,
 	multiline: PropTypes.bool,
+	monospace: PropTypes.bool,
 	placeholder: PropTypes.string,
 	description: PropTypes.string,
 	onChange: PropTypes.func.isRequired,
@@ -88,6 +91,7 @@ InputWrapper.defaultProps = {
 	optional: false,
 	nolabel: false,
 	multiline: false,
+	monospace: false,
 	children: (props) => (
 		<TextInput
 			{...props}
