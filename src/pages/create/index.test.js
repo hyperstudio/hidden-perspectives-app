@@ -4,7 +4,7 @@ import CreatePage from '.';
 import CreateForm from '../../components/CreateForm';
 
 describe('CreatePage', () => {
-	const createPage = shallow(<CreatePage />);
+	const createPage = shallow(<CreatePage itemType="document" />);
 
 	it('should render without crashing', () => {
 		expect(createPage.length).toBe(1);

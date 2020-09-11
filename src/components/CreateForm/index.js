@@ -1,246 +1,396 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
 import {
-	Button,
-	Grid,
-	Row,
-	Col,
-	Typography,
-} from '@smooth-ui/core-sc';
-import { Form, Field } from 'react-final-form';
-import { isTodayOrPrior } from '../../utils/dateUtil';
-import InputWrapper from '../_library/InputWrapper';
-import DatePicker from '../_library/DatePicker';
-import Select from '../_library/Select';
-import { Separator } from './styles';
+	compose,
+	lifecycle,
+	withState,
+	withHandlers,
+} from '@hypnosphi/recompose';
+import { withApollo } from 'react-apollo';
+import gql from 'graphql-tag';
+import { withLoading } from '../../utils/hocUtil';
+import CreateForm from './CreateForm';
+import { ucFirst } from '../../utils/stringUtil';
 
-const required = (value) => {
-	const error = 'This field is required!';
-	if (Array.isArray(value) && value.length === 0) return error;
-	if (!value) return error;
-	return undefined;
+const CREATE_DOCUMENT_MUTATION = gql`
+	mutation CreateDocument($data: DocumentCreateInput!){
+		createOneDocument(data: $data) {
+			documentTitle
+			documentDescription
+			documentCreationDate
+			documentPublicationDate
+			documentOriginalID
+			documentFiles {
+				File {
+					id
+				}
+			}
+			documentTranscript
+			documentKind {
+				Kind {
+					id
+				}
+			}
+			documentAuthors {
+				Stakeholder {
+					id
+				}
+			}
+			mentionedStakeholders {
+				Stakeholder {
+					id
+				}
+			}
+			mentionedLocations {
+				Location {
+					id
+				}
+			}
+			documentTags {
+				Tag{
+					id
+				}											
+			}
+			dnsaAbstract
+			dnsaCitation
+			dnsaCollection
+			dnsaFrom
+			dnsaItemNumber
+			dnsaOrigin
+			dnsaStakeholder
+			dnsaSubject
+			dnsaTo
+			dnsaURL
+		}
+	}
+`;
+
+// const EVENT_QUERY = gql`
+// 	query GetEvent($id: String) {
+// 		event(where: {id: $id}) {
+// 			id
+// 			eventTitle
+// 			eventDescription
+// 			eventStartDate
+// 			eventEndDate
+// 			eventStakeholders {
+// 				Stakeholder{
+// 					id
+// 					stakeholderFullName
+// 				}
+// 			}
+// 			eventTags {
+// 				Tag {
+// 					id,
+// 					name
+// 				}
+// 			}
+// 			eventLocations {
+// 				Location{
+// 					id,
+// 					locationName
+// 				}
+// 			}
+// 		}
+// 	}
+// `;
+
+// const STAKEHOLDER_QUERY = gql`
+// 	query GetStakeholder($id: String) {
+// 		stakeholder(where: {id: $id}) {
+// 			id
+// 			documents {
+// 				Document{
+// 					id
+// 					documentTitle
+// 				}
+// 			}
+// 			documentsMentionedIn {
+// 				Document{
+// 					id
+// 					documentTitle
+// 				}
+// 			}
+// 			eventsInvolvedIn {
+// 				Event {
+// 					id
+// 					eventTitle
+// 				}
+// 			}
+// 			stakeholderDescription
+// 			stakeholderFullName
+// 			stakeholderWikipediaUri
+// 		}
+// 	}
+// `;
+
+// const LOCATION_QUERY = gql`
+// 	query GetLocation($id: String) {
+// 		location(where: {id: $id}) {
+// 			id
+// 			documentsMentionedIn {
+// 				Document{
+// 					id
+// 					documentTitle
+// 				}
+// 			}
+// 			locationEvents {
+// 				Event {
+// 					id
+// 					eventTitle
+// 				}
+// 			}
+// 			locationDescription
+// 			locationName
+// 			locationWikipediaUri
+// 		}
+// 	}
+// `;
+
+const dateExists = (date) => date && date !== '' && date !== null;
+
+const getDestructuredData = (data) => {
+	switch (data.itemType) {
+	case 'document': return {
+		documentTitle: { set: data.title },
+		documentDescription: { set: data.description },
+		documentCreationDate: dateExists(data.creationDate) ? { set: new Date(`${data.creationDate} 00:00`) } : undefined,
+		documentPublicationDate: dateExists(data.publicationDate) ? { set: new Date(`${data.publicationDate} 00:00`) } : undefined,
+		documentKind: data.kind.value ? {
+			create: {
+				Kind: {
+					connect: {
+						// eslint-disable-next-line quote-props
+						'name': data.kind.value.toLowerCase(),
+					},
+				},
+			},
+		} : undefined,
+		documentClassification: data.classification.value ? {
+			create: {
+				Classification: {
+					connect: {
+						// eslint-disable-next-line quote-props
+						'name': data.classification.value.toLowerCase(),
+					},
+				},
+			},
+		} : undefined,
+		documentTags: Array.isArray(data.tags)
+			? {
+				create: data.tags.map((tag) => ({
+					Tag: {
+						connectOrCreate: {
+							where: { 'name': tag.name }, // eslint-disable-line quote-props
+							create: { 'name': tag.name }, // eslint-disable-line quote-props
+						},
+					},
+				})),
+			}
+			: undefined,
+		documentAuthors: Array.isArray(data.authors)
+			? {
+				create: data.authors.map((author) => ({
+					Stakeholder: {
+						connect: {
+							id: author.id,
+						},
+					},
+				})),
+			}
+			: undefined,
+		mentionedStakeholders: Array.isArray(data.stakeholders)
+			? {
+				create: data.stakeholders.map((stakeholder) => ({
+					Stakeholder: {
+						connect: {
+							id: stakeholder.id,
+						},
+					},
+				})),
+			}
+			: undefined,
+		mentionedLocations: Array.isArray(data.locations)
+			? {
+				create: data.locations.map((location) => ({
+					Location: {
+						connectOrCreate: {
+							where: { 'locationName': location.name }, // eslint-disable-line quote-props
+							create: { 'locationName': location.name }, // eslint-disable-line quote-props
+						},
+					},
+				})),
+			}
+			: undefined,
+	};
+	case 'event': return {
+		eventTitle: { set: data.title },
+		eventDescription: { set: data.description },
+		eventStartDate: dateExists(data.eventStartDate) ? { set: new Date(`${data.eventStartDate} 00:00`) } : undefined,
+		eventEndDate: dateExists(data.eventEndDate) ? { set: new Date(`${data.eventEndDate} 00:00`) } : undefined,
+		eventTags: Array.isArray(data.tags)
+			? {
+				create: data.tags.map((tag) => ({
+					Tag: {
+						connectOrCreate: {
+							where: { 'name': tag.name }, // eslint-disable-line quote-props
+							create: { 'name': tag.name }, // eslint-disable-line quote-props
+						},
+					},
+				})),
+			}
+			: undefined,
+		eventStakeholders: Array.isArray(data.stakeholders)
+			? {
+				create: data.stakeholders.map((stakeholder) => ({
+					Stakeholder: {
+						connect: {
+							id: stakeholder.id,
+						},
+					},
+				})),
+			}
+			: undefined,
+		eventLocations: Array.isArray(data.locations)
+			? {
+				create: data.locations.map((location) => ({
+					Location: {
+						connectOrCreate: {
+							where: { 'locationName': location.name }, // eslint-disable-line quote-props
+							create: { 'locationName': location.name }, // eslint-disable-line quote-props
+						},
+					},
+				})),
+			}
+			: undefined,
+	};
+	case 'stakeholder': return {
+		stakeholderFullName: { set: data.title },
+		stakeholderDescription: { set: data.description },
+		stakeholderWikipediaUri: { set: data.wikipediaUri },
+		documents:
+			Array.isArray(data.stakeholderAuthoredDocuments)
+				? {
+					create: data.stakeholderAuthoredDocuments.map((document) => ({
+						Document: {
+							connect: {
+								id: document.id,
+							},
+						},
+					})),
+				}
+				: undefined,
+		documentsMentionedIn:
+			Array.isArray(data.documentsMentionedIn)
+				? {
+					create: data.documentsMentionedIn.map((document) => ({
+						Document: {
+							connect: {
+								id: document.id,
+							},
+						},
+					})),
+				}
+				: undefined,
+		eventsInvolvedIn:
+			Array.isArray(data.eventsInvolvedIn)
+				? {
+					create: data.eventsInvolvedIn.map((event) => ({
+						Event: {
+							connect: {
+								id: event.id,
+							},
+						},
+					})),
+				}
+				: undefined,
+	};
+	case 'location': return {
+		locationName: { set: data.title },
+		locationDescription: { set: data.description },
+		locationWikipediaUri: { set: data.wikipediaUri },
+		documentsMentionedIn:
+			Array.isArray(data.documentsMentionedIn)
+				? {
+					create: data.documentsMentionedIn.map((document) => ({
+						Document: {
+							connect: {
+								id: document.id,
+							},
+						},
+					})),
+				}
+				: undefined,
+		locationEvents:
+			Array.isArray(data.eventsInvolvedIn)
+				? {
+					create: data.eventsInvolvedIn.map((event) => ({
+						Event: {
+							connect: {
+								id: event.id,
+							},
+						},
+					})),
+				}
+				: undefined,
+	};
+	default: return '';
+	}
 };
-const mustBeTodayOrPrior = (value) => {
-	if (!value) return required(value);
-	return isTodayOrPrior(new Date(value)) ? undefined : 'The date must be prior or equal to today';
+
+const getCreateItemMutation = (itemType) => {
+	switch (itemType) {
+	case 'document': return CREATE_DOCUMENT_MUTATION;
+	// case 'event': return EVENT_MUTATION;
+	// case 'stakeholder': return STAKEHOLDER_MUTATION;
+	// case 'location': return LOCATION_MUTATION;
+	default: return '';
+	}
 };
 
-const getError = ({ error, touched }) => (touched && error ? error : undefined);
-const isValid = ({ valid, touched }) => (!touched || valid);
-
-const getMeta = (meta) => ({
-	valid: isValid(meta),
-	error: getError(meta),
-});
-
-// eslint-disable-next-line react/prop-types
-const adapt = (Component) => ({ input, meta, ...rest }) => (
-	<Component {...input} {...rest} {...getMeta(meta)} />
-);
-
-const AdaptedInputWrapper = adapt(InputWrapper);
-
-const CreateForm = ({
-	onSubmit,
-}) => (
-	<Form
-		onSubmit={onSubmit}
-		render={({
-			handleSubmit,
-			form,
-			submitting,
-			pristine,
-		}) => (
-			<form onSubmit={handleSubmit}>
-				<Grid>
-					<Row>
-						<Col>
-							<Typography variant="h2">New document</Typography>
-						</Col>
-					</Row>
-					<Row>
-						<Separator />
-					</Row>
-					<Row>
-						<Col>
-							<Field
-								name="documentTitle"
-								label="Title"
-								placeholder="Enter the document's title"
-								multiline
-								height={118}
-								component={AdaptedInputWrapper}
-								validate={required}
-							/>
-						</Col>
-						<Col xs={4}>
-							<Field
-								name="documentOriginalId"
-								label="Identifier"
-								placeholder="Original identifier"
-								description="The identifier is the filename originally present in the briefing book. For example “uir001001”."
-								component={AdaptedInputWrapper}
-								validate={required}
-							/>
-						</Col>
-					</Row>
-					<Row>
-						<Separator />
-					</Row>
-					<Row>
-						<Col>
-							<Field
-								name="documentSummary"
-								label="Summary"
-								placeholder="Resume in a sentence or two the contents of the document"
-								multiline
-								height={200}
-								component={AdaptedInputWrapper}
-								validate={required}
-							/>
-						</Col>
-					</Row>
-					<Row>
-						<Separator />
-					</Row>
-					<Row>
-						<Col>
-							<Field
-								name="documentKind"
-								validate={required}
-							>
-								{({ input, meta }) => (
-									<InputWrapper
-										label="Kind"
-										{...getMeta(meta)}
-										placeholder="Select a kind"
-										options={[
-											{
-												value: 'conference-materials',
-												label: 'Conference Materials',
-											},
-											{
-												value: 'executive-order',
-												label: 'Executive Order',
-											},
-											{
-												value: 'speech',
-												label: 'Speech',
-											},
-											{
-												value: 'report',
-												label: 'Report',
-											},
-										]}
-										{...input}
-									>
-										{(props) => <Select {...props} />}
-									</InputWrapper>
-								)}
-							</Field>
-						</Col>
-						<Col>
-							<Field
-								name="documentClassification"
-								validate={required}
-							>
-								{({ input, meta }) => (
-									<InputWrapper
-										label="Classification"
-										{...getMeta(meta)}
-										placeholder="Select a classification"
-										options={[
-											{
-												value: 'no-classification',
-												label: 'No classification',
-											},
-											{
-												value: 'classification-unknown',
-												label: 'Classification unknown',
-											},
-											{
-												value: 'secret',
-												label: 'Secret',
-											},
-											{
-												value: 'top-secret',
-												label: 'Top Secret',
-											},
-										]}
-										{...input}
-									>
-										{(props) => <Select {...props} />}
-									</InputWrapper>
-								)}
-							</Field>
-						</Col>
-					</Row>
-					<Row>
-						<Separator />
-					</Row>
-					<Row>
-						<Col>
-							<Field
-								name="documentDate"
-								validate={mustBeTodayOrPrior}
-							>
-								{({ meta, input }) => (
-									<InputWrapper
-										label="Creation date"
-										placeholder="YYYY-MM-DD"
-										todayOrPrior
-										{...getMeta(meta)}
-										{...input}
-									>
-										{(props) => <DatePicker {...props} />}
-									</InputWrapper>
-								)}
-							</Field>
-						</Col>
-						<Col>
-							<Field
-								name="documentPublicationDate"
-								validate={mustBeTodayOrPrior}
-							>
-								{({ meta, input }) => (
-									<InputWrapper
-										label="Publication date"
-										placeholder="YYYY-MM-DD"
-										todayOrPrior
-										{...getMeta(meta)}
-										{...input}
-									>
-										{(props) => <DatePicker {...props} />}
-									</InputWrapper>
-								)}
-							</Field>
-						</Col>
-					</Row>
-					<Row>
-						<Separator />
-					</Row>
-					<Row>
-						<Button
-							type="submit"
-							alignSelf="flex-end"
-							disabled={submitting || pristine}
-						>
-							Submit document
-						</Button>
-					</Row>
-				</Grid>
-			</form>
-		)}
-	/>
-);
-
-CreateForm.defaultProps = {
-	onSubmit: () => {},
+const getMutationCallback = (props) => ({
+	errors,
+}) => {
+	let { itemType } = props;
+	if (props.itemType === 'stakeholder') itemType = 'protagonist';
+	const urlString = `/${itemType}/context/${props.id}`;
+	if (errors) {
+		props.setErrors(errors);
+		return;
+	}
+	props.history.push(urlString, { alerts: [{ message: `${ucFirst(itemType)} edited successfully.`, variant: 'success' }] });
+	props.history.go(0);
 };
 
-CreateForm.propTypes = {
-	onSubmit: PropTypes.func,
-};
-
-export default CreateForm;
-
+export default compose(
+	withApollo,
+	withRouter,
+	withLoading,
+	withState('data', 'setData', {}),
+	withState('errors', 'setErrors', []),
+	withState('specialInputState', 'setSpecialInputState', { addingTag: '', tagInputState: '' }),
+	withHandlers({
+		onSubmit(props) {
+			props.startLoading();
+			return (values) => {
+				props.client.mutate({
+					mutation: getCreateItemMutation(props.itemType),
+					variables: {
+						id: props.id,
+						data: getDestructuredData(values),
+					},
+				})
+					.then((data) => {
+						const mutationCallback = getMutationCallback(props);
+						props.stopLoading();
+						return mutationCallback(data);
+					})
+					.catch((err) => props.setErrors(err));
+			};
+		},
+	}),
+	lifecycle({
+		componentDidMount() {
+			this.props.stopLoading();
+		},
+	}),
+)(CreateForm);

@@ -6,6 +6,7 @@ import HistoryBreadcrumb from '../HistoryBreadcrumb';
 import Home from '../../pages/home';
 import Login from '../../pages/login';
 import AdminPage from '../../pages/admin';
+import CreatePage from '../../pages/create';
 import DocumentPage from '../../pages/document';
 import DocumentMetadataPage from '../../pages/documentMetadata';
 import DocumentMetadataEditPage from '../../pages/documentMetadataEdit';
@@ -35,6 +36,7 @@ const App = () => (
 				<Switch>
 					<Route exact path="/" component={Home} />
 					<Route exact path="/admin" component={AdminPage} />
+					<Route exact path="/document/new" render={(props) => (<CreatePage {...props} itemType="document" />)} />
 					<Route exact path="/document/context/:id" component={DocumentPage} />
 					<Route exact path="/document/transcript/:id" component={TranscriptPage} />
 					<Route exact path="/document/original/:id" component={OriginalPage} />
