@@ -8,10 +8,12 @@ const TextInput = ({ multiline, ...rest }) => (
 
 TextInput.propTypes = {
 	multiline: PropTypes.bool,
+	monospace: PropTypes.string,
 };
 
 TextInput.defaultProps = {
 	multiline: false,
+	monospace: 'false',
 };
 
 export default TextInput;
