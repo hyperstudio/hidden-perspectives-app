@@ -65,7 +65,7 @@ const CREATE_DOCUMENT_MUTATION = gql`
 `;
 
 const CREATE_EVENT_MUTATION = gql`
-	query CreateEvent($data: EventCreateInput!) {
+	mutation CreateEvent($data: EventCreateInput!) {
 		createOneEvent(data: $data) {
 			id
 			eventTitle
@@ -92,7 +92,7 @@ const CREATE_EVENT_MUTATION = gql`
 `;
 
 const CREATE_STAKEHOLDER_MUTATION = gql`
-mutation CreateStakeholder($data: StakeholderCreateInput!){
+	mutation CreateStakeholder($data: StakeholderCreateInput!){
 		createOneStakeholder(data: $data) {
 			id
 			stakeholderDescription
