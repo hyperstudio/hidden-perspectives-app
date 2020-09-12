@@ -4,7 +4,7 @@ import { Form, Field } from 'react-final-form';
 import arrayMutators from 'final-form-arrays';
 import { FieldArray } from 'react-final-form-arrays';
 import {
-	Alert,
+	Switch,
 } from '@smooth-ui/core-sc';
 import isURL from 'validator/lib/isURL';
 import { isAuthenticated, isAuthorized } from '../../utils/localStorageUtil';
@@ -90,6 +90,7 @@ const CreateForm = ({
 						mutators={{
 							...arrayMutators,
 						}}
+						initialValues={{ itemType }}
 						render={({
 							handleSubmit,
 							form: {
@@ -100,18 +101,18 @@ const CreateForm = ({
 							<form onSubmit={handleSubmit}>
 								<Fieldset title="Core Information" key="Core Information" mode="edit">
 									<MetadataRow
-										label="Title"
+										label={itemType === 'stakeholder' ? 'Name' : 'Title'}
 										mode="edit"
 									>
 										<Field
 											name="title"
-											placeholder="Title"
+											placeholder={itemType === 'stakeholder' ? 'Name' : 'Title'}
 											validate={required}
 											render={(args) => (
 												<>
 													<InputWrapper
 														name={args.input.name}
-														placeholder="Title"
+														placeholder={itemType === 'stakeholder' ? 'Name' : 'Title'}
 														value={args.input.value}
 														onChange={args.input.onChange}
 														onBlur={args.input.onBlur}
@@ -124,17 +125,17 @@ const CreateForm = ({
 										/>
 									</MetadataRow>
 									<MetadataRow
-										label="Summary"
+										label={itemType === 'stakeholder' ? 'Description' : 'Summary'}
 										mode="edit"
 									>
 										<Field
 											name="description"
-											placeholder="Summary"
+											placeholder={itemType === 'stakeholder' ? 'Description' : 'Summary'}
 											validate={required}
 											render={(args) => (
 												<InputWrapper
 													name={args.input.name}
-													placeholder="Summary"
+													placeholder={itemType === 'stakeholder' ? 'Description' : 'Summary'}
 													value={args.input.value}
 													onChange={args.input.onChange}
 													onBlur={args.input.onBlur}
@@ -320,29 +321,56 @@ const CreateForm = ({
 										</MetadataRow>
 									</>
 									)}
-									{(itemType === 'stakeholder' || itemType === 'location') && (
-										<MetadataRow
-											label="Wikipedia URL"
-											mode="edit"
-										>
-											<Field
-												name="wikipediaUri"
-												placeholder="Wikipedia URL"
-												validate={isValidURL}
-												render={(args) => (
-													<InputWrapper
-														name={args.input.name}
-														placeholder="Wikipedia URL"
-														value={args.input.value}
-														onChange={args.input.onChange}
-														onBlur={args.input.onBlur}
-														label="Wikipedia URL"
-														nolabel
-														{...getMeta(args.meta)}
+									{itemType === 'stakeholder' && (
+										<>
+											<MetadataRow
+												label="Wikipedia URL"
+												mode="edit"
+											>
+												<Field
+													name="wikipediaUri"
+													placeholder="Wikipedia URL"
+													validate={isValidURL}
+													render={(args) => (
+														<InputWrapper
+															name={args.input.name}
+															placeholder="Wikipedia URL"
+															value={args.input.value}
+															onChange={args.input.onChange}
+															onBlur={args.input.onBlur}
+															label="Wikipedia URL"
+															nolabel
+															{...getMeta(args.meta)}
+														/>
+													)}
+												/>
+											</MetadataRow>
+											<MetadataRow
+												label="Institution"
+												mode="edit"
+											>
+												<TagsEditWrapper>
+													<Field
+														name="isStakeholderInstitution"
+														type="checkbox"
+														render={(args) => (
+															<>
+																<Switch
+																	checked={args.input.checked}
+																	onChange={args.input.onChange}
+																	{...getMeta(args.meta)}
+																/>
+															</>
+														)}
 													/>
-												)}
-											/>
-										</MetadataRow>
+													<ControlFeedbackBlack valid>
+														Is this an institution/organization? If so, flip this switch on.
+														<br />
+														If it is a single person, leave in the &ldquo;off&rdquo; position.
+													</ControlFeedbackBlack>
+												</TagsEditWrapper>
+											</MetadataRow>
+										</>
 									)}
 								</Fieldset>
 								{itemType === 'stakeholder' && (
@@ -878,7 +906,7 @@ const CreateForm = ({
 															label="Transcript"
 															nolabel
 															multiline
-															monospace
+															monospace="true"
 															{...getMeta(args.meta)}
 														/>
 													</>
@@ -887,9 +915,6 @@ const CreateForm = ({
 										</MetadataRow>
 									</Fieldset>
 								)}
-								{errors.map(({ message }) => (
-									<Alert key={message} variant="danger">{message}</Alert>
-								))}
 								<ButtonsContainer>
 									<Button
 										to="/"
@@ -902,8 +927,7 @@ const CreateForm = ({
 										primary
 										disabled={submitting || isLoading}
 									>
-										Add
-										{` ${itemType}`}
+										Submit
 									</Button>
 								</ButtonsContainer>
 							</form>
@@ -931,9 +955,7 @@ CreateForm.propTypes = {
 		tagInputState: PropTypes.string,
 	}),
 	onSubmit: PropTypes.func.isRequired,
-	errors: PropTypes.arrayOf(PropTypes.shape({
-		message: PropTypes.string.isRequired,
-	})),
+	errors: PropTypes.arrayOf(PropTypes.string.isRequired),
 	removeText: PropTypes.string,
 };
 

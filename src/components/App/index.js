@@ -42,9 +42,11 @@ const App = () => (
 					<Route exact path="/document/original/:id" component={OriginalPage} />
 					<Route exact path="/document/metadata/:id" component={DocumentMetadataPage} />
 					<Route exact path="/document/metadata/:id/edit" component={DocumentMetadataEditPage} />
+					<Route exact path="/event/new" render={(props) => (<CreatePage {...props} itemType="event" />)} />
 					<Route exact path="/event/context/:id" component={EventPage} />
 					<Route exact path="/event/metadata/:id" component={EventMetadataPage} />
 					<Route exact path="/event/metadata/:id/edit" component={EventMetadataEditPage} />
+					<Route exact path="/protagonist/new" render={(props) => (<CreatePage {...props} itemType="stakeholder" />)} />
 					<Route exact path="/protagonist/context/:id" component={ProtagonistPage} />
 					<Route exact path="/protagonist/metadata/:id" component={ProtagonistMetadataPage} />
 					<Route exact path="/protagonist/metadata/:id/edit" component={ProtagonistMetadataEditPage} />

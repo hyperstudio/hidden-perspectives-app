@@ -64,97 +64,69 @@ const CREATE_DOCUMENT_MUTATION = gql`
 	}
 `;
 
-// const EVENT_QUERY = gql`
-// 	query GetEvent($id: String) {
-// 		event(where: {id: $id}) {
-// 			id
-// 			eventTitle
-// 			eventDescription
-// 			eventStartDate
-// 			eventEndDate
-// 			eventStakeholders {
-// 				Stakeholder{
-// 					id
-// 					stakeholderFullName
-// 				}
-// 			}
-// 			eventTags {
-// 				Tag {
-// 					id,
-// 					name
-// 				}
-// 			}
-// 			eventLocations {
-// 				Location{
-// 					id,
-// 					locationName
-// 				}
-// 			}
-// 		}
-// 	}
-// `;
+const CREATE_EVENT_MUTATION = gql`
+	query CreateEvent($data: EventCreateInput!) {
+		createOneEvent(data: $data) {
+			id
+			eventTitle
+			eventDescription
+			eventStartDate
+			eventEndDate
+			eventStakeholders {
+				Stakeholder{
+					id
+				}
+			}
+			eventTags {
+				Tag {
+					id
+				}
+			}
+			eventLocations {
+				Location{
+					id
+				}
+			}
+		}
+	}
+`;
 
-// const STAKEHOLDER_QUERY = gql`
-// 	query GetStakeholder($id: String) {
-// 		stakeholder(where: {id: $id}) {
-// 			id
-// 			documents {
-// 				Document{
-// 					id
-// 					documentTitle
-// 				}
-// 			}
-// 			documentsMentionedIn {
-// 				Document{
-// 					id
-// 					documentTitle
-// 				}
-// 			}
-// 			eventsInvolvedIn {
-// 				Event {
-// 					id
-// 					eventTitle
-// 				}
-// 			}
-// 			stakeholderDescription
-// 			stakeholderFullName
-// 			stakeholderWikipediaUri
-// 		}
-// 	}
-// `;
-
-// const LOCATION_QUERY = gql`
-// 	query GetLocation($id: String) {
-// 		location(where: {id: $id}) {
-// 			id
-// 			documentsMentionedIn {
-// 				Document{
-// 					id
-// 					documentTitle
-// 				}
-// 			}
-// 			locationEvents {
-// 				Event {
-// 					id
-// 					eventTitle
-// 				}
-// 			}
-// 			locationDescription
-// 			locationName
-// 			locationWikipediaUri
-// 		}
-// 	}
-// `;
+const CREATE_STAKEHOLDER_MUTATION = gql`
+mutation CreateStakeholder($data: StakeholderCreateInput!){
+		createOneStakeholder(data: $data) {
+			id
+			stakeholderDescription
+			stakeholderFullName
+			stakeholderWikipediaUri
+			isStakeholderInstitution
+			documents {
+				Document{
+					id
+				}
+			}
+			documentsMentionedIn {
+				Document{
+					id
+				}
+			}
+			eventsInvolvedIn {
+				Event {
+					id
+				}
+			}
+		}
+	}
+`;
 
 const dateExists = (date) => date && date !== '' && date !== null;
 
 const getDestructuredData = (data) => {
 	switch (data.itemType) {
 	case 'document': return {
-		documentTitle: { set: data.title },
-		documentDescription: { set: data.description },
-		documentCreationDate: dateExists(data.creationDate) ? { set: new Date(`${data.creationDate} 00:00`) } : undefined,
-		documentPublicationDate: dateExists(data.publicationDate) ? { set: new Date(`${data.publicationDate} 00:00`) } : undefined,
+		documentTitle: data.title,
+		documentDescription: data.description,
+		documentCreationDate: dateExists(data.creationDate) ? new Date(`${data.creationDate} 00:00`) : undefined,
+		documentPublicationDate: dateExists(data.publicationDate) ? new Date(`${data.publicationDate} 00:00`) : undefined,
 		documentKind: data.kind.value ? {
 			create: {
 				Kind: {
@@ -223,10 +195,10 @@ const getDestructuredData = (data) => {
 			: undefined,
 	};
 	case 'event': return {
-		eventTitle: { set: data.title },
-		eventDescription: { set: data.description },
-		eventStartDate: dateExists(data.eventStartDate) ? { set: new Date(`${data.eventStartDate} 00:00`) } : undefined,
-		eventEndDate: dateExists(data.eventEndDate) ? { set: new Date(`${data.eventEndDate} 00:00`) } : undefined,
+		eventTitle: data.title,
+		eventDescription: data.description,
+		eventStartDate: dateExists(data.eventStartDate) ? new Date(`${data.eventStartDate} 00:00`) : undefined,
+		eventEndDate: dateExists(data.eventEndDate) ? new Date(`${data.eventEndDate} 00:00`) : undefined,
 		eventTags: Array.isArray(data.tags)
 			? {
 				create: data.tags.map((tag) => ({
@@ -264,9 +236,10 @@ const getDestructuredData = (data) => {
 			: undefined,
 	};
 	case 'stakeholder': return {
-		stakeholderFullName: { set: data.title },
-		stakeholderDescription: { set: data.description },
-		stakeholderWikipediaUri: { set: data.wikipediaUri },
+		stakeholderFullName: data.title,
+		stakeholderDescription: data.description,
+		stakeholderWikipediaUri: data.wikipediaUri,
+		isStakeholderInstitution: data.isStakeholderInstitution ? 1 : 0,
 		documents:
 			Array.isArray(data.stakeholderAuthoredDocuments)
 				? {
@@ -304,35 +277,6 @@ const getDestructuredData = (data) => {
 				}
 				: undefined,
 	};
-	case 'location': return {
-		locationName: { set: data.title },
-		locationDescription: { set: data.description },
-		locationWikipediaUri: { set: data.wikipediaUri },
-		documentsMentionedIn:
-			Array.isArray(data.documentsMentionedIn)
-				? {
-					create: data.documentsMentionedIn.map((document) => ({
-						Document: {
-							connect: {
-								id: document.id,
-							},
-						},
-					})),
-				}
-				: undefined,
-		locationEvents:
-			Array.isArray(data.eventsInvolvedIn)
-				? {
-					create: data.eventsInvolvedIn.map((event) => ({
-						Event: {
-							connect: {
-								id: event.id,
-							},
-						},
-					})),
-				}
-				: undefined,
-	};
 	default: return '';
 	}
 };
@@ -340,24 +284,28 @@ const getDestructuredData = (data) => {
 const getCreateItemMutation = (itemType) => {
 	switch (itemType) {
 	case 'document': return CREATE_DOCUMENT_MUTATION;
-	// case 'event': return EVENT_MUTATION;
-	// case 'stakeholder': return STAKEHOLDER_MUTATION;
-	// case 'location': return LOCATION_MUTATION;
+	case 'event': return CREATE_EVENT_MUTATION;
+	case 'stakeholder': return CREATE_STAKEHOLDER_MUTATION;
 	default: return '';
 	}
 };
 
 const getMutationCallback = (props) => ({
+	data,
 	errors,
 }) => {
-	let { itemType } = props;
-	if (props.itemType === 'stakeholder') itemType = 'protagonist';
-	const urlString = `/${itemType}/context/${props.id}`;
+	const { itemType } = props;
+	let urlString = '';
+	switch (itemType) {
+	case 'document': urlString = `/document/context/${data.createOneDocument.id}`; break;
+	case 'stakeholder': urlString = `/protagonist/context/${data.createOneStakeholder.id}`; break;
+	case 'event': urlString = `/event/context/${data.createOneEvent.id}`; break;
+	default: break;
+	}
 	if (errors) {
 		props.setErrors(errors);
-		return;
 	}
-	props.history.push(urlString, { alerts: [{ message: `${ucFirst(itemType)} edited successfully.`, variant: 'success' }] });
+	props.history.push(urlString, { alerts: [{ message: `${ucFirst(itemType)} added successfully.`, variant: 'success' }] });
 	props.history.go(0);
 };
 
@@ -375,7 +323,6 @@ export default compose(
 				props.client.mutate({
 					mutation: getCreateItemMutation(props.itemType),
 					variables: {
-						id: props.id,
 						data: getDestructuredData(values),
 					},
 				})
@@ -384,7 +331,10 @@ export default compose(
 						props.stopLoading();
 						return mutationCallback(data);
 					})
-					.catch((err) => props.setErrors(err));
+					.catch((err) => {
+						props.stopLoading();
+						props.setErrors([err.message]);
+					});
 			};
 		},
 	}),
