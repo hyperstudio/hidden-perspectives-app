@@ -73,7 +73,7 @@ InputWrapper.propTypes = {
 	optional: PropTypes.bool,
 	nolabel: PropTypes.bool,
 	multiline: PropTypes.bool,
-	monospace: PropTypes.bool,
+	monospace: PropTypes.string,
 	placeholder: PropTypes.string,
 	description: PropTypes.string,
 	onChange: PropTypes.func.isRequired,
@@ -91,7 +91,7 @@ InputWrapper.defaultProps = {
 	optional: false,
 	nolabel: false,
 	multiline: false,
-	monospace: false,
+	monospace: 'false',
 	children: (props) => (
 		<TextInput
 			{...props}
