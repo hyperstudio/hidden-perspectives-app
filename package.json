@@ -84,6 +84,7 @@
     "react-select": "^2.1.1",
     "react-virtualized": "^9.21.0",
     "reactour": "^1.13.1",
+    "reakit": "^1.2.4",
     "styled-components": "^4.0.2",
     "subscriptions-transport-ws": "^0.9.15",
     "validator": "^13.1.1",
