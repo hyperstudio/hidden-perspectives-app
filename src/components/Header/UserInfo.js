@@ -34,6 +34,9 @@ const PopoverLink = ({ disclosure, ...props }) => {
 				<StyledPopoverArrow {...popover} />
 				<PopoverMenu>
 					<MenuLinkWrapper>
+						<MenuLink to="/document/new" as={Link} onClick={popover.hide}>Document</MenuLink>
+					</MenuLinkWrapper>
+					<MenuLinkWrapper>
 						<MenuLink to="/event/new" as={Link} onClick={popover.hide}>Event</MenuLink>
 					</MenuLinkWrapper>
 					<MenuLinkWrapper>

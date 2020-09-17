@@ -100,6 +100,32 @@ const CreateForm = ({
 						}) => (
 							<form onSubmit={handleSubmit}>
 								<Fieldset title="Core Information" key="Core Information" mode="edit">
+									{itemType === 'document' && (
+										<MetadataRow
+											label="ID"
+											mode="edit"
+										>
+											<Field
+												name="id"
+												placeholder="e.g. uir009001"
+												validate={required}
+												render={(args) => (
+													<>
+														<InputWrapper
+															name={args.input.name}
+															placeholder="e.g. uir009001"
+															value={args.input.value}
+															onChange={args.input.onChange}
+															onBlur={args.input.onBlur}
+															label="ID"
+															nolabel
+															{...getMeta(args.meta)}
+														/>
+													</>
+												)}
+											/>
+										</MetadataRow>
+									)}
 									<MetadataRow
 										label={itemType === 'stakeholder' ? 'Name' : 'Title'}
 										mode="edit"
@@ -139,7 +165,7 @@ const CreateForm = ({
 													value={args.input.value}
 													onChange={args.input.onChange}
 													onBlur={args.input.onBlur}
-													label="Title"
+													label="Summary"
 													nolabel
 													multiline
 													{...getMeta(args.meta)}
@@ -887,33 +913,250 @@ const CreateForm = ({
 									</Fieldset>
 								)}
 								{itemType === 'document' && (
-									<Fieldset title="Content" key="Content" mode="edit">
-										<MetadataRow label="File" mode="edit">
-											File upload goes here
-										</MetadataRow>
-										<MetadataRow label="Transcript" mode="edit">
-											<Field
-												name="documentTranscript"
-												placeholder="Transcript"
-												render={(args) => (
-													<>
-														<InputWrapper
-															name={args.input.name}
-															placeholder="Paste transcript here"
-															value={args.input.value}
-															onChange={args.input.onChange}
-															onBlur={args.input.onBlur}
-															label="Transcript"
-															nolabel
-															multiline
-															monospace="true"
-															{...getMeta(args.meta)}
-														/>
-													</>
-												)}
-											/>
-										</MetadataRow>
-									</Fieldset>
+									<>
+										<Fieldset title="Content" key="Content" mode="edit">
+											<MetadataRow label="File" mode="edit">
+												File upload will go here when AWS account is approved.
+											</MetadataRow>
+											<MetadataRow label="Transcript" mode="edit">
+												<Field
+													name="documentTranscript"
+													placeholder="Transcript"
+													render={(args) => (
+														<>
+															<InputWrapper
+																name={args.input.name}
+																placeholder="Paste transcript here"
+																value={args.input.value}
+																onChange={args.input.onChange}
+																onBlur={args.input.onBlur}
+																label="Transcript"
+																nolabel
+																multiline
+																monospace="true"
+																{...getMeta(args.meta)}
+															/>
+														</>
+													)}
+												/>
+											</MetadataRow>
+										</Fieldset>
+										<Fieldset title="DNSA fields" key="DNSA" mode="edit">
+											If this document exists in the Digital National Security Archive,
+											complete these fields accordingly. Otherwise, you may leave them blank.
+											<br />
+											<br />
+											<MetadataRow
+												label="Item Number"
+												mode="edit"
+											>
+												<Field
+													name="dnsaItemNumber"
+													placeholder="Item Number"
+													render={(args) => (
+														<>
+															<InputWrapper
+																name={args.input.name}
+																placeholder="Item Number"
+																value={args.input.value}
+																onChange={args.input.onChange}
+																onBlur={args.input.onBlur}
+																label="Item Number"
+																nolabel
+																{...getMeta(args.meta)}
+															/>
+														</>
+													)}
+												/>
+											</MetadataRow>
+											<MetadataRow
+												label="Citation"
+												mode="edit"
+											>
+												<Field
+													name="dnsaCitation"
+													placeholder="Citation"
+													render={(args) => (
+														<>
+															<InputWrapper
+																name={args.input.name}
+																placeholder="Citation"
+																value={args.input.value}
+																onChange={args.input.onChange}
+																onBlur={args.input.onBlur}
+																label="Citation"
+																nolabel
+																{...getMeta(args.meta)}
+															/>
+														</>
+													)}
+												/>
+											</MetadataRow>
+											<MetadataRow
+												label="Abstract"
+												mode="edit"
+											>
+												<Field
+													name="dnsaAbstract"
+													placeholder="Abstract"
+													render={(args) => (
+														<>
+															<InputWrapper
+																name={args.input.name}
+																placeholder="Abstract"
+																value={args.input.value}
+																onChange={args.input.onChange}
+																onBlur={args.input.onBlur}
+																label="Abstract"
+																multiline
+																nolabel
+																{...getMeta(args.meta)}
+															/>
+														</>
+													)}
+												/>
+											</MetadataRow>
+											<MetadataRow
+												label="Collection"
+												mode="edit"
+											>
+												<Field
+													name="dnsaCollection"
+													placeholder="Collection"
+													render={(args) => (
+														<>
+															<InputWrapper
+																name={args.input.name}
+																placeholder="Collection"
+																value={args.input.value}
+																onChange={args.input.onChange}
+																onBlur={args.input.onBlur}
+																label="Collection"
+																nolabel
+																{...getMeta(args.meta)}
+															/>
+														</>
+													)}
+												/>
+											</MetadataRow>
+											<MetadataRow
+												label="From"
+												mode="edit"
+											>
+												<Field
+													name="dnsaFrom"
+													placeholder="From"
+													render={(args) => (
+														<>
+															<InputWrapper
+																name={args.input.name}
+																placeholder="From"
+																value={args.input.value}
+																onChange={args.input.onChange}
+																onBlur={args.input.onBlur}
+																label="From"
+																nolabel
+																{...getMeta(args.meta)}
+															/>
+														</>
+													)}
+												/>
+											</MetadataRow>
+											<MetadataRow
+												label="To"
+												mode="edit"
+											>
+												<Field
+													name="dnsaTo"
+													placeholder="To"
+													render={(args) => (
+														<>
+															<InputWrapper
+																name={args.input.name}
+																placeholder="To"
+																value={args.input.value}
+																onChange={args.input.onChange}
+																onBlur={args.input.onBlur}
+																label="To"
+																nolabel
+																{...getMeta(args.meta)}
+															/>
+														</>
+													)}
+												/>
+											</MetadataRow>
+											<MetadataRow
+												label="Subject"
+												mode="edit"
+											>
+												<Field
+													name="dnsaSubject"
+													placeholder="Subject"
+													render={(args) => (
+														<>
+															<InputWrapper
+																name={args.input.name}
+																placeholder="Subject"
+																value={args.input.value}
+																onChange={args.input.onChange}
+																onBlur={args.input.onBlur}
+																label="Subject"
+																nolabel
+																{...getMeta(args.meta)}
+															/>
+														</>
+													)}
+												/>
+											</MetadataRow>
+											<MetadataRow
+												label="Origin"
+												mode="edit"
+											>
+												<Field
+													name="dnsaOrigin"
+													placeholder="Origin"
+													render={(args) => (
+														<>
+															<InputWrapper
+																name={args.input.name}
+																placeholder="Origin"
+																value={args.input.value}
+																onChange={args.input.onChange}
+																onBlur={args.input.onBlur}
+																label="Origin"
+																nolabel
+																{...getMeta(args.meta)}
+															/>
+														</>
+													)}
+												/>
+											</MetadataRow>
+											<MetadataRow
+												label="URL"
+												mode="edit"
+											>
+												<Field
+													name="dnsaURL"
+													placeholder="URL"
+													validate={isValidURL}
+													render={(args) => (
+														<>
+															<InputWrapper
+																name={args.input.name}
+																placeholder="URL"
+																value={args.input.value}
+																onChange={args.input.onChange}
+																onBlur={args.input.onBlur}
+																label="URL"
+																nolabel
+																{...getMeta(args.meta)}
+															/>
+														</>
+													)}
+												/>
+											</MetadataRow>
+										</Fieldset>
+									</>
 								)}
 								<ButtonsContainer>
 									<Button

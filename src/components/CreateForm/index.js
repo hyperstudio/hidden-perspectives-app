@@ -14,6 +14,7 @@ import { ucFirst } from '../../utils/stringUtil';
 const CREATE_DOCUMENT_MUTATION = gql`
 	mutation CreateDocument($data: DocumentCreateInput!){
 		createOneDocument(data: $data) {
+			id
 			documentTitle
 			documentDescription
 			documentCreationDate
@@ -123,6 +124,8 @@ const dateExists = (date) => date && date !== '' && date !== null;
 const getDestructuredData = (data) => {
 	switch (data.itemType) {
 	case 'document': return {
+		id: data.id,
+		documentOriginalID: data.id,
 		documentTitle: data.title,
 		documentDescription: data.description,
 		documentCreationDate: dateExists(data.creationDate) ? new Date(`${data.creationDate} 00:00`) : undefined,
