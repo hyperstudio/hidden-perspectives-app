@@ -50,7 +50,7 @@ const getLoginCallback = (props) => ({
 		props.setErrors(errors);
 		return;
 	}
-	const { token, user: { id, role } } = data.signInUser ? data.signInUser : data.createUser;
+	const { token, user: { id, role } } = data.signinUser ? data.signinUser : data.createUser;
 	logUserIn(token, id, role);
 	props.clearFields();
 };
