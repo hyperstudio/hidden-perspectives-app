@@ -24,6 +24,7 @@ const DOCUMENT_QUERY = gql`
 			id
 			documentTitle
 			documentDescription
+			documentTranscript
 			documentKind {
 				Kind {
 					id
@@ -62,6 +63,15 @@ const DOCUMENT_QUERY = gql`
 					name
 				}											
 			}
+			dnsaItemNumber
+			dnsaCitation
+			dnsaAbstract
+			dnsaCollection
+			dnsaFrom
+			dnsaTo
+			dnsaSubject
+			dnsaOrigin
+			dnsaURL
 		}
 	}
 `;
@@ -252,6 +262,16 @@ const structureDocumentData = (data) => ({
 		label: data.documentClassification[0].Classification.name,
 	} : undefined,
 	tags: reOrganizeItems(data.documentTags, 'tag'),
+	documentTranscript: data.documentTranscript,
+	dnsaItemNumber: data.dnsaItemNumber,
+	dnsaCitation: data.dnsaCitation,
+	dnsaAbstract: data.dnsaAbstract,
+	dnsaCollection: data.dnsaCollection,
+	dnsaFrom: data.dnsaFrom,
+	dnsaTo: data.dnsaTo,
+	dnsaSubject: data.dnsaSubject,
+	dnsaOrigin: data.dnsaOrigin,
+	dnsaURL: data.dnsaURL,
 });
 
 const structureEventData = (data) => ({
