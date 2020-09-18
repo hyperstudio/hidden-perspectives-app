@@ -49,7 +49,7 @@ const OriginalView = ({
 							stopLoading();
 						}}
 						onLoadError={(err) => {
-							setErrors([err]);
+							setErrors([err.message]);
 							stopLoading([err]);
 						}}
 					>
