@@ -115,7 +115,7 @@ const getItemAuthors = (item, itemType) => {
 	}));
 };
 
-const mapLocation = ({ id, locationName: name }) => ({ id, name });
+const mapLocation = ({ Location: { id, locationName: name } }) => ({ id, name });
 const getItemLocations = (item, itemType) => {
 	if (itemType === 'document') return item.mentionedLocations.map(mapLocation);
 	if (itemType === 'event') return item.eventLocations.map(mapLocation);
