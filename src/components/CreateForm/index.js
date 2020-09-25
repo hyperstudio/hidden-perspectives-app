@@ -196,6 +196,25 @@ const getDestructuredData = (data) => {
 				})),
 			}
 			: undefined,
+		documentFiles: Array.isArray(data.documentFiles)
+			? {
+				create: data.documentFiles.map((file) => ({
+					File: {
+						connectOrCreate: {
+							where: {
+								'url': file.url, // eslint-disable-line quote-props
+							},
+							create: {
+								'name': file.name, // eslint-disable-line quote-props
+								'url': file.url, // eslint-disable-line quote-props
+								'size': file.size, // eslint-disable-line quote-props
+								'contentType': file.contentType, // eslint-disable-line quote-props
+							},
+						},
+					},
+				})),
+			}
+			: undefined,
 	};
 	case 'event': return {
 		eventTitle: data.title,
@@ -317,12 +336,14 @@ export default compose(
 	withRouter,
 	withLoading,
 	withState('data', 'setData', {}),
+	withState('progress', 'setProgress', {}),
 	withState('errors', 'setErrors', []),
 	withState('specialInputState', 'setSpecialInputState', { addingTag: '', tagInputState: '' }),
 	withHandlers({
 		onSubmit(props) {
 			props.startLoading();
 			return (values) => {
+				props.stopLoading();
 				props.client.mutate({
 					mutation: getCreateItemMutation(props.itemType),
 					variables: {

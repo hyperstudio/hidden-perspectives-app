@@ -26,10 +26,12 @@ import {
 	Container,
 	Content,
 	ControlFeedbackBlack,
+	ProgressIndicator,
 	RemoveButton,
 	ScrollContainer,
 	TagLikeContainer,
 	TagsEditWrapper,
+	StyledReactS3Uploader,
 } from '../MetadataEditView/styles';
 import { DNSAKindList, DNSAClassificationList } from '../../utils/listUtil';
 
@@ -68,6 +70,9 @@ const CreateForm = ({
 	isLoading,
 	onSubmit,
 	errors,
+	setErrors,
+	progress,
+	setProgress,
 	itemType,
 	removeText,
 	specialInputState,
@@ -916,7 +921,52 @@ const CreateForm = ({
 									<>
 										<Fieldset title="Content" key="Content" mode="edit">
 											<MetadataRow label="File" mode="edit">
-												File upload will go here when AWS account is approved.
+												<Field name="documentFiles">
+													{({ input: { value, onChange, ...input } }) => (
+														<>
+															<StyledReactS3Uploader
+																signingUrl="https://d1n5c6z5w87l9z.cloudfront.net/url"
+																name="documentFiles"
+																signingUrlMethod="GET"
+																accept="application/pdf"
+																s3path="newuploads/"
+																disabled={progress.started}
+																onProgress={
+																	(percent, status) => setProgress(
+																		{ started: true, percent, status },
+																	)
+																}
+																onError={((status) => setErrors([status]))}
+																onFinish={(signRes, file) => {
+																	const fileUrl = signRes.signedUrl.substring(
+																		0, signRes.signedUrl.indexOf(file.name),
+																	);
+																	const fileObj = {
+																		name: file.name,
+																		size: file.size,
+																		contentType: file.type,
+																		url: `${fileUrl}${file.name}`,
+																	};
+																	return onChange([fileObj]);
+																}}
+																uploadRequestHeaders={{ 'x-amz-acl': 'public-read' }}
+																scrubFilename={(filename) => filename.replace(/[^\w\d_\-.]+/ig, '')}
+																{...input}
+															/>
+															{progress.started && (
+																<TagsEditWrapper>
+																	<ProgressIndicator percent={progress.percent} />
+																	<ControlFeedbackBlack valid>
+																		{progress.percent}
+																		%:
+																		{' '}
+																		{progress.status}
+																	</ControlFeedbackBlack>
+																</TagsEditWrapper>
+															)}
+														</>
+													)}
+												</Field>
 											</MetadataRow>
 											<MetadataRow label="Transcript" mode="edit">
 												<Field
@@ -1199,12 +1249,20 @@ CreateForm.propTypes = {
 	}),
 	onSubmit: PropTypes.func.isRequired,
 	errors: PropTypes.arrayOf(PropTypes.string.isRequired),
+	setErrors: PropTypes.func.isRequired,
+	progress: PropTypes.shape({
+		started: PropTypes.bool,
+		percent: PropTypes.number,
+		status: PropTypes.string,
+	}),
+	setProgress: PropTypes.func.isRequired,
 	removeText: PropTypes.string,
 };
 
 CreateForm.defaultProps = {
 	isLoading: true,
 	errors: [],
+	progress: {},
 	removeText: '✕',
 	specialInputState: { addingTag: '', tagInputState: '' },
 };

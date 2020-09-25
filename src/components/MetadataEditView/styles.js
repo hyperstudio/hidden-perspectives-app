@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { ControlFeedback } from '@smooth-ui/core-sc';
+import ReactS3Uploader from 'react-s3-uploader';
 import 'react-day-picker/lib/style.css';
 
 export const Container = styled.div`
@@ -116,4 +117,25 @@ export const ControlFeedbackBlack = styled(ControlFeedback)`
 export const ButtonsContainer = styled.div`
 	display: flex;
 	justify-content: space-between;
+`;
+
+export const StyledReactS3Uploader = styled(ReactS3Uploader)`
+	width: 100%;
+	background-color: white;
+	padding: 1rem 1rem .75rem;
+	border-radius: 0;
+	transition: color 100ms ease-out, background 100ms ease-out;
+	&:focus {
+		${({ theme }) => (theme.controlFocus()('primary'))}
+		z-index: 1;
+		border-radius: 1px;
+	}
+`;
+
+export const ProgressIndicator = styled.div`
+	background-color: green;
+	height: 10px;
+	margin-right: 1rem;
+	margin-bottom: 0.25rem;
+	width: ${({ percent }) => `${percent}%`};	
 `;
