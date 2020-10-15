@@ -139,7 +139,6 @@ const MetadataEditView = ({
 										<Field
 											name="description"
 											placeholder="Summary"
-											validate={required}
 											render={(args) => (
 												<InputWrapper
 													name={args.input.name}
@@ -868,9 +867,6 @@ const MetadataEditView = ({
 								{itemType === 'document' && (
 									<>
 										<Fieldset title="Content" key="Content" mode="edit">
-											<MetadataRow label="File" mode="edit">
-												File upload will go here when AWS account is approved.
-											</MetadataRow>
 											<MetadataRow label="Transcript" mode="edit">
 												<Field
 													name="documentTranscript"

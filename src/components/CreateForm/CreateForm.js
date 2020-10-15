@@ -162,7 +162,6 @@ const CreateForm = ({
 										<Field
 											name="description"
 											placeholder={itemType === 'stakeholder' ? 'Description' : 'Summary'}
-											validate={required}
 											render={(args) => (
 												<InputWrapper
 													name={args.input.name}
