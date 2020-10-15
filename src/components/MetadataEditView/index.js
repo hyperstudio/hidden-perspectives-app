@@ -337,6 +337,7 @@ const getDestructuredData = (data) => {
 	case 'document': return {
 		documentTitle: { set: data.title },
 		documentDescription: { set: data.description },
+		documentTranscript: { set: data.documentTranscript },
 		documentCreationDate: dateExists(data.creationDate) ? { set: new Date(`${data.creationDate} 00:00`) } : undefined,
 		documentPublicationDate: dateExists(data.publicationDate) ? { set: new Date(`${data.publicationDate} 00:00`) } : undefined,
 		documentKind: data.kind.value ? {
