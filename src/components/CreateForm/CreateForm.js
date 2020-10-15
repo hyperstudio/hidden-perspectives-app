@@ -949,7 +949,6 @@ const CreateForm = ({
 																	return onChange([fileObj]);
 																}}
 																uploadRequestHeaders={{ 'x-amz-acl': 'public-read' }}
-																scrubFilename={(filename) => filename.replace(/[^\w\d_\-.]+/ig, '')}
 																{...input}
 															/>
 															{progress.started && (
