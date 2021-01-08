@@ -18,13 +18,22 @@ export const getSearchQuery = (limit) => {
 	const getEventsQuery = (suffix = '') => `events${suffix}(
 		where: {
 			OR: [
-				{ eventTitle: { contains: $searchQuery } }
-				{ eventDescription: { contains: $searchQuery } }
+				{ eventTitle: { 
+            contains: $searchQuery
+            mode: insensitive
+          }
+        }
+				{ eventDescription: { 
+            contains: $searchQuery
+            mode: insensitive
+          }
+        }
 				{ eventStakeholders: { 
 						some: {
 							Stakeholder: {
 								stakeholderFullName: {
-									contains: $searchQuery
+                  contains: $searchQuery
+                  mode: insensitive
 								}
 							}
 						}
@@ -37,14 +46,27 @@ export const getSearchQuery = (limit) => {
 	const getDocumentsQuery = (suffix = '') => `documents${suffix}(
 		where: {
 			OR: [
-				{ documentTitle: { contains: $searchQuery } }
-				{ documentDescription: { contains: $searchQuery } }
-				{ documentTranscript: { contains: $searchQuery } }
+				{ documentTitle: { 
+            contains: $searchQuery
+            mode: insensitive
+          }
+        }
+				{ documentDescription: { 
+            contains: $searchQuery
+            mode: insensitive
+          }
+        }
+				{ documentTranscript: { 
+            contains: $searchQuery
+            mode: insensitive
+          }
+        }
 				{ mentionedStakeholders: { 
 						some: {
 							Stakeholder: {
 								stakeholderFullName: {
-									contains: $searchQuery
+                  contains: $searchQuery
+                  mode: insensitive
 								}
 							}
 						}
@@ -58,11 +80,13 @@ export const getSearchQuery = (limit) => {
 		where: {
 			OR: [
 				{ stakeholderFullName: { 
-						contains: $searchQuery
+            contains: $searchQuery
+            mode: insensitive
 					} 
 				}
 				{ stakeholderDescription: {
-						contains: $searchQuery 
+            contains: $searchQuery
+            mode: insensitive
 					}
 				}
 			]
@@ -73,7 +97,8 @@ export const getSearchQuery = (limit) => {
 		where: {
 			OR: [
 				{ name: { 
-						contains: $searchQuery
+            contains: $searchQuery
+            mode: insensitive
 					} 
 				}
 			]
@@ -85,7 +110,8 @@ export const getSearchQuery = (limit) => {
 		where: {
 			OR: [
 				{ locationName: { 
-						contains: $searchQuery
+            contains: $searchQuery
+            mode: insensitive
 					} 
 				}
 			]
