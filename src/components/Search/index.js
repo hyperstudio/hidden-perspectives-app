@@ -55,16 +55,9 @@ export default compose(
 			const {
 				setSearchQuery,
 				startLoading,
-				searchQuery,
-				allSearchResults,
 			} = props;
 
 			setSearchQuery(newSearchQuery);
-
-			const prevQueryAlreadyGaveNoResults = searchQuery
-				&& newSearchQuery.includes(searchQuery)
-				&& allSearchResults.length === 0;
-			if (prevQueryAlreadyGaveNoResults) return;
 
 			startLoading();
 			performQuery(props);
