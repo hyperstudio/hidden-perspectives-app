@@ -49,7 +49,7 @@ const CREATE_DOCUMENT_MUTATION = gql`
 			documentTags {
 				Tag{
 					id
-				}											
+				}
 			}
 			dnsaAbstract
 			dnsaCitation
