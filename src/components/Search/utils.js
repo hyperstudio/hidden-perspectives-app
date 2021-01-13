@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
 import {
-	sortBy,
-	prop,
+	// sortBy,
+	// prop,
 	propEq,
 	findIndex,
 } from 'ramda';
@@ -15,102 +15,26 @@ import { withRouter } from 'react-router-dom';
 import { withLoading, withErrors } from '../../utils/hocUtil';
 
 export const getSearchQuery = (limit) => {
-	const getEventsQuery = (suffix = '') => `events${suffix}(
-		where: {
-			OR: [
-				{ eventTitle: { 
-            contains: $searchQuery
-            mode: insensitive
-          }
-        }
-				{ eventDescription: { 
-            contains: $searchQuery
-            mode: insensitive
-          }
-        }
-				{ eventStakeholders: { 
-						some: {
-							Stakeholder: {
-								stakeholderFullName: {
-                  contains: $searchQuery
-                  mode: insensitive
-								}
-							}
-						}
-					} 
-				}
-			]
-		}
-		${(limit && suffix !== 'Count') ? `first: ${limit}` : ''}
+	const getQuery = (suffix = '') => `searchQuery${suffix}(
+		searchQuery: $searchQuery 
+		${(limit && suffix !== 'Count') ? `limit: ${limit}` : ''}
 	)`;
-	const getDocumentsQuery = (suffix = '') => `documents${suffix}(
-		where: {
-			OR: [
-				{ documentTitle: {
-            contains: $searchQuery
-            mode: insensitive
-          }
-        }
-				{ documentDescription: {
-            contains: $searchQuery
-            mode: insensitive
-          }
-        }
-				{ documentTranscript: { 
-            contains: $searchQuery
-            mode: insensitive
-          }
-        }
-				{ mentionedStakeholders: { 
-						some: {
-							Stakeholder: {
-								stakeholderFullName: {
-                  contains: $searchQuery
-                  mode: insensitive
-								}
-							}
-						}
-					}
-				}
-			]
-		}
-		${(limit && suffix !== 'Count') ? `first: ${limit}` : ''}
-	)`;
-	const getStakeholderQuery = (suffix = '') => `stakeholders${suffix}(
-		where: {
-			OR: [
-				{ stakeholderFullName: { 
-            contains: $searchQuery
-            mode: insensitive
-					} 
-				}
-				{ stakeholderDescription: {
-            contains: $searchQuery
-            mode: insensitive
-					}
-				}
-			]
-		}
-		${(limit && suffix !== 'Count') ? `first: ${limit}` : ''}
-	)`;
-
 	return gql`
 		query Search($searchQuery: String!) {
-			${getEventsQuery()} {
-				id
-				eventTitle
+			${getQuery()} {
+        events {
+          id
+          eventTitle
+        }
+        documents { 
+          id
+          documentTitle
+        }
+        stakeholders {
+          id
+          stakeholderFullName
+        }
 			}
-			${getDocumentsQuery()} {
-				id
-				documentTitle
-			}
-			${getStakeholderQuery()} {
-				id
-				stakeholderFullName
-			}
-			${getEventsQuery('Count')}
-			${getDocumentsQuery('Count')}
-			${getStakeholderQuery('Count')}
 		}
 	`;
 };
@@ -128,29 +52,30 @@ const contains = (container, containment) => container.toLowerCase()
 	.includes(containment.toLowerCase());
 
 export const handleSearchResults = (props, value) => ({ data }) => {
-	const { stopLoading, setCounts, setSearchResults } = props;
-	const documents = parseDocuments(data.documents);
-	const events = parseEvents(data.events);
-	const stakeholders = parseStakeholders(data.stakeholders);
-	const unorderedSearchResults = [...stakeholders, ...documents, ...events];
-	const allSearchResults = sortBy(prop('title'), unorderedSearchResults);
+	const { stopLoading, setSearchResults } = props;
+	// const { stopLoading, setCounts, setSearchResults } = props;
+	const documents = parseDocuments(data.searchQuery.documents);
+	const events = parseEvents(data.searchQuery.events);
+	const stakeholders = parseStakeholders(data.searchQuery.stakeholders);
+	const allSearchResults = [...stakeholders, ...documents, ...events];
+	// const allSearchResults = sortBy(prop('title'), unorderedSearchResults);
 	const withHighlights = allSearchResults.filter(({ title }) => contains(title, value));
 	const withoutHighlights = allSearchResults.filter(({ title }) => !contains(title, value));
 	const searchResults = [...withHighlights, ...withoutHighlights];
-	const documentCount = data.documentsCount;
-	const eventCount = data.eventsCount;
-	const stakeholderCount = data.stakeholdersCount;
+	// const documentCount = data.documentsCount;
+	// const eventCount = data.eventsCount;
+	// const stakeholderCount = data.stakeholdersCount;
 
 	stopLoading();
 	setSearchResults(searchResults);
-	setCounts({
-		all: eventCount
-			+ documentCount
-			+ stakeholderCount,
-		event: eventCount,
-		document: documentCount,
-		stakeholder: stakeholderCount,
-	});
+	// setCounts({
+	// 	all: eventCount
+	// 		+ documentCount
+	// 		+ stakeholderCount,
+	// 	event: eventCount,
+	// 	document: documentCount,
+	// 	stakeholder: stakeholderCount,
+	// });
 };
 
 export const withSearch = compose(

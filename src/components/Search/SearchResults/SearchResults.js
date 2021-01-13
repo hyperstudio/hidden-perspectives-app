@@ -20,19 +20,50 @@ const loadingResults = Object.keys([...Array(3)]);
 const getFormattedTitle = (title, searchQuery) => {
 	const titleLowercased = title.toLowerCase();
 	const searchQueryLowercased = searchQuery.toLowerCase();
-	const index = titleLowercased.indexOf(searchQueryLowercased);
 	let formattedTitle = title;
 
-	if (index >= 0) {
+	const sqArray = searchQueryLowercased.split(' ');
+	if (sqArray.length > 1) {
+		const highlights = sqArray
+			.map((sqPart) => {
+				const index = titleLowercased.indexOf(sqPart);
+				return {
+					text: sqPart,
+					start: index,
+					end: index + sqPart.length,
+				};
+			})
+			.filter((highlight) => highlight.start >= 0);
+		let cursor = 0;
+		highlights.sort((a, b) => ((a.start > b.start) ? 1 : -1));
 		formattedTitle = (
 			<span>
-				{title.substring(0, index)}
-				<Highlight>{title.substring(index, index + searchQuery.length)}</Highlight>
-				{title.substring(index + searchQuery.length)}
+				{highlights.map((highlight) => {
+					const start = cursor;
+					cursor = highlight.end;
+					return (
+						<>
+							{title.substring(start, highlight.start)}
+							<Highlight>{title.substring(highlight.start, highlight.end)}</Highlight>
+						</>
+					);
+				})}
+				{title.substring(cursor)}
 			</span>
 		);
-	}
+	} else {
+		const index = titleLowercased.indexOf(searchQueryLowercased);
 
+		if (index >= 0) {
+			formattedTitle = (
+				<span>
+					{title.substring(0, index)}
+					<Highlight>{title.substring(index, index + searchQuery.length)}</Highlight>
+					{title.substring(index + searchQuery.length)}
+				</span>
+			);
+		}
+	}
 	return <span>{formattedTitle}</span>;
 };
 
