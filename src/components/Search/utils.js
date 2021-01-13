@@ -17,7 +17,7 @@ import { withLoading, withErrors } from '../../utils/hocUtil';
 export const getSearchQuery = (limit) => {
 	const getQuery = (suffix = '') => `searchQuery${suffix}(
 		searchQuery: $searchQuery 
-		${(limit && suffix !== 'Count') ? `limit: ${limit}` : ''}
+		${(limit && !suffix.includes('Count')) ? `limit: ${limit}` : ''}
 	)`;
 	return gql`
 		query Search($searchQuery: String!) {
@@ -35,6 +35,9 @@ export const getSearchQuery = (limit) => {
           stakeholderFullName
         }
 			}
+			${getQuery('EventsCount')}
+			${getQuery('DocumentsCount')}
+			${getQuery('StakeholdersCount')}
 		}
 	`;
 };
@@ -52,30 +55,28 @@ const contains = (container, containment) => container.toLowerCase()
 	.includes(containment.toLowerCase());
 
 export const handleSearchResults = (props, value) => ({ data }) => {
-	const { stopLoading, setSearchResults } = props;
-	// const { stopLoading, setCounts, setSearchResults } = props;
+	const { stopLoading, setCounts, setSearchResults } = props;
 	const documents = parseDocuments(data.searchQuery.documents);
 	const events = parseEvents(data.searchQuery.events);
 	const stakeholders = parseStakeholders(data.searchQuery.stakeholders);
-	const allSearchResults = [...stakeholders, ...documents, ...events];
-	// const allSearchResults = sortBy(prop('title'), unorderedSearchResults);
+	const allSearchResults = [...documents, ...events, ...stakeholders];
 	const withHighlights = allSearchResults.filter(({ title }) => contains(title, value));
 	const withoutHighlights = allSearchResults.filter(({ title }) => !contains(title, value));
 	const searchResults = [...withHighlights, ...withoutHighlights];
-	// const documentCount = data.documentsCount;
-	// const eventCount = data.eventsCount;
-	// const stakeholderCount = data.stakeholdersCount;
+	const documentCount = data.searchQueryDocumentsCount;
+	const eventCount = data.searchQueryEventsCount;
+	const stakeholderCount = data.searchQueryStakeholdersCount;
 
 	stopLoading();
 	setSearchResults(searchResults);
-	// setCounts({
-	// 	all: eventCount
-	// 		+ documentCount
-	// 		+ stakeholderCount,
-	// 	event: eventCount,
-	// 	document: documentCount,
-	// 	stakeholder: stakeholderCount,
-	// });
+	setCounts({
+		all: eventCount
+			+ documentCount
+			+ stakeholderCount,
+		event: eventCount,
+		document: documentCount,
+		stakeholder: stakeholderCount,
+	});
 };
 
 export const withSearch = compose(
