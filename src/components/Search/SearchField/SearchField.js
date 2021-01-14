@@ -18,7 +18,7 @@ const SearchField = ({
 			type="search"
 			name="searchfield"
 			value={searchQuery}
-			placeholder="Search for documents, events, locations or protagonists"
+			placeholder="Search for documents, events, locations or stakeholders"
 			onChange={(evt) => onSearch(evt.target.value)}
 			id="search-bar"
 			autocomplete="off"

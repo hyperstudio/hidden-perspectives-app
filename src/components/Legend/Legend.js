@@ -39,7 +39,7 @@ const createLegendComponent = (label, itemType) => {
 
 export const DocumentLegend = createLegendComponent('Documents', 'document');
 export const EventLegend = createLegendComponent('Events', 'event');
-export const ProtagonistLegend = createLegendComponent('Protagonists', 'stakeholder');
+export const ProtagonistLegend = createLegendComponent('Stakeholders', 'stakeholder');
 
 export const MainTimelineLegend = ({
 	documentsCount,
