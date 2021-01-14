@@ -99,7 +99,7 @@ export const withSearch = compose(
 				{ key: 'all', title: 'All' },
 				{ key: 'event', title: 'Events' },
 				{ key: 'document', title: 'Documents' },
-				{ key: 'stakeholder', title: 'Protagonists' },
+				{ key: 'stakeholder', title: 'Stakeholders' },
 			],
 		};
 	}),

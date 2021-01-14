@@ -35,10 +35,10 @@ const steps = {
 			content: 'Event are symbolized by a calendar icon and are placed on the right of the vertical timeline.',
 		},
 		{
-			title: 'Protagonists',
+			title: 'Stakeholders',
 			image: ProtagonistImage,
 			selector: '.tour-protagonists',
-			content: 'These are the protagonists involved in the visible documents and events.',
+			content: 'These are the stakeholders involved in the visible documents and events.',
 		},
 		{
 			title: 'Minimap',

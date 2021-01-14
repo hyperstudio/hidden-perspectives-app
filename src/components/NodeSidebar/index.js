@@ -93,7 +93,7 @@ const getItemSubtitle = (item, itemType) => {
 	switch (itemType) {
 	case 'event': return `Event ・ ${formatHumanDate(new Date(item.eventStartDate))}`;
 	case 'document': return `${ucFirst(item.documentKind && item.documentKind[0].Kind.name)} ・ ${formatHumanDate(new Date(item.documentCreationDate))}`;
-	case 'stakeholder': return 'Protagonist';
+	case 'stakeholder': return 'Stakeholder';
 	case 'location': return 'Location';
 	default: return '';
 	}
