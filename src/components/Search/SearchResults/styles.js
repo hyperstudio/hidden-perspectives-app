@@ -22,7 +22,7 @@ export const Results = styled.ul`
 	list-style: none;
 	padding: 0;
 	margin: 0;
-	max-height: calc(100vh - 7.875rem);
+	max-height: calc(100vh - 10.5rem);
 	overflow-y: auto;
 `;
 
@@ -50,6 +50,11 @@ export const Result = styled.li`
 		box-shadow: 0 6px 20px -6px rgba(0, 0, 0, 0.2),
 			inset 0 0 0 1px ${({ theme }) => theme.primary};
 	}
+`;
+
+export const ResultInfo = styled(Result)`
+  background: ${({ theme }) => theme.gray300};
+	cursor: default;
 `;
 
 const pulse = keyframes`

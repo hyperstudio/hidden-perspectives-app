@@ -5,6 +5,7 @@ import {
 	Content,
 	Results,
 	Result,
+	ResultInfo,
 	LoadingResult,
 	TabsContainer,
 	Tabs,
@@ -117,6 +118,9 @@ const SearchResults = ({
 								{getFormattedTitle(title, searchQuery)}
 							</Result>
 						))}
+					{!isLoading && searchResults.length < counts[activeTab] && (
+						<ResultInfo>{`Displaying first ${searchResults.length} results of ${counts[activeTab]}. Please refine your search to narrow results.`}</ResultInfo>
+					)}
 				</Results>
 			)}
 		</Content>
