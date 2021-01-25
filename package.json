@@ -2,7 +2,11 @@
   "name": "hidden-perspectives",
   "version": "0.1.0",
   "private": true,
-  "url": "git@github.com:vogelino/hidden-perspectives-app.git",
+  "url": "git@github.com:hyperstudio/hidden-perspectives-app.git",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:hyperstudio/hidden-perspectives-app.git"
+  },
   "description": "The Frontend App of the US-IRAN project",
   "authors": [
     "Lucas Vogel @vogelino <contact@vogelino.com> (https://vogelino.com)",

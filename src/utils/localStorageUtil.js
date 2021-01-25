@@ -43,15 +43,22 @@ const saveTour = (componentName) => {
 
 export const startTour = (componentName, callback) => {
 	const date = new Date();
-	const lastTourDate = new Date(localStorage.getItem(`hp-last-${componentName}-tour-visit`));
-	if (!isDate(lastTourDate)) {
+	const lastTourDate = localStorage.getItem(`hp-last-${componentName}-tour-visit`);
+	const isFirstTime = lastTourDate === null;
+
+	if (!isFirstTime && typeof lastTourDate !== 'string') {
 		localStorage.removeItem(`hp-last-${componentName}-tour-visit`);
+		saveTour(componentName);
+		return callback(true);
 	}
-	if (lastTourDate && differenceInMinutes(lastTourDate, date) < 10000000000) {
-		return callback(false);
+	if (isFirstTime
+		|| (typeof lastTourDate === 'string'
+		&& isDate(new Date(lastTourDate))
+		&& differenceInMinutes(lastTourDate, date) > 1)) {
+		saveTour(componentName);
+		return callback(true);
 	}
-	saveTour(componentName);
-	return callback(true);
+	return callback(false);
 };
 
 export const lib = {
