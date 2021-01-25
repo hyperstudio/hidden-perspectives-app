@@ -938,13 +938,16 @@ const CreateForm = ({
 																onError={((status) => setErrors([status]))}
 																onFinish={(signRes, file) => {
 																	const fileUrl = signRes.signedUrl.substring(
-																		0, signRes.signedUrl.indexOf(file.name),
+																		0, signRes.signedUrl.indexOf('?X-Amz-Algorithm'),
+																	);
+																	const nameOnServer = signRes.signedUrl.substring(
+																		signRes.signedUrl.lastIndexOf('/') + 1, signRes.signedUrl.indexOf('?X-Amz-Algorithm'),
 																	);
 																	const fileObj = {
-																		name: file.name,
+																		name: nameOnServer,
 																		size: file.size,
 																		contentType: file.type,
-																		url: `${fileUrl}${file.name}`,
+																		url: fileUrl,
 																	};
 																	return onChange([fileObj]);
 																}}
