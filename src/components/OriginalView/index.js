@@ -32,8 +32,10 @@ const getFileUrl = pipe(
 	prop('url'),
 );
 
-const getDataParser = ({ setFile }) => ({ data }) => {
-	setFile(getFileUrl(data.document.documentFiles[0]));
+const getDataParser = ({ setFile, stopLoading }) => ({ data }) => {
+	if (data.document.documentFiles.length > 0) {
+		setFile(getFileUrl(data.document.documentFiles[0]));
+	} else stopLoading();
 };
 
 export default compose(
