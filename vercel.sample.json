@@ -1,7 +1,4 @@
 {
-	"name": "irus",
-	"alias": "my-deployment-url",
-	"version": 2,
 	"builds": [
 		{
 			"src": "package.json",
