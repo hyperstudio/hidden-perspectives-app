@@ -19,7 +19,7 @@ const formatItems = (bubblesData, activeId) => {
 		isActive: key === activeId,
 	}));
 	return {
-		name: 'protagonists',
+		name: 'stakeholders',
 		children: formattedData.filter((item) => !item.isActive),
 	};
 };

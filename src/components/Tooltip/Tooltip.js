@@ -69,7 +69,7 @@ Tooltip.propTypes = {
 	noTitle: PropTypes.bool,
 	withLink: PropTypes.bool,
 	position: PropTypes.oneOf(['left', 'right']),
-	itemTypeName: PropTypes.oneOf(['Event', 'Document', 'Protagonist']),
+	itemTypeName: PropTypes.oneOf(['Event', 'Document', 'Stakeholder']),
 	authors: PropTypes.arrayOf(PropTypes.shape({
 		id: PropTypes.string.isRequired,
 		name: PropTypes.string.isRequired,
