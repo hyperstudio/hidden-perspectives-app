@@ -29,14 +29,13 @@ const getFormattedTitle = (title, searchQuery) => {
 			.map((sqPart) => {
 				const index = titleLowercased.indexOf(sqPart);
 				return {
-					text: sqPart,
 					start: index,
 					end: index + sqPart.length,
 				};
 			})
 			.filter((highlight) => highlight.start >= 0);
 		let cursor = 0;
-		highlights.sort((a, b) => ((a.start > b.start) ? 1 : -1));
+		highlights.sort((a, b) => (a.start - b.start));
 		formattedTitle = (
 			<span>
 				{highlights.map((highlight) => {
