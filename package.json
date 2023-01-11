@@ -65,7 +65,7 @@
     "graphql": "^14.0.2",
     "graphql-tag": "^2.10.0",
     "initials": "^3.0.0",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "lint-staged": "^7.3.0",
     "lodash.debounce": "^4.0.8",
     "lodash.throttle": "^4.1.1",
