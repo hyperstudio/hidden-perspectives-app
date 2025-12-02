@@ -93,7 +93,7 @@
     "reakit": "^1.2.4",
     "styled-components": "^4.0.2",
     "subscriptions-transport-ws": "^0.9.15",
-    "validator": "^13.1.1",
+    "validator": "^13.15.22",
     "wikijs": "^5.0.0-alpha.1"
   },
   "devDependencies": {
